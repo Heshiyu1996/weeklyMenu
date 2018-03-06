@@ -44,7 +44,7 @@ export default {
 
     methods: {
         getFoodInfo () {
-            this.$axios.get(`${prefix}/food/getFoodInfoById?foodId=1`)
+            this.$axios.get(`${prefix}/food/getFoodInfoById?foodId=${this.$route.params.foodId}`)
             .then((res) => {
                 if (res.data.success) {
                     Object.assign(this.foodInfo, res.data.relatedObject)
@@ -110,7 +110,7 @@ export default {
     .shadeBg {
         position: absolute;
         width: 100%;
-        min-height: px2rem(360px);
+        height: 64.8%;
         background-color: $black;
         opacity: .4;
     }

@@ -54,7 +54,7 @@ export default new Router({
             component: Search
         },
         {
-            path: '/foodDetail',
+            path: '/foodDetail/:foodId',
             name: 'foodDetail',
             component: foodDetail
         },

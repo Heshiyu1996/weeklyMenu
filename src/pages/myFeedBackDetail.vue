@@ -9,7 +9,7 @@
                         <el-tag v-else type="info" size="mini">未回复</el-tag>
                     </div>
                     <div ref="content" class="content f-ellipsis3">{{ feedBackInfo.content }}</div>
-                    <div class="time">{{ feedBackInfo.time }}</div>
+                    <div class="time">{{ feedBackInfo.createTime }}</div>
                     <div class="extend-btn" v-if="feedBackInfo.needExtend" @click="extend($event, feedBackInfo)">展开</div>
                 </div>
                 <div class="reply-wrapper" v-if="feedBackInfo.isReplied !== 0">
@@ -38,7 +38,7 @@ export default {
                 fid: '',
                 user: '',
                 content: '',
-                time: '',
+                createTime: '',
                 isReplied: 0,
                 repliedMsg: '',
                 repliedTime: ''

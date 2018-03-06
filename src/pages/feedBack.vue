@@ -43,7 +43,7 @@ export default {
             let that = this
             this.$axios.post(`${prefix}/feedBack/insert`,
                 querystring.stringify({
-                    userId: that.userInfo.sid,
+                    userId: that.userInfo.uid,
                     user: that.userInfo.uname,
                     content: that.cnt
                 }))

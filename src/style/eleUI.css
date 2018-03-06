@@ -53,25 +53,25 @@
 }
 
 /* 查看反馈用 */
-.reply .filter-wrapper .el-dropdown.dd-replied {
+.myFeedBack .filter-wrapper .el-dropdown.dd-replied, .reply .filter-wrapper .el-dropdown.dd-replied {
     height: 100%;
     padding-left: 10px;
     min-width: 70px;
 }
 
-.reply .filter-wrapper .el-dropdown {
+.myFeedBack .filter-wrapper .el-dropdown, .reply .filter-wrapper .el-dropdown {
     height: 100%;
     padding-left: 10px;
     min-width: 90px;
 }
 
-.reply .filter-wrapper .el-dropdown .el-dropdown-link {
+.myFeedBack .filter-wrapper .el-dropdown .el-dropdown-link, .reply .filter-wrapper .el-dropdown .el-dropdown-link {
     display: inline-block;
     height: 100%;
     line-height: 32px;
 }
 
-.reply .filter-wrapper .el-dropdown .el-icon-arrow-down {
+.myFeedBack .filter-wrapper .el-dropdown .el-icon-arrow-down, .reply .filter-wrapper .el-dropdown .el-icon-arrow-down {
     position: absolute;
     right: 0;
     top: 10px;
