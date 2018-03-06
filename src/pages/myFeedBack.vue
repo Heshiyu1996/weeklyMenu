@@ -1,7 +1,7 @@
 <template>
     <div>
         <mHeader2 title="我的反馈"></mHeader2>
-        <div class="reply">
+        <div class="myFeedBack">
             <div class="filter-wrapper">
                 <el-dropdown trigger="click" class="dd-replied">
                     <span class="el-dropdown-link">
@@ -130,7 +130,7 @@ export default {
 
 <style lang="postcss" type="text/css" rel="stylesheet/css" scoped>
 @import "../common.css";
-.reply {
+.myFeedBack {
     position: absolute;
     width: 100%;
     height: 100%;

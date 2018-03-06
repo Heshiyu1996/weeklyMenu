@@ -10,7 +10,7 @@
             <div class="tag">{{ foodInfo.category }}</div>
             <i class="mark-btn el-icon-star-on"></i>
             <div class="desc">{{ foodInfo.desc }}</div>
-            <div class="hot f-ellipsis">{{ foodInfo.visitCount }}浏览 {{ foodInfo.markCount }}收藏</div>
+            <div class="hot f-ellipsis">{{ foodInfo.visitCount }} 浏览 {{ foodInfo.markCount }} 收藏</div>
         </div>
         <div class="vidLine"></div>
         <div class="vidBody">
@@ -36,7 +36,7 @@ export default {
                 markCount: 0,
                 visitCount: 0,
                 categoryId: 0,
-                category: '',
+                category: ''
             },
             img_food: require('./../../static/food/ws.jpg')
         }
@@ -49,11 +49,31 @@ export default {
                 if (res.data.success) {
                     Object.assign(this.foodInfo, res.data.relatedObject)
                     console.log(this.foodInfo)
+                    this.addVisitCount()
                 }
             })
             .catch((err) => {
                 alert(err)
             })
+        },
+
+        addVisitCount () {
+            var querystring = require('querystring')
+            let that = this
+            this.$axios.post(`${prefix}/food/addVisitCount`,
+                querystring.stringify({
+                    foodId: that.foodInfo.foodId
+                }))
+                .then((res) => {
+                    if (res.data.success) {
+                        console.log(res.data.msg)
+                    } else {
+                        alert(res.data.msg)
+                    }
+                })
+                .catch((err) => {
+                    alert(err)
+                })
         }
     },
 
