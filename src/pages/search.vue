@@ -58,17 +58,27 @@ export default {
     },
     data () {
         return {
-            isSearch: true,
+            img_food: require('./../../static/food/ws.jpg'),
             keyword: '',
-            keywords: []
+            keywords: [],
+            foods: []
         }
     },
     methods: {
         search () {
-            
+            this.$axios.get(`${prefix}/food/getFoodsByKeyword?keyword=${this.keyword}`)
+            .then((res) => {
+                if (res.data.success) {
+                    // this.foods = [...res.data.relatedObject.myList]
+                    // console.log(this.keywords)
+                }
+            })
+            .catch((err) => {
+                alert(err)
+            })
         },
 
-        getKeywords () {
+        getHotKeywords () {
             this.$axios.get(`${prefix}/search/getKeywords`)
             .then((res) => {
                 if (res.data.success) {
@@ -101,7 +111,7 @@ export default {
     },
 
     mounted () {
-        this.getKeywords()
+        this.getHotKeywords()
     }
 }
 </script>
