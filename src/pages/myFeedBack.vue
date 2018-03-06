@@ -45,7 +45,7 @@
                                 <el-tag v-else type="info" size="mini">未回复</el-tag>
                             </div>
                             <div ref="content" class="content f-ellipsis2">{{ item.content }}</div>
-                            <div class="time">{{ item.time }}</div>
+                            <div class="time">{{ item.createTime }}</div>
                         </router-link>
                     </div>
                 </div>

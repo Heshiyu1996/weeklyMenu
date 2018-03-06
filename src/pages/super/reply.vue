@@ -43,7 +43,7 @@
                             {{(item.isReplied !== 0) ? '重新' : ''}}回复
                         </div>
                         <div ref="content" class="content f-ellipsis3">{{ item.content }}</div>
-                        <div class="time">{{ item.time }}</div>
+                        <div class="time">{{ item.createTime }}</div>
                         <div class="extend-btn" v-if="item.needExtend" @click="extend($event, item)">展开</div>
                     </div>
                 </div>
