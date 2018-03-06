@@ -32,19 +32,9 @@
             </div>
         </div>
         <!-- 初次进入 结束 -->
-
         <div v-else class="result-wrapper">
-            <div class="tip">以下为 “{{ keyword }}” 的搜索结果，共 {{ foods.length }} 个</div>
-            <div class="food" v-for="(item, idx) in foods" :key="idx">
-                <router-link :to="'/foodDetail/' + item.foodId">
-                    <img class="img" :src="img_food" />
-                    <div class="desc">
-                        <div class="name f-ellipsis">{{ item.name }}</div>
-                        <div class="material f-ellipsis">{{ item.material }}</div>
-                        <div class="hot f-ellipsis">{{ item.visitCount }} 浏览 {{ item.markCount }} 收藏</div>
-                    </div>
-                </router-link>
-            </div>
+            <div class="tip">以下为 “{{ lastKeyword }}” 的搜索结果，共 {{ foods.length }} 个</div>
+            <FoodCard :foodInfo="item" v-for="(item, idx) in foods" :key="idx"></FoodCard>
         </div>
     </div>
 </template>
@@ -52,17 +42,20 @@
 <script>
 import { prefix } from '@/publicAPI/config'
 import mHeader2 from '@/components/Public/mHeader2'
+import FoodCard from '@/components/foodCard'
 
 export default {
     name: 'search',
     components: {
-        mHeader2
+        mHeader2,
+        FoodCard
     },
     data () {
         return {
             firstEnter: true,
             img_food: require('./../../static/food/ws.jpg'),
             keyword: '',
+            lastKeyword: '',
             keywords: [],
             foods: []
         }
@@ -75,11 +68,11 @@ export default {
 
         search (val) {
             this.firstEnter = false
+            this.lastKeyword = this.keyword
             this.$axios.get(`${prefix}/food/getFoodsByKeyword?keyword=${val || this.keyword}`)
             .then((res) => {
                 if (res.data.success) {
                     this.foods = [...res.data.relatedObject.myList]
-                    console.log(this.foods)
                 }
             })
             .catch((err) => {
@@ -254,7 +247,7 @@ export default {
         padding: px2rem(5px) px2rem(15px);
 
         .tip {
-            margin-top: px2rem(5px);
+            margin: px2rem(5px) 0;
             color: $gray2;
             font-size: px2rem(12px);
         }

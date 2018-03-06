@@ -24,7 +24,7 @@
                     <div class="food-wrapper">
                         <el-tabs tab-position="left" style="height: 360px;">
                             <el-tab-pane label="点心">
-                                <div class="food" v-for="(item, idx) in 10" :key="idx">
+                                <!-- <div class="food" v-for="(item, idx) in 10" :key="idx">
                                     <router-link :to="'/foodDetail/' + idx">
                                         <img class="img" :src="img_food" />
                                         <div class="desc">
@@ -33,7 +33,8 @@
                                             <div class="hot f-ellipsis">14浏览 7收藏</div>
                                         </div>
                                     </router-link>
-                                </div>
+                                </div> -->
+                                <FoodCard :foodInfo="item" v-for="(item, idx) in foods" :key="idx"></FoodCard>
                             </el-tab-pane>
                             <el-tab-pane label="粉面">
 
@@ -50,12 +51,15 @@
 </template>
 
 <script>
+import { prefix } from '@/publicAPI/config'
 import mHeader from '@/components/Public/mHeader'
+import FoodCard from '@/components/foodCard'
 
 export default {
     name: 'Index',
     components: {
-        mHeader
+        mHeader,
+        FoodCard
     },
     data () {
         return {
@@ -68,13 +72,31 @@ export default {
             img_lunch: require('./../../static/new_lunch.png'),
             img_dinner: require('./../../static/new_dinner.png'),
             img_food: require('./../../static/food/ws.jpg'),
-            autoPlay: false
+            autoPlay: false,
+            foods: []
         }
     },
+
     methods: {
         onIndexChange (index) {
             this.idx = index
+        },
+
+        getData () {
+            this.$axios.get(`${prefix}/food/getFoodsByKeyword?keyword=米`)
+            .then((res) => {
+                if (res.data.success) {
+                    this.foods = [...res.data.relatedObject.myList]
+                }
+            })
+            .catch((err) => {
+                alert(err)
+            })
         }
+    },
+
+    mounted () {
+        this.getData()
     }
 }
 </script>
