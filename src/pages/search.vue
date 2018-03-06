@@ -3,35 +3,52 @@
         <nav class="header-wrapper">
             <router-link to="/">
                 <div class="flag">
-                    <a href="javascript:;" class="login_link icon icon-user"></a>
+                    <i class="back_link el-icon-arrow-left"></i>
                 </div>
             </router-link>
             <div class="input-wrapper">
-                <input class="searchInput" type="text" placeholder="想吃什么搜这里，如粤菜" />
-                <div class="btn">搜索</div>
+                <input v-model="keyword" class="searchInput" type="text" placeholder="想吃什么搜这里，如粤菜" />
+                <div class="btn" @click="search()">搜索</div>
             </div>
         </nav>
 
         <!-- 初次进入 开始 -->
-        <div class="hot-wrapper">
-            <div class="title">热门搜索</div>
-            <div class="list">
-                <div class="item" v-for="(i, key) in 7" :key="key">青鸡蛋椒</div>
+        <div v-if="false" class="init">
+            <div class="hot-wrapper">
+                <div class="title">热门搜索</div>
+                <div class="list">
+                    <div class="item" v-for="(item, key) in keywords.length" :key="key">{{ keywords[item] }}</div>
+                </div>
             </div>
-        </div>
-        <div class="recent-wrapper">
-            <div class="title">最近搜索
-                <a href="javascript:;" class="remove icon icon-user"></a>
-            </div>
-            <div class="list">
-                <div class="item" v-for="(i, key) in 4" :key="key">粤菜</div>
+            <div class="recent-wrapper">
+                <div class="title">最近搜索
+                    <a href="javascript:;" class="remove el-icon-delete"></a>
+                </div>
+                <div class="list">
+                    <div class="item" v-for="(i, key) in 4" :key="key">粤菜</div>
+                </div>
             </div>
         </div>
         <!-- 初次进入 结束 -->
+
+        <div v-else class="result-wrapper">
+            <div class="tip">以下为{{ keyword }}的搜索结果，共100个</div>
+            <div class="food" v-for="(item, idx) in 10" :key="idx">
+                <router-link :to="'/foodDetail/' + idx">
+                    <img class="img" :src="img_food" />
+                    <div class="desc">
+                        <div class="name f-ellipsis">莴笋炒鸡蛋</div>
+                        <div class="material f-ellipsis">鸡蛋、莴笋、红椒、小葱</div>
+                        <div class="hot f-ellipsis">14浏览 7收藏</div>
+                    </div>
+                </router-link>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
+import { prefix } from '@/publicAPI/config'
 import mHeader2 from '@/components/Public/mHeader2'
 
 export default {
@@ -41,10 +58,50 @@ export default {
     },
     data () {
         return {
-            isSearch: true
+            isSearch: true,
+            keyword: '',
+            keywords: []
         }
     },
     methods: {
+        search () {
+            
+        },
+
+        getKeywords () {
+            this.$axios.get(`${prefix}/search/getKeywords`)
+            .then((res) => {
+                if (res.data.success) {
+                    this.keywords = [...res.data.relatedObject.myList]
+                    console.log(this.keywords)
+                }
+            })
+            .catch((err) => {
+                alert(err)
+            })
+        },
+
+        recordKeyword () {
+            var querystring = require('querystring')
+            this.$axios.post(`${prefix}/search/addKeywordCount`,
+                querystring.stringify({
+                    keyword: this.keyword
+                }))
+                .then((res) => {
+                    if (res.data.success) {
+                        console.log(res.data.success)
+                    } else {
+                        alert(res.data.msg)
+                    }
+                })
+                .catch((err) => {
+                    alert(err)
+                })
+        }
+    },
+
+    mounted () {
+        this.getKeywords()
     }
 }
 </script>
@@ -75,6 +132,10 @@ export default {
             left: px2rem(-15px);
             width: px2rem(24px);
             height: px2rem(24px);
+
+            .back_link {
+                color: $white;
+            }
         }
         
         .title {
@@ -112,58 +173,115 @@ export default {
         }
     }
 
-    .hot-wrapper {
-        height: px2rem(106px);
-        background: $white;
+    .init {
+        .hot-wrapper {
+            height: px2rem(106px);
+            background: $white;
 
-        .title {
-            height: px2rem(36px);
-            margin-left: px2rem(15px);
-            line-height: px2rem(36px);
-            color: $gray2;
-            border-bottom: px2rem(1px) solid $gray1;
+            .title {
+                height: px2rem(36px);
+                margin-left: px2rem(15px);
+                line-height: px2rem(36px);
+                color: $gray2;
+                border-bottom: px2rem(1px) solid $gray1;
+            }
+
+            .list {
+                padding: px2rem(4px) 0;
+                .item {
+                    display: inline-block;
+                    width: 20%;
+                    height: px2rem(32px);
+                    line-height: px2rem(32px);
+                    text-align: center;
+                    color: $black2;
+                }
+            }
         }
 
-        .list {
-            padding: px2rem(4px) 0;
-            .item {
-                display: inline-block;
-                width: 20%;
-                height: px2rem(32px);
-                line-height: px2rem(32px);
-                text-align: center;
-                color: $black2;
+        .recent-wrapper {
+            margin-top: px2rem(10px);
+            background: $white;
+
+            .title, .list .item {
+                margin-left: px2rem(15px);
+                color: $gray2;
+                border-bottom: px2rem(1px) solid $gray1;
+            }
+
+            .title {
+                height: px2rem(36px);
+                line-height: px2rem(36px);
+
+                .remove {
+                    float: right;
+                    margin: px2rem(10px) px2rem(15px) 0 0;
+                    font-size: px2rem(18px);
+                    color: $gray2;
+                }
+            }
+
+            .list {
+                .item {
+                    height: px2rem(48px);
+                    line-height: px2rem(48px);
+                    color: $black2;
+                }
             }
         }
     }
 
-    .recent-wrapper {
-        margin-top: px2rem(10px);
-        background: $white;
+    .result-wrapper {
+        padding: px2rem(5px) px2rem(15px);
 
-        .title, .list .item {
-            margin-left: px2rem(15px);
+        .tip {
+            margin-top: px2rem(5px);
             color: $gray2;
-            border-bottom: px2rem(1px) solid $gray1;
+            font-size: px2rem(12px);
         }
 
-        .title {
-            height: px2rem(36px);
-            line-height: px2rem(36px);
+        .food {
+            height: px2rem(76px);
+            padding: px2rem(5px) 0;
+            border-bottom: px2rem(1px) solid $gray2;
 
-            .remove:before {
-                position: absolute;
-                right: 0;
-                margin: px2rem(10px) px2rem(20px) 0 0;
-                color: $gray2;
+            & a {
+                display: flex;
+                height: 100%;
+
+                .img, .desc {
+                    display: inline-block;
+                }
+
+                .img {
+                    width: px2rem(115px);
+                    height: 100%;
+                    background: green;
+                }
+
+                .desc {
+                    width: 100%;
+                    height: 100%;
+                    margin-left: px2rem(4px);
+                    vertical-align: top;
+
+                    .name {
+                        max-width: 80%;
+                        color: $black2;
+                        font-size: px2rem(16px);
+                    }
+
+                    .material, .hot {
+                        max-width: px2rem(280px);;
+                        margin-top: px2rem(3px);
+                        color: $gray2;
+                        font-size: px2rem(12px);
+                    }
+                }
             }
-        }
 
-        .list {
-            .item {
-                height: px2rem(48px);
-                line-height: px2rem(48px);
-                color: $black2;
+            &:last-child {
+                border-bottom: 0 solid $gray2;
             }
         }
     }

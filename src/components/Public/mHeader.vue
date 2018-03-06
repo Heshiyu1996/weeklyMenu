@@ -5,6 +5,7 @@
             <span class="title">每日菜单</span>
         </router-link>
         <div class="login_area">
+            <span class="search-btn el-icon-search" @click="goTo('search')"></span>
             <span v-if="Object.keys(userInfo).length !== 0">
                 <span @click="goTo('user')">{{ userInfo.uname }}</span>
                 <span class="logout" @click="logout()">退出</span> 
@@ -71,7 +72,7 @@ export default {
         top: px2rem(9.5px);
         bottom: px2rem(10.1px);
         left: px2rem(20px);
-        width: px2rem(18px);
+        width: px2rem(24px);
         height: px2rem(21px);
     }
 
@@ -95,6 +96,11 @@ export default {
         font-size: px2rem(14px);
         color: #FFF;
         
+        .search-btn {
+            margin-right: px2rem(20px);
+            font-size: px2rem(16px);
+        }
+
         .logout {
             margin-left: px2rem(8px);
             color: $red;

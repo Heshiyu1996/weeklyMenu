@@ -2,7 +2,7 @@
     <nav class="header-wrapper" :class="{isSuper: isSuper}">
         <router-link to="/">
             <div class="flag">
-                <i class="login_link el-icon-arrow-left"></i>
+                <i class="back_link el-icon-arrow-left"></i>
             </div>
         </router-link>
         <div class="title">
@@ -56,7 +56,7 @@ export default {
         width: px2rem(24px);
         height: px2rem(24px);
 
-        .login_link {
+        .back_link {
             color: $white;
         }
     }

@@ -19,8 +19,8 @@
 </template>
 
 <script>
-import mHeader2 from '@/components/Public/mHeader2'
 import { prefix } from '@/publicAPI/config'
+import mHeader2 from '@/components/Public/mHeader2'
 
 export default {
     name: 'feedBack',
