@@ -1,0 +1,82 @@
+
+.time-wrapper .el-carousel .el-carousel__container {
+    height: 80px !important;
+}
+
+.time-wrapper .el-carousel__container .el-carousel__item {
+    height: 70px;
+}
+
+.time-wrapper .el-carousel__indicators {
+    width: 100%;
+}
+
+.time-wrapper .el-carousel__indicators .el-carousel__indicator {
+    padding: 0 5px !important;
+}
+
+.time-wrapper .el-carousel__indicators .el-carousel__indicator.is-active .el-carousel__button {
+    height: 6px;
+}
+
+.time-wrapper .el-carousel__indicators .el-carousel__indicator .el-carousel__button {
+    width: 108px;
+}
+
+/* 主页的菜单用 */
+.index .main-wrapper .order-wrapper .food-wrapper .el-tabs.el-tabs--left {
+    height: 380px;
+}
+
+.index .main-wrapper .order-wrapper .food-wrapper .el-tabs.el-tabs--left .el-tabs__item.is-left {
+    text-align: center;
+}
+
+.index .main-wrapper .order-wrapper .food-wrapper .el-tabs.el-tabs--left .el-tabs__header {
+    width: 62px;
+}
+
+.index .main-wrapper .order-wrapper .food-wrapper .el-tabs.el-tabs--left .el-tabs__header .el-tabs__nav-wrap .el-tabs__nav-scroll .el-tabs__nav .el-tabs__item {
+    padding: 0;
+    font-size: 16px;
+    height: 50px;
+}
+
+.index .main-wrapper .order-wrapper .food-wrapper .el-tabs.el-tabs--left .el-tabs__content {
+    height: 360px;
+    overflow: scroll !important;
+}
+
+/* 提交反馈用 */
+.feedBack .input-wrapper .el-textarea .el-textarea__inner {
+    padding: 5px;
+}
+
+/* 查看反馈用 */
+.reply .filter-wrapper .el-dropdown.dd-replied {
+    height: 100%;
+    padding-left: 10px;
+    min-width: 70px;
+}
+
+.reply .filter-wrapper .el-dropdown {
+    height: 100%;
+    padding-left: 10px;
+    min-width: 90px;
+}
+
+.reply .filter-wrapper .el-dropdown .el-dropdown-link {
+    display: inline-block;
+    height: 100%;
+    line-height: 32px;
+}
+
+.reply .filter-wrapper .el-dropdown .el-icon-arrow-down {
+    position: absolute;
+    right: 0;
+    top: 10px;
+}
+
+.el-message-box__wrapper .el-message-box {
+    width: 90%;
+}

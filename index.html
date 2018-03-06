@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>weeklymenu</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <!-- 构建好的文件就会自动注入到这里 -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function(e) {
+        var num = window.innerWidth / 10
+        if(num > 54) {
+          num = 54
+        }
+        document.getElementsByTagName('html')[0].style.fontSize = num + 'px';
+      }, false);
+    </script>
+  </body>
+</html>
