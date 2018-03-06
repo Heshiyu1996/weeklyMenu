@@ -7,17 +7,19 @@
                 </div>
             </router-link>
             <div class="input-wrapper">
-                <input v-model="keyword" class="searchInput" type="text" placeholder="想吃什么搜这里，如粤菜" />
+                <input v-model="keyword" class="searchInput" type="text" @keyup.enter="search()" placeholder="想吃什么搜这里，如粤菜" />
                 <div class="btn" @click="search()">搜索</div>
             </div>
         </nav>
 
         <!-- 初次进入 开始 -->
-        <div v-if="false" class="init">
+        <div v-if="firstEnter" class="init">
             <div class="hot-wrapper">
                 <div class="title">热门搜索</div>
                 <div class="list">
-                    <div class="item" v-for="(item, key) in keywords.length" :key="key">{{ keywords[item] }}</div>
+                    <div class="item" v-for="(idx, key) in keywords.length" :key="key" @click="quicklySearch(keywords[idx])">
+                        {{ keywords[idx] }}
+                    </div>
                 </div>
             </div>
             <div class="recent-wrapper">
@@ -32,14 +34,14 @@
         <!-- 初次进入 结束 -->
 
         <div v-else class="result-wrapper">
-            <div class="tip">以下为{{ keyword }}的搜索结果，共100个</div>
-            <div class="food" v-for="(item, idx) in 10" :key="idx">
-                <router-link :to="'/foodDetail/' + idx">
+            <div class="tip">以下为 “{{ keyword }}” 的搜索结果，共 {{ foods.length }} 个</div>
+            <div class="food" v-for="(item, idx) in foods" :key="idx">
+                <router-link :to="'/foodDetail/' + item.foodId">
                     <img class="img" :src="img_food" />
                     <div class="desc">
-                        <div class="name f-ellipsis">莴笋炒鸡蛋</div>
-                        <div class="material f-ellipsis">鸡蛋、莴笋、红椒、小葱</div>
-                        <div class="hot f-ellipsis">14浏览 7收藏</div>
+                        <div class="name f-ellipsis">{{ item.name }}</div>
+                        <div class="material f-ellipsis">{{ item.material }}</div>
+                        <div class="hot f-ellipsis">{{ item.visitCount }} 浏览 {{ item.markCount }} 收藏</div>
                     </div>
                 </router-link>
             </div>
@@ -58,6 +60,7 @@ export default {
     },
     data () {
         return {
+            firstEnter: true,
             img_food: require('./../../static/food/ws.jpg'),
             keyword: '',
             keywords: [],
@@ -65,12 +68,18 @@ export default {
         }
     },
     methods: {
-        search () {
-            this.$axios.get(`${prefix}/food/getFoodsByKeyword?keyword=${this.keyword}`)
+        quicklySearch (val) {
+            this.keyword = val
+            this.search(val)
+        },
+
+        search (val) {
+            this.firstEnter = false
+            this.$axios.get(`${prefix}/food/getFoodsByKeyword?keyword=${val || this.keyword}`)
             .then((res) => {
                 if (res.data.success) {
-                    // this.foods = [...res.data.relatedObject.myList]
-                    // console.log(this.keywords)
+                    this.foods = [...res.data.relatedObject.myList]
+                    console.log(this.foods)
                 }
             })
             .catch((err) => {
@@ -264,7 +273,7 @@ export default {
                 }
 
                 .img {
-                    width: px2rem(115px);
+                    width: px2rem(110px);
                     height: 100%;
                     background: green;
                 }
