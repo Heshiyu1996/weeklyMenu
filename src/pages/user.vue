@@ -2,25 +2,19 @@
     <div>
         <mHeader2></mHeader2>
         <div class="user">
-            <div class="item">
+            <div class="item" @click="goTo('myMark')">
                 <span class="flag el-icon-star-off"></span>
-                <router-link to="/myMark">
-                    <span class="txt">我的收藏</span>
-                </router-link>
+                <span class="txt">我的收藏</span>
                 <span class="extend el-icon-arrow-right"></span>
             </div>
-            <div class="item">
+            <div class="item" @click="goTo('myFeedBack')">
                 <span class="flag el-icon-edit-outline"></span>
-                <router-link to="/myFeedBack">
-                    <div class="txt">我的反馈</div>
-                </router-link>
+                <div class="txt">我的反馈</div>
                 <span class="extend el-icon-arrow-right"></span>
             </div>
-            <div class="item">
+            <div class="item" @click="goTo('feedBack')">
                 <span class="flag el-icon-edit"></span>
-                <router-link to="/feedBack">
-                    <div class="txt">提交反馈</div>
-                </router-link>
+                <div class="txt">提交反馈</div>
             </div>
             <div class="item logout" @click="logout()">退出登录</div>
         </div>
@@ -46,6 +40,10 @@ export default {
         }
     },
     methods: {
+        goTo (destination) {
+            this.$router.push(`/${destination}`)
+        },
+
         logout () {
             let that = this
             this.$axios.get(`${prefix}/staff/logout.do`)

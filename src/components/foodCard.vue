@@ -6,13 +6,15 @@
             <div class="material f-ellipsis">{{ foodInfo.material }}</div>
             <div class="hot f-ellipsis">{{ foodInfo.visitCount }} 浏览 {{ foodInfo.markCount }} 收藏</div>
         </div>
-        <div v-if="showStar" class="star" @click="say($event, foodInfo.foodId)" @click.stop>
+        <div v-if="showStar" class="star" @click="removeMarks(foodInfo.foodId)" @click.stop>
             <i class="star_link el-icon-star-on"></i>
         </div>
     </div>
 </template>
 
 <script>
+import { prefix } from '@/publicAPI/config'
+
 export default {
     name: 'foodCard',
     props: {
@@ -29,6 +31,11 @@ export default {
             type: Boolean
         }
     },
+    computed: {
+        userInfo () {
+            return this.$store.getters.getUserInfo
+        }
+    },
 
     data () {
         return {
@@ -40,9 +47,25 @@ export default {
         }
     },
     methods: {
-        say (ev, val) {
-            alert(11)
-
+        removeMarks (id) {
+            var querystring = require('querystring')
+            let that = this
+            this.$axios.post(`${prefix}/food/removeMarks`,
+                querystring.stringify({
+                    foodId: id,
+                    userId: that.userInfo.uid
+                }))
+                .then((res) => {
+                    if (res.data.success) {
+                        this.foodInfo.markCount--
+                        this.$emit('removeMark', id)
+                    } else {
+                        alert(res.data.msg)
+                    }
+                })
+                .catch((err) => {
+                    alert(err)
+                })
         },
 
         gotoDetail (id) {

@@ -2,7 +2,7 @@
     <div>
         <mHeader2 title="我的收藏"></mHeader2>
         <div class="myMark">
-            <FoodCard size="normal" :showStar="true" :foodInfo="item" v-for="(item, idx) in foods" :key="idx"></FoodCard>
+            <FoodCard @removeMark="updateList" size="normal" :showStar="true" :foodInfo="item" v-for="(item, idx) in foods" :key="idx"></FoodCard>
         </div>
     </div>
 </template>
@@ -20,16 +20,28 @@ export default {
     },
     data () {
         return {
-            foods: []
+            foods: [],
+            removingId: ''
         }
     },
 
     methods: {
-        getData () {
-            this.$axios.get(`${prefix}/food/getFoodsByKeyword?keyword=米`)
+        updateList (id) {
+            this.removingId = id
+            this.foods.forEach((elem, idx) => {
+                if (elem.foodId === id) {
+                    this.foods.splice(idx, 1)
+                    console.log('删了一个id为' + id)
+                    console.log(this.foods)
+                }
+            })
+        },
+
+        getMyMarksList () {
+            this.$axios.get(`${prefix}/food/getMyMarksList`)
             .then((res) => {
                 if (res.data.success) {
-                    this.foods = [...res.data.relatedObject.myList]
+                    this.foods = [...res.data.relatedObject]
                 }
             })
             .catch((err) => {
@@ -38,7 +50,7 @@ export default {
         }
     },
     mounted () {
-        this.getData()
+        this.getMyMarksList()
     }
 }
 </script>
