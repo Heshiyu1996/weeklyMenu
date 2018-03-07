@@ -2,36 +2,13 @@
     <div class="search">
         <nav class="header-wrapper">
             <router-link to="/">
-                <div class="flag">
-                    <i class="back_link el-icon-arrow-left"></i>
-                </div>
             </router-link>
             <div class="input-wrapper">
-                <input v-model="keyword" class="searchInput" type="text" @keyup.enter="search()" placeholder="想吃什么搜这里，如粤菜" />
+                <input v-model="keyword" class="searchInput" type="text" @keyup.enter="search()" placeholder="请输入菜品名" />
                 <div class="btn" @click="search()">搜索</div>
             </div>
         </nav>
-        <!-- 初次进入 开始 -->
-        <div v-if="firstEnter" class="init">
-            <div class="hot-wrapper">
-                <div class="title">热门搜索</div>
-                <div class="list">
-                    <div class="item" v-for="(item, idx) in keywords" :key="idx" @click="quicklySearch(item)">
-                        {{ item }}
-                    </div>
-                </div>
-            </div>
-            <div class="recent-wrapper">
-                <div class="title">最近搜索
-                    <a href="javascript:;" class="remove el-icon-delete"></a>
-                </div>
-                <div class="list">
-                    <div class="item" v-for="(i, key) in 4" :key="key">粤菜</div>
-                </div>
-            </div>
-        </div>
-        <!-- 初次进入 结束 -->
-        <div v-else class="result-wrapper">
+        <div class="result-wrapper">
             <div v-if="lastKeyword.length !== 0" class="tip">以下为 “{{ lastKeyword }}” 的搜索结果，共 {{ foods.length }} 个</div>
             <FoodCard size="big" :foodInfo="item" v-for="(item, idx) in foods" :key="idx"></FoodCard>
         </div>
@@ -51,14 +28,14 @@ export default {
     },
     data () {
         return {
-            firstEnter: true,
-            img_food: require('./../../static/food/ws.jpg'),
+            img_food: require('./../../../static/food/ws.jpg'),
             keyword: '',
             lastKeyword: '',
             keywords: [],
             foods: []
         }
     },
+
     methods: {
         quicklySearch (val) {
             this.keyword = val
@@ -66,7 +43,6 @@ export default {
         },
 
         search (val) {
-            this.firstEnter = false
             this.lastKeyword = this.keyword
             this.$axios.get(`${prefix}/food/getFoodsByKeyword?keyword=${val || this.keyword}`)
             .then((res) => {
@@ -118,14 +94,13 @@ export default {
 </script>
 
 <style lang="postcss" type="text/css" rel="stylesheet/css" scoped>
-@import "../common.css";
+@import "../../common.css";
 
 .search {
     position: absolute;
     width: 100%;
     height: 100%;
     font-size: px2rem(14px);
-    background: $gray1;
         
     .header-wrapper {
         position: relative;
@@ -134,7 +109,6 @@ export default {
         height: px2rem(40.5px);
         text-align: center;
         color: #FFF;
-        background-image: linear-gradient(-1deg, $blue1 10%, $blue 100%);
         box-shadow: 0 12px 14px 0 rgba(209, 209, 209, .27);
 
         .flag {
@@ -167,17 +141,17 @@ export default {
                 height: px2rem(30px);
                 padding-left: px2rem(28px);
                 font-size: px2rem(12px);
-                color: $white;
-                border: 0 solid $white;
+                color: $black;
+                border: px2rem(1px) solid $white;
                 border-radius: px2rem(4px);
-                background: rgba(71, 114, 241, .7);
 
                 &:focus {
-                    color: $white;
+                    color: $black;
                 }
             }
 
             .btn {
+                color: $black;
                 display: inline-block;
                 margin-left: px2rem(10px);
                 font-size: px2rem(12px);

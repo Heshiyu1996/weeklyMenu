@@ -1,19 +1,27 @@
 <template>
     <div>
         <mHeader2 :isSuper="true"></mHeader2>
-        <div class="super">
+        <div v-if="!this.$route.meta.inChild" class="super">
             <div class="manager">
-                <div class="item">
+                <div class="item" @click="goTo('reply')">
                     <span class="flag el-icon-edit-outline"></span>
-                    <router-link to="/super/reply">
-                        <div class="txt">查看反馈</div>
-                    </router-link>
+                    <div class="txt">查看反馈</div>
+                    <span class="extend el-icon-arrow-right"></span>
+                </div>
+                <div class="item" @click="goTo('addFood')">
+                    <span class="flag el-icon-circle-plus-outline"></span>
+                    <div class="txt">添加菜品</div>
+                    <span class="extend el-icon-arrow-right"></span>
+                </div>
+                <div class="item" @click="goTo('editFood')">
+                    <span class="flag el-icon-edit"></span>
+                    <div class="txt">编辑菜品</div>
                     <span class="extend el-icon-arrow-right"></span>
                 </div>
             </div>
             <div class="item logout" @click="logout()">退出登录</div>
         </div>
-        <router-view></router-view>
+        <router-view v-else></router-view>
     </div>
 </template>
 
@@ -22,7 +30,7 @@ import mHeader2 from '@/components/Public/mHeader2'
 import { prefix } from '@/publicAPI/config'
 
 export default {
-    name: 'super',
+    name: 'addFood',
     components: {
         mHeader2
     },
@@ -31,6 +39,10 @@ export default {
         }
     },
     methods: {
+        goTo (destination) {
+            this.$router.push(`/super/${destination}`)
+        },
+
         logout () {
             let that = this
             this.$axios.get(`${prefix}/staff/logout.do`)

@@ -80,3 +80,28 @@
 .el-message-box__wrapper .el-message-box {
     width: 90%;
 }
+
+/* 添加菜品 */
+.addFood .items-wrapper .item .el-select {
+    top: -3px;
+}
+
+.addFood .items-wrapper .item .avatar-uploader .el-upload.el-upload--text {
+    width: 100%;
+    height: 100%;
+}
+
+.addFood .items-wrapper .item .avatar-uploader .el-upload.el-upload--text .el-icon-plus.avatar-uploader-icon {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.addFood .items-wrapper .item .avatar-uploader .el-upload.el-upload--text .el-icon-plus.avatar-uploader-icon:before {
+    position: absolute;
+    margin-top: -57px;
+    margin-left: -50px;
+    height: 0;
+    width: 100%;
+}

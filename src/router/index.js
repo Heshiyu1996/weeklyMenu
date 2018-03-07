@@ -14,6 +14,9 @@ import foodDetail from '@/pages/foodDetail'
 
 import superIndex from '@/pages/super/index'
 import Reply from '@/pages/super/reply'
+import AddFood from '@/pages/super/addFood'
+import EditFood from '@/pages/super/editFood'
+import FoodSearch from '@/pages/super/foodSearch'
 
 Vue.use(Router)
 
@@ -73,10 +76,37 @@ export default new Router({
             path: '/super',
             name: 'super',
             component: superIndex,
+            meta: {
+                inChild: false
+            },
             children: [{
                 path: 'reply',
                 name: 'reply',
-                component: Reply
+                component: Reply,
+                meta: {
+                    inChild: true
+                }
+            }, {
+                path: 'addFood',
+                name: 'addFood',
+                component: AddFood,
+                meta: {
+                    inChild: true
+                }
+            }, {
+                path: 'editFood',
+                name: 'editFood',
+                component: EditFood,
+                meta: {
+                    inChild: true
+                }
+            }, {
+                path: 'foodSearch',
+                name: 'foodSearch',
+                component: FoodSearch,
+                meta: {
+                    inChild: true
+                }
             }]
         }
     ]

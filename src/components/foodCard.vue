@@ -69,7 +69,12 @@ export default {
         },
 
         gotoDetail (id) {
-            this.$router.push(`/foodDetail/${id}`)
+            if (this.$route.name === 'foodSearch') {
+                this.$store.commit('setFoodInfo', this.foodInfo)
+                this.$router.push(`/super/editFood`)
+            } else {
+                this.$router.push(`/foodDetail/${id}`)
+            }
         }
     }
 }
