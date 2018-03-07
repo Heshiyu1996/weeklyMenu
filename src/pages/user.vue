@@ -4,7 +4,9 @@
         <div class="user">
             <div class="item">
                 <span class="flag el-icon-star-off"></span>
-                <span class="txt">我的收藏</span>
+                <router-link to="/myMark">
+                    <span class="txt">我的收藏</span>
+                </router-link>
                 <span class="extend el-icon-arrow-right"></span>
             </div>
             <div class="item">

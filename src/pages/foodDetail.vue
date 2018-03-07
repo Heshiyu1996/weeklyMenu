@@ -8,7 +8,8 @@
         <div class="vidHeader">
             <div class="name f-ellipsis2">{{ foodInfo.name }}</div>
             <div class="tag">{{ foodInfo.category }}</div>
-            <i class="mark-btn el-icon-star-on"></i>
+            <i v-if="!isExistMark" class="mark-btn el-icon-star-off" @click="insertMarks()"></i>
+            <i v-if="isExistMark" class="mark-btn el-icon-star-on" @click="removeMarks()"></i>
             <div class="desc">{{ foodInfo.desc }}</div>
             <div class="hot f-ellipsis">{{ foodInfo.visitCount }} 浏览 {{ foodInfo.markCount }} 收藏</div>
         </div>
@@ -28,7 +29,9 @@ export default {
     name: 'foodDetail',
     data () {
         return {
+            isExistMark: false,
             foodInfo: {
+                foodId: '',
                 name: '',
                 imageUrl: '',
                 material: '',
@@ -41,8 +44,69 @@ export default {
             img_food: require('./../../static/food/ws.jpg')
         }
     },
+    computed: {
+        userInfo () {
+            return this.$store.getters.getUserInfo
+        }
+    },
 
     methods: {
+        checkMarks () {
+            this.$axios.get(`${prefix}/food/checkMarks?foodId=${this.$route.params.foodId}`)
+            .then((res) => {
+                if (res.data.success) {
+                    if (res.data.relatedObject.isExist) {
+                        this.isExistMark = true
+                    }
+                }
+            })
+            .catch((err) => {
+                alert(err)
+            })
+        },
+        
+        insertMarks () {
+            var querystring = require('querystring')
+            let that = this
+            this.$axios.post(`${prefix}/food/insertMarks`,
+                querystring.stringify({
+                    foodId: that.foodInfo.foodId,
+                    userId: that.userInfo.uid
+                }))
+                .then((res) => {
+                    if (res.data.success) {
+                        this.isExistMark = true
+                        this.foodInfo.markCount++
+                    } else {
+                        alert(res.data.msg)
+                    }
+                })
+                .catch((err) => {
+                    alert(err)
+                })
+        },
+
+        removeMarks () {
+            var querystring = require('querystring')
+            let that = this
+            this.$axios.post(`${prefix}/food/removeMarks`,
+                querystring.stringify({
+                    foodId: that.foodInfo.foodId,
+                    userId: that.userInfo.uid
+                }))
+                .then((res) => {
+                    if (res.data.success) {
+                        this.isExistMark = false
+                        this.foodInfo.markCount--
+                    } else {
+                        alert(res.data.msg)
+                    }
+                })
+                .catch((err) => {
+                    alert(err)
+                })
+        },
+
         getFoodInfo () {
             this.$axios.get(`${prefix}/food/getFoodInfoById?foodId=${this.$route.params.foodId}`)
             .then((res) => {
@@ -78,6 +142,7 @@ export default {
     },
 
     mounted () {
+        this.checkMarks()
         this.getFoodInfo()
     },
 
