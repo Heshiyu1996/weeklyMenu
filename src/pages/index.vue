@@ -24,18 +24,9 @@
                     <div class="food-wrapper">
                         <el-tabs tab-position="left" style="height: 360px;">
                             <el-tab-pane label="点心">
-                                <!-- <div class="food" v-for="(item, idx) in 10" :key="idx">
-                                    <router-link :to="'/foodDetail/' + idx">
-                                        <img class="img" :src="img_food" />
-                                        <div class="desc">
-                                            <div class="name f-ellipsis">莴笋炒鸡蛋</div>
-                                            <div class="material f-ellipsis">鸡蛋、莴笋、红椒、小葱</div>
-                                            <div class="hot f-ellipsis">14浏览 7收藏</div>
-                                        </div>
-                                    </router-link>
-                                </div> -->
-                                <FoodCard :foodInfo="item" v-for="(item, idx) in foods" :key="idx"></FoodCard>
+                                <FoodCard size="normal" :foodInfo="item" v-for="(item, idx) in foods" :key="idx"></FoodCard>
                             </el-tab-pane>
+
                             <el-tab-pane label="粉面">
 
                             </el-tab-pane>

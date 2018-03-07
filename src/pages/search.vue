@@ -11,14 +11,13 @@
                 <div class="btn" @click="search()">搜索</div>
             </div>
         </nav>
-
         <!-- 初次进入 开始 -->
         <div v-if="firstEnter" class="init">
             <div class="hot-wrapper">
                 <div class="title">热门搜索</div>
                 <div class="list">
-                    <div class="item" v-for="(idx, key) in keywords.length" :key="key" @click="quicklySearch(keywords[idx])">
-                        {{ keywords[idx] }}
+                    <div class="item" v-for="(item, idx) in keywords" :key="idx" @click="quicklySearch(item)">
+                        {{ item }}
                     </div>
                 </div>
             </div>
@@ -34,11 +33,11 @@
         <!-- 初次进入 结束 -->
         <div v-else class="result-wrapper">
             <div class="tip">以下为 “{{ lastKeyword }}” 的搜索结果，共 {{ foods.length }} 个</div>
-            <FoodCard :foodInfo="item" v-for="(item, idx) in foods" :key="idx"></FoodCard>
+            <FoodCard size="big" :foodInfo="item" v-for="(item, idx) in foods" :key="idx"></FoodCard>
         </div>
     </div>
 </template>
-
+       
 <script>
 import { prefix } from '@/publicAPI/config'
 import mHeader2 from '@/components/Public/mHeader2'
@@ -120,6 +119,7 @@ export default {
 
 <style lang="postcss" type="text/css" rel="stylesheet/css" scoped>
 @import "../common.css";
+
 .search {
     position: absolute;
     width: 100%;
@@ -173,7 +173,7 @@ export default {
                 background: rgba(71, 114, 241, .7);
 
                 &:focus {
-                    color:  $white;
+                    color: $white;
                 }
             }
 
@@ -200,6 +200,7 @@ export default {
 
             .list {
                 padding: px2rem(4px) 0;
+
                 .item {
                     display: inline-block;
                     width: 20%;

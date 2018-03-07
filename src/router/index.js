@@ -6,6 +6,7 @@ import Login from '@/pages/login'
 import User from '@/pages/user'
 import FeedBack from '@/pages/feedBack'
 import MyFeedBack from '@/pages/myFeedBack'
+import MyMark from '@/pages/myMark'
 import MyFeedBackDetail from '@/pages/myFeedBackDetail'
 import Search from '@/pages/search'
 import test from '@/pages/test'
@@ -42,6 +43,11 @@ export default new Router({
             path: '/myFeedBack',
             name: 'myFeedBack',
             component: MyFeedBack
+        },
+        {
+            path: '/myMark',
+            name: 'myMark',
+            component: MyMark
         },
         {
             path: '/myFeedBackDetail/:fid',

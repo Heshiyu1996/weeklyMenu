@@ -1,30 +1,54 @@
 <template>
     <div class="foodCard" @click="gotoDetail(foodInfo.foodId)">
         <img class="img" :src="img_food" />
-        <div class="desc">
+        <div class="desc" :class="sizeObj">
             <div class="name f-ellipsis">{{ foodInfo.name }}</div>
             <div class="material f-ellipsis">{{ foodInfo.material }}</div>
             <div class="hot f-ellipsis">{{ foodInfo.visitCount }} 浏览 {{ foodInfo.markCount }} 收藏</div>
+        </div>
+        <div v-if="showStar" class="star" @click="say($event, foodInfo.foodId)" @click.stop>
+            <i class="star_link el-icon-star-on"></i>
         </div>
     </div>
 </template>
 
 <script>
 export default {
-  name: 'foodCard',
+    name: 'foodCard',
+    props: {
+        foodInfo: {
+            default: {},
+            type: Object
+        },
+        size: {
+            default: '',
+            type: String
+        },
+        showStar: {
+            default: false,
+            type: Boolean
+        }
+    },
 
-  props: ['foodInfo'],
+    data () {
+        return {
+            img_food: require('./../../static/food/ws.jpg'),
+            sizeObj: {
+                'small': this.size === 'small',     // 55%
+                'normal': this.size === 'normal'    // 58%
+            }
+        }
+    },
+    methods: {
+        say (ev, val) {
+            alert(11)
 
-  data () {
-    return {
-        img_food: require('./../../static/food/ws.jpg')
+        },
+
+        gotoDetail (id) {
+            this.$router.push(`/foodDetail/${id}`)
+        }
     }
-  },
-  methods: {
-      gotoDetail (id) {
-          this.$router.push(`/foodDetail/${id}`)
-      }
-  }
 }
 </script>
 
@@ -61,10 +85,37 @@ export default {
         }
 
         .material, .hot {
-            max-width: px2rem(280px);;
-            margin-top: px2rem(3px);
+            max-width: px2rem(280px);
             color: $gray2;
             font-size: px2rem(14px);
+        }
+
+        &.small {
+            width: 55%;
+        }
+
+        &.normal {
+            width: 58%;
+        }
+    }
+
+    .star {
+        display: inline-block;
+        position: absolute;
+        right: 0;
+        width: px2rem(60px);
+        height: px2rem(76px);
+        margin-top: px2rem(-5px);
+        text-align: center;
+        line-height: px2rem(76px);
+
+        .star_link {
+            color: $blue;
+            font-size: px2rem(28px);
+        }
+
+        &:first-child {
+            margin-top: 0;
         }
     }
 
