@@ -17,6 +17,7 @@ import Reply from '@/pages/super/reply'
 import AddFood from '@/pages/super/addFood'
 import EditFood from '@/pages/super/editFood'
 import DeleteFood from '@/pages/super/deleteFood'
+import CheckFood from '@/pages/super/checkFood'
 import FoodSearch from '@/pages/super/foodSearch'
 
 Vue.use(Router)
@@ -105,6 +106,13 @@ export default new Router({
                 path: 'deleteFood',
                 name: 'deleteFood',
                 component: DeleteFood,
+                meta: {
+                    inChild: true
+                }
+            }, {
+                path: 'checkFood',
+                name: 'checkFood',
+                component: CheckFood,
                 meta: {
                     inChild: true
                 }

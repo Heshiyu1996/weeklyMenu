@@ -18,6 +18,11 @@
                     <div class="txt">删除菜品</div>
                     <span class="extend el-icon-arrow-right"></span>
                 </div>
+                <div class="item" @click="goTo('checkFood')">
+                    <span class="flag el-icon-remove-outline"></span>
+                    <div class="txt">查看菜品</div>
+                    <span class="extend el-icon-arrow-right"></span>
+                </div>
             </div>
             <div class="manager">
                 <div class="item" @click="goTo('reply')">

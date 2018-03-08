@@ -9,7 +9,7 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import './style/reset.css'
 import './style/eleUI.css'
-import { getUserInfo } from '@/publicAPI/util'
+import { getUserInfo, getCommonInfo, getRecentWeek } from '@/publicAPI/util'
 
 Vue.config.productionTip = false
 axios.defaults.withCredentials = true
@@ -23,7 +23,9 @@ let vm = new Vue({
     store,
     template: '<App/>',
     mounted () {
-        getUserInfo(this)
+        getUserInfo(this),
+        getCommonInfo(this),
+        getRecentWeek(this)
     },
     components: { App }
 })
