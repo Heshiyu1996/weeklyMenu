@@ -1,5 +1,5 @@
 <template>
-    <div class="foodCard" @click="gotoDetail(foodInfo.foodId)">
+    <div class="foodCard" @click="gotoDetail($event, foodInfo.foodId)">
         <img class="img" :src="img_food" />
         <div class="desc" :class="sizeObj">
             <div class="name f-ellipsis">{{ foodInfo.name }}</div>
@@ -8,6 +8,9 @@
         </div>
         <div v-if="showStar" class="star" @click="removeMarks(foodInfo.foodId)" @click.stop>
             <i class="star_link el-icon-star-on"></i>
+        </div>
+        <div v-if="showSelect" class="select" @click="select(foodInfo.foodId)" @click.stop >
+            <el-checkbox class="star_link" size="medium" v-model="foodInfo.checked"></el-checkbox>
         </div>
     </div>
 </template>
@@ -29,6 +32,10 @@ export default {
         showStar: {
             default: false,
             type: Boolean
+        },
+        showSelect: {
+            default: false,
+            type: Boolean
         }
     },
     computed: {
@@ -43,10 +50,15 @@ export default {
             sizeObj: {
                 'small': this.size === 'small',     // 55%
                 'normal': this.size === 'normal'    // 58%
-            }
+            },
+            checked: false
         }
     },
     methods: {
+        select (id) {
+
+        },
+
         removeMarks (id) {
             var querystring = require('querystring')
             let that = this
@@ -68,7 +80,7 @@ export default {
                 })
         },
 
-        gotoDetail (id) {
+        gotoDetail (ev, id) {
             if (this.$route.name === 'foodSearch') {
                 this.$store.commit('setFoodInfo', this.foodInfo)
                 this.$router.push(`/super/editFood`)
@@ -87,6 +99,7 @@ export default {
     width: 100%;
     height: px2rem(76px);
     padding: px2rem(5px) 0;
+    margin-top: px2rem(5px);
     border-bottom: px2rem(1px) solid $gray2;
     background: $white;
 
@@ -127,7 +140,7 @@ export default {
         }
     }
 
-    .star {
+    .star, .select {
         display: inline-block;
         position: absolute;
         right: 0;
@@ -137,7 +150,7 @@ export default {
         text-align: center;
         line-height: px2rem(76px);
 
-        .star_link {
+        .star_link, .select {
             color: $blue;
             font-size: px2rem(28px);
         }

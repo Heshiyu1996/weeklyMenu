@@ -1,9 +1,9 @@
 <template>
-    <div class="addFood">
+    <div class="editFood">
         <div class="items-wrapper">
             <div class="item">
                 <span class="label">菜品id</span>
-                <input type="text" v-model="foodInfoCopy.foodId" class="inputBox id" placeholder="请输入菜品id"/>
+                <input type="text" v-model="foodInfoCopy.foodId" disabled class="inputBox id" placeholder="请选取菜品id"/>
                 <span class="search-btn el-icon-search" @click="goToSearch()"></span>
             </div>
             <div class="item">
@@ -39,7 +39,7 @@
             </div>
         </div>
         <div class="btn-wrapper">
-            <div ref="btn" class="btn" :class="{ noInput: ((foodInfoCopy.foodId.length === 0) || (foodInfoCopy.name.length === 0) || (foodInfoCopy.material.length === 0) || (foodInfoCopy.description.length === 0) || (foodInfoCopy.categoryId.length === 0)) }" @click="submit()">添加</div>
+            <div ref="btn" class="btn" :class="{ noInput: ((foodInfoCopy.foodId.length === 0) || (foodInfoCopy.name.length === 0) || (foodInfoCopy.material.length === 0) || (foodInfoCopy.description.length === 0) || (foodInfoCopy.categoryId.length === 0)) }" @click="beforeSubmit()">修改</div>
         </div>
     </div>
 </template>
@@ -49,7 +49,7 @@ import { prefix } from '@/publicAPI/config'
 import { getUserInfo } from '@/publicAPI/util'
 
 export default {
-    name: 'addFood',
+    name: 'editFood',
     data () {
         return {
             foodInfoCopy: {
@@ -103,31 +103,35 @@ export default {
             })
         },
 
-        toLogin (ev) {
-            // if (ev.target.classList.contains('noInput')) return false
-            // this.$refs.btn.innerText = '登录中...'
-            // this.$refs.btn.style.backgroundColor = '#4FA34B'
-            // setTimeout(() => {
-            //     this.login()
-            // }, 100)
+        beforeSubmit () {
+            this.$confirm('确认修改此菜品吗?', '温馨提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                this.submit()
+            }).catch(() => {
+                console.log('取消本次修改')
+            })
         },
 
         submit () {
             var querystring = require('querystring')
             let that = this
-            this.$axios.post(`${prefix}/admin/insertFood`,
+            this.$axios.post(`${prefix}/admin/updateFood`,
                 querystring.stringify({
-                    name: this.foodInfo.name,
-                    // imgUrl: this.foodInfo.imgUrl,
+                    foodId: this.foodInfoCopy.foodId,
+                    name: this.foodInfoCopy.name,
+                    // imgUrl: this.foodInfoCopy.imgUrl,
                     imgUrl: "www.baidu.com",
-                    material: this.foodInfo.material,
-                    description: this.foodInfo.description,
-                    categoryId: this.foodInfo.categoryId
+                    material: this.foodInfoCopy.material,
+                    description: this.foodInfoCopy.description,
+                    categoryId: this.foodInfoCopy.categoryId
 
                 }))
                 .then((res) => {
                     if (res.data.success) {
-                        this.$alert('添加成功!', '温馨提示', {
+                        this.$alert('修改成功!', '温馨提示', {
                             confirmButtonText: '好的',
                             callback: () => {
                                 this.$router.push('/super')
@@ -153,7 +157,7 @@ export default {
 <style lang="postcss" type="text/css" rel="stylesheet/postcss" scoped>
 @import "../../common.css";
 
-.addFood {
+.editFood {
     height: px2rem(330px);
 
     .items-wrapper {
@@ -178,6 +182,7 @@ export default {
 
                 &.id {
                     width: px2rem(100px);
+                    background: $white;
                 }
             }
 
@@ -233,7 +238,7 @@ export default {
 
                 .avatar-uploader-icon {
                     font-size: 28px;
-                    color: #8c939d;
+                    color: #8C939D;
                     width: 178px;
                     height: 178px;
                     line-height: 178px;
@@ -241,9 +246,9 @@ export default {
                 }
 
                 .avatar {
-                    width: 178px;
-                    height: 178px;
                     display: block;
+                    height: 100%;
+                    width: 100%;
                 }
             }
 

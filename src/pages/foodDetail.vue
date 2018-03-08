@@ -130,7 +130,7 @@ export default {
                 }))
                 .then((res) => {
                     if (res.data.success) {
-                        console.log(res.data.msg)
+                        this.foodInfo.visitCount++
                     } else {
                         alert(res.data.msg)
                     }

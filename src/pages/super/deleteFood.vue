@@ -1,5 +1,5 @@
 <template>
-    <div class="foodSearch">
+    <div class="deleteFood">
         <nav class="header-wrapper">
             <router-link to="/">
             </router-link>
@@ -8,9 +8,12 @@
                 <div class="btn" @click="search()">搜索</div>
             </div>
         </nav>
+        <div class="operation-wrapper">
+            <el-button class="delete" type="danger" size="mini" @click="beforeDelete()">删除</el-button>
+            <el-button class="selectAll" type="primary" size="mini" @click="selectAll($event)">全选</el-button>
+        </div>
         <div class="result-wrapper">
-            <div v-if="lastKeyword.length !== 0" class="tip">以下为 “{{ lastKeyword }}” 的搜索结果，共 {{ foods.length }} 个</div>
-            <FoodCard size="big" :foodInfo="item" v-for="(item, idx) in foods" :key="idx"></FoodCard>
+            <FoodCard size="normal" :showSelect="true" :foodInfo="item" v-for="(item, idx) in foods" :key="idx"></FoodCard>
         </div>
     </div>
 </template>
@@ -21,7 +24,7 @@ import mHeader2 from '@/components/Public/mHeader2'
 import FoodCard from '@/components/foodCard'
 
 export default {
-    name: 'foodSearch',
+    name: 'deleteFood',
     components: {
         mHeader2,
         FoodCard
@@ -32,14 +35,61 @@ export default {
             keyword: '',
             lastKeyword: '',
             keywords: [],
+            idDeleting: [],
             foods: []
         }
     },
 
     methods: {
-        quicklySearch (val) {
-            this.keyword = val
-            this.search(val)
+        beforeDelete () {
+            this.idDeleting = []
+            this.foods.forEach((elem) => {
+                if (elem.checked) {
+                    this.idDeleting.push(elem.foodId)
+                }
+            })
+            this.$confirm('确认删除菜品吗?', '温馨提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                this.deleteFoods()
+            }).catch(() => {
+                console.log('取消本次修改')
+            })
+        },
+
+        deleteFoods () {
+            var querystring = require('querystring')
+            let that = this
+            this.$axios.post(`${prefix}/admin/deleteFood`,
+                querystring.stringify({
+                    foodsId: that.idDeleting
+                }))
+                .then((res) => {
+                    if (res.data.success) {
+                        this.search()
+                    } else {
+                        alert(res.data.msg)
+                    }
+                })
+                .catch((err) => {
+                    alert(err)
+                })
+        },
+
+        selectAll (ev) {
+            if (ev.currentTarget.innerText === '全选') {
+                this.foods.forEach((elem) => {
+                    this.$set(elem, 'checked', true)
+                })
+                ev.currentTarget.innerText = '取消全选'
+            } else {
+                this.foods.forEach((elem) => {
+                    this.$set(elem, 'checked', false)
+                })
+                ev.currentTarget.innerText = '全选'
+            }
         },
 
         search (val) {
@@ -48,6 +98,10 @@ export default {
             .then((res) => {
                 if (res.data.success) {
                     this.foods = [...res.data.relatedObject.myList]
+                    this.foods.forEach((elem) => {
+                        this.$set(elem, 'checked', false)
+                    })
+                    this.idDeleting = []
                 }
             })
             .catch((err) => {
@@ -65,7 +119,7 @@ export default {
 <style lang="postcss" type="text/css" rel="stylesheet/css" scoped>
 @import "../../common.css";
 
-.foodSearch {
+.deleteFood {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -154,47 +208,29 @@ export default {
                 }
             }
         }
+    }
 
-        .recent-wrapper {
-            margin-top: px2rem(10px);
-            background: $white;
+    .operation-wrapper {
+        position: relative;
+        text-align: left;
+        top: px2rem(5px);
+        height: px2rem(30px);
 
-            .title, .list .item {
-                margin-left: px2rem(15px);
-                color: $gray2;
-                border-bottom: px2rem(1px) solid $gray1;
-            }
+        .delete {
+            display: inline-block;
+            position: absolute;
+            left: px2rem(15px);
+        }
 
-            .title {
-                height: px2rem(36px);
-                line-height: px2rem(36px);
-
-                .remove {
-                    float: right;
-                    margin: px2rem(10px) px2rem(15px) 0 0;
-                    font-size: px2rem(18px);
-                    color: $gray2;
-                }
-            }
-
-            .list {
-                .item {
-                    height: px2rem(48px);
-                    line-height: px2rem(48px);
-                    color: $black2;
-                }
-            }
+        .selectAll {
+            display: inline-block;
+            position: absolute;
+            right: px2rem(15px);
         }
     }
 
     .result-wrapper {
-        padding: px2rem(5px) px2rem(15px);
-
-        .tip {
-            margin: px2rem(5px) 0;
-            color: $gray2;
-            font-size: px2rem(12px);
-        }
+        padding: 0 px2rem(15px);
 
         .food {
             height: px2rem(76px);

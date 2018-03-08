@@ -3,11 +3,6 @@
         <mHeader2 :isSuper="true"></mHeader2>
         <div v-if="!this.$route.meta.inChild" class="super">
             <div class="manager">
-                <div class="item" @click="goTo('reply')">
-                    <span class="flag el-icon-edit-outline"></span>
-                    <div class="txt">查看反馈</div>
-                    <span class="extend el-icon-arrow-right"></span>
-                </div>
                 <div class="item" @click="goTo('addFood')">
                     <span class="flag el-icon-circle-plus-outline"></span>
                     <div class="txt">添加菜品</div>
@@ -16,6 +11,18 @@
                 <div class="item" @click="goTo('editFood')">
                     <span class="flag el-icon-edit"></span>
                     <div class="txt">编辑菜品</div>
+                    <span class="extend el-icon-arrow-right"></span>
+                </div>
+                <div class="item" @click="goTo('deleteFood')">
+                    <span class="flag el-icon-remove-outline"></span>
+                    <div class="txt">删除菜品</div>
+                    <span class="extend el-icon-arrow-right"></span>
+                </div>
+            </div>
+            <div class="manager">
+                <div class="item" @click="goTo('reply')">
+                    <span class="flag el-icon-edit-outline"></span>
+                    <div class="txt">查看反馈</div>
                     <span class="extend el-icon-arrow-right"></span>
                 </div>
             </div>
