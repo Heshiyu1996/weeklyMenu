@@ -28,6 +28,8 @@
                                     </el-dropdown-item>
                                 </el-dropdown-menu>
                             </el-dropdown>
+                            <div class="period-lf">早</div>
+                            <div class="period-rt">午</div>
                         </div>
                     </div>
                     <div class="food-wrapper">
@@ -199,7 +201,7 @@ export default {
             border: 1px solid $gray;
 
             .date-wrapper {
-                height: px2rem(69px);
+                height: px2rem(67px);
                 border-bottom: px2rem(1px) solid $gray2;
 
                 .image {
@@ -219,7 +221,6 @@ export default {
 
                     .type, .date {
                         display: inline-block;
-                        margin-top: px2rem(5px);
                         color: $black2;
                         font-size: px2rem(28px);
                     }
@@ -233,6 +234,30 @@ export default {
                         line-height: px2rem(20px);
                         color: $black2;
                         font-size: px2rem(14px);
+                    }
+
+                    .period-lf, .period-rt {
+                        display: inline-block;
+                        position: absolute;
+                        top: px2rem(36px);
+                        right: px2rem(5px);
+                        width: px2rem(37px);
+                        height: px2rem(28px);
+                        background: $blue;
+                        color: $white;
+                        font-size: px2rem(12px);
+                        line-height: px2rem(28px);
+                    }
+
+                    .period-rt {
+                        border-bottom-right-radius: px2rem(4px);
+                        border-top-right-radius: px2rem(4px);
+                    }
+
+                    .period-lf {
+                        right: px2rem(43px);
+                        border-bottom-left-radius: px2rem(4px);
+                        border-top-left-radius: px2rem(4px);
                     }
                 }
             }

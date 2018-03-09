@@ -49,12 +49,13 @@
 
 .index .main-wrapper .date-wrapper .detail .el-dropdown {
     position: absolute;
-    top: 10px;
+    top: 2px;
     right: 5px;
 }
 
 .index .main-wrapper .date-wrapper .detail .el-dropdown .el-button-group .el-button {
     padding: 7px;
+    width: 38px;
 }
 
 /* 提交反馈用 */
