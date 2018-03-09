@@ -2,7 +2,7 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import axios from 'axios'
-import eruda from 'eruda'
+// import eruda from 'eruda'
 import store from './vuex'
 import ElementUI from 'element-ui'
 
@@ -14,7 +14,7 @@ import { getUserInfo, getCommonInfo, getRecentWeek } from '@/publicAPI/util'
 Vue.config.productionTip = false
 axios.defaults.withCredentials = true
 Vue.prototype.$axios = axios
-Vue.prototype.$eruda = eruda
+// Vue.prototype.$eruda = eruda
 
 Vue.use(ElementUI)
 let vm = new Vue({

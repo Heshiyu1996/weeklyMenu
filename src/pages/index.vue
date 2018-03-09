@@ -28,21 +28,24 @@
                                     </el-dropdown-item>
                                 </el-dropdown-menu>
                             </el-dropdown>
-                            <div class="period-lf">早</div>
-                            <div class="period-rt">午</div>
+                            <div v-if="periodIndex === 1">
+                                <div class="period-lf" @click="selectPeriod(2)">午</div>
+                                <div class="period-rt" @click="selectPeriod(3)">晚</div>
+                            </div>
+                            <div v-if="periodIndex === 2">
+                                <div class="period-lf" @click="selectPeriod(1)">早</div>
+                                <div class="period-rt" @click="selectPeriod(3)">晚</div>
+                            </div>
+                            <div v-if="periodIndex === 3">
+                                <div class="period-lf" @click="selectPeriod(1)">早</div>
+                                <div class="period-rt" @click="selectPeriod(2)">午</div>
+                            </div>
                         </div>
                     </div>
                     <div class="food-wrapper">
-                        <el-tabs tab-position="left" style="height: 360px;">
-                            <el-tab-pane label="点心">
+                        <el-tabs ref="myTabs" tab-position="left" style="height: 360px;" @tab-click="selectCategory">
+                            <el-tab-pane :cid="category.cid" v-for="(category, idx) in categories" :key="idx" :label="category.cname">
                                 <FoodCard size="normal" :foodInfo="item" v-for="(item, idx) in foods" :key="idx"></FoodCard>
-                            </el-tab-pane>
-
-                            <el-tab-pane label="粉面">
-
-                            </el-tab-pane>
-                            <el-tab-pane label="粥">
-
                             </el-tab-pane>
                         </el-tabs>
                     </div>
@@ -81,15 +84,20 @@ export default {
             dayIndex: 1,
             periods: [{
                 txt: '早餐',
+                shortTxt: '早',
                 time: '7:00-8:00'
             }, {
                 txt: '午餐',
+                shortTxt: '午',
                 time: '11:00-13:00'
             }, {
                 txt: '晚餐',
+                shortTxt: '晚',
                 time: '18:00-20:00'
             }],
             periodIndex: 1,
+            categories: [],
+            categoryIndex: 1,
             today: {
                 year: '',
                 month: '',
@@ -100,6 +108,14 @@ export default {
     },
 
     methods: {
+        selectCategory (tab, event) {
+            this.categoryIndex = tab.$attrs.cid
+        },
+
+        selectPeriod (periodIdx) {
+            this.periodIndex = periodIdx
+        },
+
         selectDay (dayIdx) {
             this.dayIndex = dayIdx
             this.weekCalendar.forEach((elem, idx) => {
@@ -137,11 +153,46 @@ export default {
             .catch((err) => {
                 console.log(err)
             })
+        },
+
+        getCategoriesList () {
+            // console.log(this.$refs.myTabs.$children[0].$el)
+            // console.log(document.getElementsByClassName('el-tabs__nav'))
+            this.$axios.get(`${prefix}/plan/getCidsByDayPid?day=${this.dayIndex}&pid=${this.periodIndex}`)
+            .then((res) => {
+                if (res.data.success) {
+                    this.categories = [...res.data.relatedObject.categories]
+                    console.log(this.categories)
+                }
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+        },
+
+        getFoodsList (day, pid, cid) {
+            this.$axios.get(`${prefix}/plan/getFoodsByDayPidCid?day=${this.dayIndex}&pid=${this.periodIndex}&cid=${this.categoryIndex}`)
+            .then((res) => {
+                if (res.data.success) {
+                    this.foods = [...res.data.relatedObject.foods]
+                }
+            })
+            .catch((err) => {
+                console.log(err)
+            })
         }
     },
 
     mounted () {
         this.getWeekCalendar()
+        this.getCategoriesList()
+        this.getFoodsList()
+    },
+
+    watch: {
+        dayIndex: 'getCategoriesList',
+        periodIndex: 'getCategoriesList',
+        categoryIndex: 'getFoodsList'
     }
 }
 </script>

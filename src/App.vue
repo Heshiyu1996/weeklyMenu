@@ -16,11 +16,11 @@ export default {
     //     // mFooter
     // },
     mounted () {
-        var el = document.createElement('div')
-        document.body.appendChild(el)
-        this.$eruda.init({
-            container: el
-        })
+        // var el = document.createElement('div')
+        // document.body.appendChild(el)
+        // this.$eruda.init({
+        //     container: el
+        // })
     },
     methods: {
     }
