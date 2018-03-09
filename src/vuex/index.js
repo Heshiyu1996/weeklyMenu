@@ -5,10 +5,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
         userInfo: {},
-        foodInfo: {},
-        commonInfo: {
-            nowTime: ''
-        }
+        foodInfo: {}
     },
 
     getters: {
@@ -17,10 +14,7 @@ export default new Vuex.Store({
         },
         getFoodInfo: state => {
             return state.foodInfo
-        },
-        getCommonInfo: state => {
-            return state.commonInfo
-        },
+        }
     },
 
     mutations: {
@@ -29,9 +23,6 @@ export default new Vuex.Store({
         },
         setFoodInfo (state, obj) {
             state.foodInfo = obj
-        },
-        setCommonInfo (state, obj) {
-            state.commonInfo = obj
         }
     }
 })

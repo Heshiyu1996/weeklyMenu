@@ -24,7 +24,7 @@ let vm = new Vue({
     template: '<App/>',
     mounted () {
         getUserInfo(this),
-        getCommonInfo(this),
+        // getCommonInfo(this),
         getRecentWeek(this)
     },
     components: { App }

@@ -61,8 +61,17 @@ function getRecentWeek (myVue) {
     // console.log(monday)
     console.log(dateAndDay)
 }
+
+function splitDate (obj, dateStr) {
+    obj.year = dateStr.split('-')[0].slice(2, 4)
+    obj.month = dateStr.split('-')[1]
+    obj.day = dateStr.split('-')[2]
+    return obj
+}
+
 export {
     getUserInfo,
-    getCommonInfo,
-    getRecentWeek
+    // getCommonInfo,
+    getRecentWeek,
+    splitDate
 }

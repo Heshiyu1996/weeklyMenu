@@ -7,7 +7,7 @@
                     <el-carousel trigger="click" height="75px" :autoplay="autoPlay">
                         <el-carousel-item v-for="(pic, idx) in pic_list" :key="idx">
                             <img :src="pic" class="pic" />
-                            <div class="date"> {{ commonInfo.nowTime.year }}.{{ commonInfo.nowTime.month }}.{{ commonInfo.nowTime.day }}</div>
+                            <div class="date"> {{ today.year }}.{{ today.month }}.{{ today.day }}</div>
                             <div class="time">（11:30-12:30）</div>
                         </el-carousel-item>
                     </el-carousel>
@@ -16,33 +16,15 @@
                     <div class="date-wrapper">
                         <img class="image" :src="img_breakfast" />
                         <div class="detail">
-                            <div class="type">早餐</div>
-                            <div class="date"> {{ commonInfo.nowTime.year }}.{{ commonInfo.nowTime.month }}.{{ commonInfo.nowTime.day }}</div>
-                            <div class="time">(7:30 - 9:00)</div>
+                            <div class="type">{{ periods[periodIndex-1].txt }}</div>
+                            <div class="date"> {{ today.year }}.{{ today.month }}.{{ today.day }}</div>
+                            <div class="time">({{ periods[periodIndex-1].time }})</div>
 
                             <el-dropdown size="mini" trigger="click" split-button type="primary">
                                 {{ days[dayIndex-1] }}
                                 <el-dropdown-menu slot="dropdown">
-                                    <el-dropdown-item>
-                                        <span @click="selectDay(1)">周一</span>
-                                    </el-dropdown-item>
-                                    <el-dropdown-item>
-                                        <span @click="selectDay(2)">周二</span>
-                                    </el-dropdown-item>
-                                    <el-dropdown-item>
-                                        <span @click="selectDay(3)">周三</span>
-                                    </el-dropdown-item>
-                                    <el-dropdown-item>
-                                        <span @click="selectDay(4)">周四</span>
-                                    </el-dropdown-item>
-                                    <el-dropdown-item>
-                                        <span @click="selectDay(5)">周五</span>
-                                    </el-dropdown-item>
-                                    <el-dropdown-item>
-                                        <span @click="selectDay(6)">周六</span>
-                                    </el-dropdown-item>
-                                    <el-dropdown-item>
-                                        <span @click="selectDay(7)">周日</span>
+                                    <el-dropdown-item v-for="(val, idx) in days" :key="idx">
+                                        <span @click="selectDay(idx+1)">{{ val }}</span>
                                     </el-dropdown-item>
                                 </el-dropdown-menu>
                             </el-dropdown>
@@ -72,6 +54,7 @@
 import { prefix } from '@/publicAPI/config'
 import mHeader from '@/components/Public/mHeader'
 import FoodCard from '@/components/foodCard'
+import { splitDate } from '@/publicAPI/util'
 
 export default {
     name: 'Index',
@@ -92,47 +75,71 @@ export default {
             img_food: require('./../../static/food/ws.jpg'),
             autoPlay: false,
             foods: [],
-            dayIndex: 0,
-            days: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
-        }
-    },
-    computed:{
-        commonInfo () {
-            return this.$store.getters.getCommonInfo
+            days: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+            dayIndex: 1,
+            periods: [{
+                txt: '早餐',
+                time: '7:00-8:00'
+            }, {
+                txt: '午餐',
+                time: '11:00-13:00'
+            }, {
+                txt: '晚餐',
+                time: '18:00-20:00'
+            }],
+            periodIndex: 1,
+            today: {
+                year: '',
+                month: '',
+                day: ''
+            },
+            weekCalendar: []
         }
     },
 
     methods: {
         selectDay (dayIdx) {
             this.dayIndex = dayIdx
+            this.weekCalendar.forEach((elem, idx) => {
+                if (elem.day === dayIdx) {
+                    splitDate(this.today, elem.date)
+                }
+            })
         },
 
         onIndexChange (index) {
             this.idx = index
         },
 
-        getData () {
-            this.$axios.get(`${prefix}/food/getFoodsByKeyword?keyword=`)
+        getWeekCalendar () {
+            this.$axios.get(`${prefix}/plan/getWeekCalendar`)
             .then((res) => {
                 if (res.data.success) {
-                    this.foods = [...res.data.relatedObject.myList]
+                    // 获取今天星期几
+                    this.dayIndex = res.data.relatedObject.today.day
+                    // 获取目前时段
+                    let hour = res.data.relatedObject.time.split(":")[0]
+                    if (hour <=8) {
+                        this.periodIndex = 1
+                    } else if (hour >13) {
+                        this.periodIndex = 3
+                    } else {
+                        this.periodIndex = 2
+                    }
+                    // 获取今天日期
+                    splitDate(this.today, res.data.relatedObject.today.date)
+                    // 获取周日历
+                    this.weekCalendar = [...res.data.relatedObject.weekCalendar]
                 }
             })
             .catch((err) => {
-                alert(err)
+                console.log(err)
             })
-        },
-
-        getWhichDay () {
-            let date = new Date()
-            this.dayIndex = date.getDay()
-            // alert(this.dayIndex)
         }
     },
 
     mounted () {
-        this.getData()
-        this.getWhichDay()
+        this.getWeekCalendar()
     }
 }
 </script>

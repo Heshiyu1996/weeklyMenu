@@ -104,7 +104,7 @@ export default {
                 querystring.stringify({
                     name: this.foodInfo.name,
                     // imgUrl: this.foodInfo.imgUrl,
-                    imgUrl: "www.baidu.com",
+                    imgUrl: '',
                     material: this.foodInfo.material,
                     description: this.foodInfo.description,
                     categoryId: this.foodInfo.categoryId
