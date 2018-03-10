@@ -16,22 +16,42 @@
             <div class="item">
                 <span class="label">菜品分类</span>
                 <!-- <input type="text" v-model="categoryId" class="inputBox" placeholder="请选择菜品分类"/> -->
-                <el-select v-model="foodInfo.categoryId" slot="prepend" placeholder="请选择">
+                <el-select v-model="foodInfo.categoryId" slot="prepend" placeholder="请选择" size="mini">
                     <el-option v-for="(item, idx) in categories" :key="idx" :label="item.cname" :value="item.cid"></el-option>
                 </el-select>
             </div>
-            <div class="item image">
+            <div class="item"
+                v-for="(period, index) in foodInfo.plans"
+                :label="'供餐时段' + index"
+                :key="period.key"
+            >
+                <span class="label">供应时段{{ index+1 }}</span>
+                <el-select v-model="period.dayId" slot="prepend" placeholder="请选择" size="mini">
+                    <el-option v-for="(day, idx) in days" :key="idx" :label="day.txt" :value="day.dayId"></el-option>
+                </el-select>
+                <el-checkbox-group v-model="period.pids" size="mini">
+                    <!-- <el-checkbox-button label="早餐" name="type"></el-checkbox-button>
+                    <el-checkbox-button label="午餐" name="type"></el-checkbox-button>
+                    <el-checkbox-button label="晚餐" name="type"></el-checkbox-button> -->
+                    <el-checkbox-button v-for="period in periods" :label="period.pid" :key="period.txt">{{period.txt}}</el-checkbox-button>
+                </el-checkbox-group>
+                <i v-if="index === 0" class="add-btn el-icon-circle-plus-outline" @click.prevent="addDomain"></i>
+                <i v-else class="delete-btn el-icon-circle-close-outline" @click.prevent="removeDomain(period)"></i>
+            </div>
+            <!-- <div class="item image">
                 <span class="label">图片</span>
                 <el-upload
                     class="avatar-uploader"
-                    action="https://jsonplaceholder.typicode.com/posts/"
+                    action="http://up-z2.qiniup.com"
                     :show-file-list="false"
                     :on-success="handleAvatarSuccess"
-                    :before-upload="beforeAvatarUpload">
+                    :on-error="handleError"
+                    :before-upload="beforeAvatarUpload"
+                    :data="postData">
                         <img v-if="foodInfo.imgUrl" :src="foodInfo.imgUrl" class="avatar">
                         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
-            </div>
+            </div> -->
         </div>
         <div class="btn-wrapper">
             <div ref="btn" class="btn" :class="{ noInput: ((foodInfo.name.length === 0) || (foodInfo.material.length === 0) || (foodInfo.description.length === 0) || (foodInfo.categoryId.length === 0)) }" @click="submit()">添加</div>
@@ -52,14 +72,73 @@ export default {
                 material: '',
                 description: '',
                 imgUrl: '',
-                categoryId: ''
+                categoryId: '',
+                plans: [{
+                    dayId: '',
+                    pids: []
+                }]
             },
-            categories: []
+            periods: [{
+                pid: 1,
+                txt: '早'
+            }, {
+                pid: 2,
+                txt: '午'
+            }, {
+                pid: 3,
+                txt: '晚'
+            }],
+            days: [{
+                dayId: 1, 
+                txt: '周一'
+            }, {
+                dayId: 2, 
+                txt: '周二'
+            }, {
+                dayId: 3, 
+                txt: '周三'
+            }, {
+                dayId: 4, 
+                txt: '周四'
+            }, {
+                dayId: 5, 
+                txt: '周五'
+            }, {
+                dayId: 6, 
+                txt: '周六'
+            }, {
+                dayId: 7, 
+                txt: '周日'
+            }],
+            categories: [],
+            postData: {
+                token: 'ANPdNJ3TJ0L5ZmI1ht91Pr1D1yAhbLM6DdrRs_If:7TnjVhycrXTu0kr7csnDhjKKYSo=:eyJzY29wZSI6IndlZWtseW1lbnUiLCJkZWFkbGluZSI6MTUyMDY5NTM4Mn0='
+            }
         }
     },
     methods: {
+        removeDomain(item) {
+        var index = this.foodInfo.plans.indexOf(item)
+            if (index !== -1) {
+                this.foodInfo.plans.splice(index, 1)
+            }
+        },
+
+        addDomain() {
+            this.foodInfo.plans.push({
+                dayId: '',
+                pids: [],
+                key: Date.now()
+            });
+        },
+
         handleAvatarSuccess(res, file) {
-            this.foodInfo.imgUrl = URL.createObjectURL(file.raw);
+            this.foodInfo.imgUrl = 'http://p5cuf4ihy.bkt.clouddn.com/'+ res.key
+            console.log(res)
+        },
+
+        handleError(res) {   //显示错误
+        console.log(res)
         },
 
         beforeAvatarUpload(file) {
@@ -107,7 +186,8 @@ export default {
                     imgUrl: '',
                     material: this.foodInfo.material,
                     description: this.foodInfo.description,
-                    categoryId: this.foodInfo.categoryId
+                    categoryId: this.foodInfo.categoryId,
+                    plans: this.foodInfo.plans
 
                 }))
                 .then((res) => {
@@ -142,12 +222,12 @@ export default {
     .items-wrapper {
         .item {
             height: px2rem(50px);
-            padding: 0 px2rem(20px) px2rem(9px);
+            padding: 0 px2rem(15px) px2rem(9px);
             border-bottom: 1px solid $gray3;
 
             .label {
                 display: inline-block;
-                width: px2rem(70px);
+                width: px2rem(75px);
                 height: 100%;
                 padding-top: px2rem(14px);
                 color: $gray2;
@@ -224,6 +304,30 @@ export default {
 
             &.image {
                 height: px2rem(70px);
+            }
+
+            .el-checkbox-group {
+                display: inline-block;
+                margin-left: px2rem(8px);
+                vertical-align: super;
+
+                .el-checkbox-button {
+                    .el-checkbox-button__inner {
+                        padding: px2rem(7px) px2rem(12px);
+                    }
+                }
+            }
+
+            .el-select {
+                width: px2rem(82px);
+            }
+
+            .add-btn, .delete-btn {
+                margin-left: px2rem(8px);
+            }
+
+            .delete-btn {
+                color: $red;
             }
         }
     }

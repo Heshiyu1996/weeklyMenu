@@ -9,7 +9,7 @@
                 </div>
                 <div class="item">
                     <span class="label">密码</span>
-                    <input type="text" v-model="password" class="inputBox" placeholder="请输入密码"/>
+                    <input type="password" v-model="password" class="inputBox" placeholder="请输入密码"/>
                 </div>
             </div>
             <div class="btn-wrapper">
