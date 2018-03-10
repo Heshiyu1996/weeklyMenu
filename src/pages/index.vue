@@ -43,8 +43,8 @@
                         </div>
                     </div>
                     <div class="food-wrapper">
-                        <el-tabs ref="myTabs" tab-position="left" style="height: 360px;" @tab-click="selectCategory">
-                            <el-tab-pane :cid="category.cid" v-for="(category, idx) in categories" :key="idx" :label="category.cname">
+                        <el-tabs v-model="categoryIndex" tab-position="left" style="height: 360px;" @tab-click="selectCategory">
+                            <el-tab-pane :cid="category.cid" :name="category.cid.toString()" v-for="(category, idx) in categories" :key="idx" :label="category.cname">
                                 <FoodCard size="normal" :foodInfo="item" v-for="(item, idx) in foods" :key="idx"></FoodCard>
                             </el-tab-pane>
                         </el-tabs>
@@ -97,7 +97,7 @@ export default {
             }],
             periodIndex: 1,
             categories: [],
-            categoryIndex: 1,
+            categoryIndex: '',
             today: {
                 year: '',
                 month: '',
@@ -109,7 +109,7 @@ export default {
 
     methods: {
         selectCategory (tab, event) {
-            this.categoryIndex = tab.$attrs.cid
+            this.categoryIndex = tab.$attrs.cid.toString()
         },
 
         selectPeriod (periodIdx) {
@@ -156,13 +156,10 @@ export default {
         },
 
         getCategoriesList () {
-            // console.log(this.$refs.myTabs.$children[0].$el)
-            // console.log(document.getElementsByClassName('el-tabs__nav'))
             this.$axios.get(`${prefix}/plan/getCidsByDayPid?day=${this.dayIndex}&pid=${this.periodIndex}`)
             .then((res) => {
                 if (res.data.success) {
                     this.categories = [...res.data.relatedObject.categories]
-                    console.log(this.categories)
                 }
             })
             .catch((err) => {
@@ -192,7 +189,15 @@ export default {
     watch: {
         dayIndex: 'getCategoriesList',
         periodIndex: 'getCategoriesList',
-        categoryIndex: 'getFoodsList'
+        categoryIndex: 'getFoodsList',
+        categories: {
+            handler: function (val, oldVal) { 
+                if (val.length > 0) {
+                    this.categoryIndex = val[0].cid.toString()
+                }
+             },
+            deep: true
+        }
     }
 }
 </script>
