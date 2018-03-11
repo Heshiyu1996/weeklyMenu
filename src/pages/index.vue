@@ -4,17 +4,18 @@
         <div class="index">
             <div class="main-wrapper">
                 <div class="time-wrapper">
-                    <el-carousel trigger="click" height="75px" :autoplay="autoPlay">
-                        <el-carousel-item v-for="(pic, idx) in pic_list" :key="idx">
-                            <img :src="pic" class="pic" />
-                            <div class="date"> {{ today.year }}.{{ today.month }}.{{ today.day }}</div>
-                            <div class="time">（11:30-12:30）</div>
+                    <img class="img-hot" :src="img_hot" />
+                    <el-carousel trigger="click" height="75px" :autoplay="autoPlay" arrow="never">
+                        <el-carousel-item v-for="(hotFood, idx) in hotFoods" :key="idx">
+                            <img :src="img_food" class="pic" />
+                            <div class="name"> {{ hotFood.name }} </div>
+                            <div class="category">{{ hotFood.category }}</div>
                         </el-carousel-item>
                     </el-carousel>
                 </div>
                 <div class="order-wrapper">
                     <div class="date-wrapper">
-                        <img class="image" :src="img_breakfast" />
+                        <img class="image" :src="img_period[periodIndex-1]" />
                         <div class="detail">
                             <div class="type">{{ periods[periodIndex-1].txt }}</div>
                             <div class="date"> {{ today.year }}.{{ today.month }}.{{ today.day }}</div>
@@ -69,16 +70,15 @@ export default {
     },
     data () {
         return {
-            pic_list: [
-                require('./../../static/breakfast.png'),
-                require('./../../static/lunch.png'),
-                require('./../../static/dinner.png')
+            img_hot: require('./../../static/hot.png'),
+            img_period: [
+                require('./../../static/new_breakfast.png'),
+                require('./../../static/new_lunch.png'),
+                require('./../../static/new_dinner.png')
             ],
-            img_breakfast: require('./../../static/new_breakfast.png'),
-            img_lunch: require('./../../static/new_lunch.png'),
-            img_dinner: require('./../../static/new_dinner.png'),
             img_food: require('./../../static/food/ws.jpg'),
             autoPlay: false,
+            hotFoods: [],
             foods: [],
             days: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
             dayIndex: 1,
@@ -177,13 +177,26 @@ export default {
             .catch((err) => {
                 console.log(err)
             })
+        },
+
+        getHotFoods (day, pid, cid) {
+            this.$axios.get(`${prefix}/food/getHotFoods`)
+            .then((res) => {
+                if (res.data.success) {
+                    this.hotFoods = [...res.data.relatedObject]
+                }
+            })
+            .catch((err) => {
+                console.log(err)
+            })
         }
     },
 
     mounted () {
         this.getWeekCalendar()
         this.getCategoriesList()
-        this.getFoodsList()
+        this.getFoodsList(),
+        this.getHotFoods()
     },
 
     watch: {
@@ -194,6 +207,7 @@ export default {
             handler: function (val, oldVal) { 
                 if (val.length > 0) {
                     this.categoryIndex = val[0].cid.toString()
+                    this.getFoodsList()
                 }
              },
             deep: true
@@ -218,32 +232,46 @@ export default {
             z-index: 5;
             background: $blue;
             border-radius: 4px;
+            
+            .img-hot {
+                position: absolute;
+                top: px2rem(-3px);
+                left: px2rem(6px);
+                width: px2rem(22px);
+                height: px2rem(28px);
+                z-index: 999;
+            }
 
             .pic {
-                width: px2rem(135px);
-                height: 100%;
-                margin-left: px2rem(55px);
+                position: absolute;
+                width: px2rem(110px);
+                height: px2rem(65px);
+                top: px2rem(2px);
+                left: px2rem(30px);
+                border: px2rem(3px) solid orange;
+                border-radius: px2rem(6px);;
                 background-size: contain;
             }
 
-            .date, .time {
+            .name, .category {
                 display: inline-block;
                 position: absolute;
-                width: px2rem(135px);
+                right: px2rem(15px);
+                width: px2rem(165px);
+                text-align: right;
             }
             
-            .date {
+            .name {
                 height: 100%;
-                line-height: px2rem(74px);
+                line-height: px2rem(44px);
                 font-size: px2rem(24px);
                 color: $white;
             }
 
-            .time {
-                left: px2rem(135px);
-                bottom: px2rem(2px);
+            .category {
+                bottom: px2rem(6px);
                 height: 20px;
-                font-size: px2rem(14px);
+                font-size: px2rem(12px);
                 color: $gray;
             }
         }
@@ -341,7 +369,6 @@ export default {
                     .img {
                         width: px2rem(92px);
                         height: 100%;
-                        background: green;
                     }
 
                     .desc {

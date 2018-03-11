@@ -177,6 +177,14 @@ export default {
         },
 
         submit () {
+            let plansStrArr = []
+            this.foodInfo.plans.forEach((plan) => {
+                let str = plan.dayId
+                plan.pids.forEach((pid) => {
+                    str += '-' + pid
+                })
+                plansStrArr.push(str)
+            })
             var querystring = require('querystring')
             let that = this
             this.$axios.post(`${prefix}/admin/insertFood`,
@@ -187,8 +195,7 @@ export default {
                     material: this.foodInfo.material,
                     description: this.foodInfo.description,
                     categoryId: this.foodInfo.categoryId,
-                    plans: this.foodInfo.plans
-
+                    plans: plansStrArr
                 }))
                 .then((res) => {
                     if (res.data.success) {

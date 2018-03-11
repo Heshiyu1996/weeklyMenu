@@ -72,6 +72,9 @@ export default {
             .then((res) => {
                 if (res.data.success) {
                     this.foods = [...res.data.relatedObject.myList]
+                    if (this.keyword !== '') {
+                        this.recordKeyword(this.keyword)
+                    }
                 }
             })
             .catch((err) => {
@@ -84,7 +87,6 @@ export default {
             .then((res) => {
                 if (res.data.success) {
                     this.keywords = [...res.data.relatedObject.myList]
-                    console.log(this.keywords)
                 }
             })
             .catch((err) => {

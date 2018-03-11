@@ -69,6 +69,12 @@ export default {
                 .then((res) => {
                     if (res.data.success) {
                         this.search()
+                        this.$alert('删除成功!', '温馨提示', {
+                            confirmButtonText: '好的',
+                            callback: () => {
+                                this.$router.push('/super')
+                            }
+                        })
                     } else {
                         alert(res.data.msg)
                     }

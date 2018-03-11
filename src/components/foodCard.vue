@@ -120,7 +120,6 @@ export default {
         vertical-align: top;
 
         .name {
-            max-width: 80%;
             color: $black2;
             font-size: px2rem(18px);
         }
