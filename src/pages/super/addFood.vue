@@ -61,7 +61,6 @@
 
 <script>
 import { prefix } from '@/publicAPI/config'
-import { getUserInfo } from '@/publicAPI/util'
 
 export default {
     name: 'editFood',
@@ -89,25 +88,25 @@ export default {
                 txt: '晚'
             }],
             days: [{
-                dayId: 1, 
+                dayId: 1,
                 txt: '周一'
             }, {
-                dayId: 2, 
+                dayId: 2,
                 txt: '周二'
             }, {
-                dayId: 3, 
+                dayId: 3,
                 txt: '周三'
             }, {
-                dayId: 4, 
+                dayId: 4,
                 txt: '周四'
             }, {
-                dayId: 5, 
+                dayId: 5,
                 txt: '周五'
             }, {
-                dayId: 6, 
+                dayId: 6,
                 txt: '周六'
             }, {
-                dayId: 7, 
+                dayId: 7,
                 txt: '周日'
             }],
             categories: [],
@@ -117,45 +116,44 @@ export default {
         }
     },
     methods: {
-        removeDomain(item) {
-        var index = this.foodInfo.plans.indexOf(item)
+        removeDomain (item) {
+            var index = this.foodInfo.plans.indexOf(item)
             if (index !== -1) {
                 this.foodInfo.plans.splice(index, 1)
             }
         },
 
-        addDomain() {
+        addDomain () {
             this.foodInfo.plans.push({
                 dayId: '',
                 pids: [],
                 key: Date.now()
-            });
+            })
         },
 
-        handleAvatarSuccess(res, file) {
-            this.foodInfo.imgUrl = 'http://p5cuf4ihy.bkt.clouddn.com/'+ res.key
+        handleAvatarSuccess (res, file) {
+            this.foodInfo.imgUrl = 'http://p5cuf4ihy.bkt.clouddn.com/' + res.key
             console.log(res)
         },
 
-        handleError(res) {   //显示错误
-        console.log(res)
+        handleError (res) {
+            console.log(res)
         },
 
-        beforeAvatarUpload(file) {
-            const isJPG = file.type === 'image/jpeg';
-            const isLt2M = file.size / 1024 / 1024 < 2;
+        beforeAvatarUpload (file) {
+            const isJPG = file.type === 'image/jpeg'
+            const isLt2M = file.size / 1024 / 1024 < 2
 
             if (!isJPG) {
-            this.$message.error('上传头像图片只能是 JPG 格式!');
+                this.$message.error('上传头像图片只能是 JPG 格式!')
             }
             if (!isLt2M) {
-            this.$message.error('上传头像图片大小不能超过 2MB!');
+                this.$message.error('上传头像图片大小不能超过 2MB!')
             }
-            return isJPG && isLt2M;
+            return isJPG && isLt2M
         },
 
         getAllCategories () {
-            let that = this
             this.$axios.get(`${prefix}/food/getAllCategories`)
             .then((res) => {
                 if (res.data.success) {
@@ -186,7 +184,6 @@ export default {
                 plansStrArr.push(str)
             })
             var querystring = require('querystring')
-            let that = this
             this.$axios.post(`${prefix}/admin/insertFood`,
                 querystring.stringify({
                     name: this.foodInfo.name,

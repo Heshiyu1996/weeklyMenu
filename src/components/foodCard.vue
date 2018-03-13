@@ -1,6 +1,6 @@
 <template>
     <div class="foodCard" @click="gotoDetail($event, foodInfo.foodId)">
-        <img class="img" :src="img_food" />
+        <img class="img" :src="prefix + foodInfo.imgUrl" />
         <div class="desc" :class="sizeObj">
             <div class="name f-ellipsis">{{ foodInfo.name }}</div>
             <div class="material f-ellipsis">{{ foodInfo.material }}</div>
@@ -51,7 +51,8 @@ export default {
                 'small': this.size === 'small',     // 55%
                 'normal': this.size === 'normal'    // 58%
             },
-            checked: false
+            checked: false,
+            prefix: prefix
         }
     },
     methods: {

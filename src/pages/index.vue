@@ -8,8 +8,12 @@
                     <el-carousel trigger="click" height="75px" :autoplay="autoPlay" arrow="never">
                         <el-carousel-item v-for="(hotFood, idx) in hotFoods" :key="idx">
                             <img :src="img_food" class="pic" />
-                            <div class="name"> {{ hotFood.name }} </div>
-                            <div class="category">{{ hotFood.category }}</div>
+                            <div class="name f-ellipsis"> {{ hotFood.cname }} | {{ hotFood.name }} </div>
+                            <div class="plans">
+                                <div class="plan" v-for="(plan, idx) in hotFood.plans" :key="idx">
+                                    {{ days[plan.day-1] }} {{ periods[plan.pid-1].txt }}
+                                </div>
+                            </div>
                         </el-carousel-item>
                     </el-carousel>
                 </div>
@@ -79,6 +83,7 @@ export default {
             img_food: require('./../../static/food/ws.jpg'),
             autoPlay: false,
             hotFoods: [],
+            hotFoodsPlans: [],
             foods: [],
             days: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
             dayIndex: 1,
@@ -136,10 +141,10 @@ export default {
                     // 获取今天星期几
                     this.dayIndex = res.data.relatedObject.today.day
                     // 获取目前时段
-                    let hour = res.data.relatedObject.time.split(":")[0]
-                    if (hour <=8) {
+                    let hour = res.data.relatedObject.time.split(':')[0]
+                    if (hour <= 8) {
                         this.periodIndex = 1
-                    } else if (hour >13) {
+                    } else if (hour > 13) {
                         this.periodIndex = 3
                     } else {
                         this.periodIndex = 2
@@ -184,6 +189,21 @@ export default {
             .then((res) => {
                 if (res.data.success) {
                     this.hotFoods = [...res.data.relatedObject]
+                    this.hotFoods.forEach((food) => {
+                        this.getPlanByFoodId(food)
+                    })
+                }
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+        },
+
+        getPlanByFoodId (food) {
+            this.$axios.get(`${prefix}/food/getPlanByFoodId?foodId=${food.foodId}`)
+            .then((res) => {
+                if (res.data.success) {
+                    food.plans = [...res.data.relatedObject]
                 }
             })
             .catch((err) => {
@@ -195,7 +215,7 @@ export default {
     mounted () {
         this.getWeekCalendar()
         this.getCategoriesList()
-        this.getFoodsList(),
+        this.getFoodsList()
         this.getHotFoods()
     },
 
@@ -204,12 +224,12 @@ export default {
         periodIndex: 'getCategoriesList',
         categoryIndex: 'getFoodsList',
         categories: {
-            handler: function (val, oldVal) { 
+            handler: function (val, oldVal) {
                 if (val.length > 0) {
                     this.categoryIndex = val[0].cid.toString()
                     this.getFoodsList()
                 }
-             },
+            },
             deep: true
         }
     }
@@ -253,26 +273,34 @@ export default {
                 background-size: contain;
             }
 
-            .name, .category {
+            .name, .plans {
                 display: inline-block;
                 position: absolute;
                 right: px2rem(15px);
-                width: px2rem(165px);
+                max-width: px2rem(200px);
+                font-size: px2rem(16px);
                 text-align: right;
             }
             
             .name {
-                height: 100%;
                 line-height: px2rem(44px);
-                font-size: px2rem(24px);
+                height: px2rem(32px);
+                // font-size: px2rem(24px);
                 color: $white;
             }
 
-            .category {
-                bottom: px2rem(6px);
-                height: 20px;
-                font-size: px2rem(12px);
+            .plans {
+                bottom: 0;
+                height: px2rem(36px);
+                // font-size: px2rem(12px);
                 color: $gray;
+
+                .plan {
+                    display: inline-block;
+                    width: px2rem(32px);
+                    height: px2rem(30px);
+                    font-size: px2rem(12px);
+                }
             }
         }
 

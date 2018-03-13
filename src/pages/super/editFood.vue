@@ -27,15 +27,10 @@
             </div>
             <div class="item image">
                 <span class="label">图片</span>
-                <el-upload
-                    class="avatar-uploader"
-                    action="https://jsonplaceholder.typicode.com/posts/"
-                    :show-file-list="false"
-                    :on-success="handleAvatarSuccess"
-                    :before-upload="beforeAvatarUpload">
-                        <img v-if="foodInfoCopy.imgUrl" :src="foodInfoCopy.imgUrl" class="avatar">
-                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                </el-upload>
+                <img :src="foodInfoCopy.imgUrl" class="avatar-uploader" @click="openUploadBox()"/>
+                <input ref="fileInput" @change="changeFileBox()" v-show="false" type="file" name="fileToUpload" id="fileToUpload" />
+                
+                <input ref="uploadBtn" v-show="false" type="button" @click="uploadFile()" value="Upload" />
             </div>
         </div>
         <div class="btn-wrapper">
@@ -46,7 +41,6 @@
 
 <script>
 import { prefix } from '@/publicAPI/config'
-import { getUserInfo } from '@/publicAPI/util'
 
 export default {
     name: 'editFood',
@@ -60,7 +54,8 @@ export default {
                 imgUrl: '',
                 categoryId: ''
             },
-            categories: []
+            categories: [],
+            default_imageUrl: '/img/default.png'
         }
     },
     computed: {
@@ -69,29 +64,46 @@ export default {
         }
     },
     methods: {
+        openUploadBox () {
+            this.$refs.fileInput.click()
+        },
+
+        changeFileBox () {
+            console.log(document.getElementById('fileToUpload').files)
+            if (document.getElementById('fileToUpload').files.length !== 0) {
+                this.$refs.uploadBtn.click()
+            } else {
+                this.$set(this.foodInfoCopy, 'imgUrl' , '')
+            }
+        },
+
+        uploadFile () {
+            let config = {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            }
+            var fd = new FormData()
+            fd.append('imageFile', document.getElementById('fileToUpload').files[0])
+
+            this.$axios.post(`${prefix}/admin/uploadFile`, fd, config)
+                .then((res) => {
+                    if (res.data.success) {
+                            this.$set(this.foodInfoCopy,'imgUrl' ,prefix + '/img/image.jpg?radom' + Math.random())
+                    } else {
+                        alert(res.data.msg)
+                    }
+                })
+                .catch((err) => {
+                    alert(err)
+                })
+        },
+
         goToSearch () {
             this.$router.push('/super/foodSearch')
         },
 
-        handleAvatarSuccess(res, file) {
-            this.foodInfo.imgUrl = URL.createObjectURL(file.raw);
-        },
-
-        beforeAvatarUpload(file) {
-            const isJPG = file.type === 'image/jpeg';
-            const isLt2M = file.size / 1024 / 1024 < 2;
-
-            if (!isJPG) {
-            this.$message.error('上传头像图片只能是 JPG 格式!');
-            }
-            if (!isLt2M) {
-            this.$message.error('上传头像图片大小不能超过 2MB!');
-            }
-            return isJPG && isLt2M;
-        },
-
         getAllCategories () {
-            let that = this
             this.$axios.get(`${prefix}/food/getAllCategories`)
             .then((res) => {
                 if (res.data.success) {
@@ -104,34 +116,32 @@ export default {
         },
 
         beforeSubmit () {
+            let that = this
             this.$confirm('确认修改此菜品吗?', '温馨提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                this.submit()
+                that.editFoodInfo()
             }).catch(() => {
                 console.log('取消本次修改')
             })
         },
 
-        submit () {
+        editFoodInfo () {
             var querystring = require('querystring')
-            let that = this
             this.$axios.post(`${prefix}/admin/updateFood`,
                 querystring.stringify({
                     foodId: this.foodInfoCopy.foodId,
                     name: this.foodInfoCopy.name,
-                    // imgUrl: this.foodInfoCopy.imgUrl,
-                    imgUrl: "www.baidu.com",
+                    imgUrl: this.foodInfoCopy.imgUrl,
                     material: this.foodInfoCopy.material,
                     description: this.foodInfoCopy.description,
                     categoryId: this.foodInfoCopy.categoryId
-
                 }))
                 .then((res) => {
                     if (res.data.success) {
-                        this.$alert('修改成功!', '温馨提示', {
+                        this.$alert('编辑成功!', '温馨提示', {
                             confirmButtonText: '好的',
                             callback: () => {
                                 this.$router.push('/super')
@@ -149,6 +159,11 @@ export default {
     mounted () {
         this.getAllCategories()
         Object.assign(this.foodInfoCopy, this.foodInfo)
+        if (this.foodInfo.imgUrl === null || this.foodInfo.imgUrl === '' || typeof this.foodInfo.imgUrl === 'undefined') {
+            this.$set(this.foodInfoCopy, 'imgUrl', prefix + this.default_imageUrl)
+        } else {
+            this.$set(this.foodInfoCopy, 'imgUrl', prefix + this.foodInfo.imgUrl)
+        }
         this.$store.commit('setFoodInfo', {})
     }
 }
@@ -215,45 +230,19 @@ export default {
             }
 
             .avatar-uploader {
-                border: 1px dashed #D9D9D9;
+                border: 2px dashed $blue;
+                border-radius: px2rem(3px);
+                padding: px2rem(5px);
                 display: inline-block;
-                width: px2rem(100px);
-                height: px2rem(65px);
-                margin-top: px2rem(2px);
+                width: px2rem(225px);
+                height: px2rem(150px);
+                margin: px2rem(10px) 0 px2rem(10px);
                 vertical-align: middle;
-
-                .el-upload {
-                    width: 100%;
-                    height: 100%;
-                    border: 1px dashed #D9D9D9;
-                    border-radius: 6px;
-                    cursor: pointer;
-                    position: relative;
-                    overflow: hidden;
-                }
-
-                .el-upload:hover {
-                    border-color: #409EFF;
-                }
-
-                .avatar-uploader-icon {
-                    font-size: 28px;
-                    color: #8C939D;
-                    width: 178px;
-                    height: 178px;
-                    line-height: 178px;
-                    text-align: center;
-                }
-
-                .avatar {
-                    display: block;
-                    height: 100%;
-                    width: 100%;
-                }
             }
 
             &.image {
-                height: px2rem(70px);
+                height: px2rem(172px);
+                padding-bottom: 0;
             }
         }
     }

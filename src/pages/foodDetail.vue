@@ -16,7 +16,31 @@
         <div class="vidLine"></div>
         <div class="vidBody">
             <div class="material">食材：{{ foodInfo.material }}</div>
-            <div class="material">下次出现时间：周二、周三</div>
+            <div class="plansTable">
+                <el-table
+                    :data="hotfoods"
+                    style="width: 100%;"
+                    size="mini">
+                    <el-table-column
+                    label="星期"
+                    width="100">
+                    <template slot-scope="scope">
+                        <span style="margin-left: 10px;">{{ days[scope.row.day-1] }}</span>
+                    </template>
+                    </el-table-column>
+                    <el-table-column
+                    label="时段"
+                    width="100">
+                    <template slot-scope="scope">
+                        <el-popover trigger="hover" placement="top">
+                        <div slot="reference" class="name-wrapper">
+                            <el-tag size="medium">{{ scope.row.pname }}</el-tag>
+                        </div>
+                        </el-popover>
+                    </template>
+                    </el-table-column>
+                </el-table>
+            </div>
         </div>
     </div>
   </div>
@@ -41,6 +65,8 @@ export default {
                 categoryId: 0,
                 category: ''
             },
+            hotfoods: [],
+            days: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
             img_food: require('./../../static/food/ws.jpg')
         }
     },
@@ -112,7 +138,7 @@ export default {
             .then((res) => {
                 if (res.data.success) {
                     Object.assign(this.foodInfo, res.data.relatedObject)
-                    console.log(this.foodInfo)
+                    this.getPlanByFoodId(this.foodInfo)
                     this.addVisitCount()
                 }
             })
@@ -138,6 +164,19 @@ export default {
                 .catch((err) => {
                     alert(err)
                 })
+        },
+
+        getPlanByFoodId (food) {
+            this.$axios.get(`${prefix}/food/getPlanByFoodId?foodId=${food.foodId}`)
+            .then((res) => {
+                if (res.data.success) {
+                    this.hotfoods = []
+                    this.hotfoods = [...res.data.relatedObject]
+                }
+            })
+            .catch((err) => {
+                console.log(err)
+            })
         }
     },
 
@@ -237,6 +276,16 @@ export default {
 
         .vidBody {
             .material {
+                margin-bottom: px2rem(16px);
+                color: $white;
+                font-size: px2rem(12px);
+            }
+
+            .plansTable {
+                margin: 0 auto;
+                width: px2rem(200px);
+                border: px2rem(4px) solid $blue;
+                border-radius: px2rem(4px);
                 color: $white;
                 font-size: px2rem(12px);
             }
