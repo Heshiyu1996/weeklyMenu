@@ -347,6 +347,7 @@ export default {
             line-height: px2rem(45px);
             letter-spacing: px2rem(4px);
             border-radius: 25px;
+            background: $blue;
             color: $white;
             text-align: center;
         }

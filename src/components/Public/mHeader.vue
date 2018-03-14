@@ -58,12 +58,13 @@ export default {
 @import "../../common.css";
 
 .header-wrapper {
-    position: relative;
+    position: absolute;
     width: 100%;
     height: px2rem(40.5px);
     color: #FFF;
     background-image: linear-gradient(-1deg, $blue1 10%, $blue 100%);
     box-shadow: 0 12px 14px 0 rgba(209, 209, 209, .27);
+    z-index: 999;
 
     .logo, .title, .login_area {
         position: absolute;

@@ -22,6 +22,8 @@ export default {
 
 <style lang="postcss" type="text/css" rel="stylesheet/postcss" scoped>
 #app {
+    position: relative;
+    height: 100%;
     color: #3893E5;
 }
 </style>

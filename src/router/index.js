@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 import Index from '@/pages/index'
+import NewIndex from '@/pages/newIndex'
 import Login from '@/pages/login'
 import Regist from '@/pages/regist'
 import User from '@/pages/user'
@@ -26,10 +27,18 @@ Vue.use(Router)
 
 export default new Router({
     routes: [
+        // {
+        //     path: '/',
+        //     name: 'Index',
+        //     component: Index,
+        //     meta: { 
+        //         keepAlive: true 
+        //     }
+        // },        
         {
             path: '/',
-            name: 'Index',
-            component: Index,
+            name: 'newIndex',
+            component: NewIndex,
             meta: { 
                 keepAlive: true 
             }
