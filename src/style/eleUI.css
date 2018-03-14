@@ -123,3 +123,14 @@
     top: -10px;
 }
 
+/* 订餐页面 */
+.book .main-wrapper .order-wrapper .food-wrapper .el-tabs.el-tabs--left .el-tabs__header {
+    width: 62px;
+}
+
+.book .main-wrapper .order-wrapper .food-wrapper .el-tabs.el-tabs--left .el-tabs__header .el-tabs__nav-wrap .el-tabs__nav-scroll .el-tabs__nav .el-tabs__item {
+    padding: 0;
+    font-size: 16px;
+    height: 40px;
+    text-align: center;
+}

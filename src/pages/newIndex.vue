@@ -12,19 +12,25 @@
             </div>
             <div class="bookPicker">
                 <el-tag>
-                    <img class="imgPeriod" :src="img_period[0]" />
-                    <div class="time">&nbsp;&nbsp;7：00 早餐</div>
-                    <div class="btn">可点餐</div>
+                    <div @click="goTo('book')">
+                        <img class="imgPeriod" :src="img_period[0]" />
+                        <div class="time">&nbsp;&nbsp;7：00 早餐</div>
+                        <div class="btn">可点餐</div>
+                    </div>
                 </el-tag>
                 <el-tag>
-                    <img class="imgPeriod" :src="img_period[1]" />
-                    <div class="time">11：00 午餐</div>
-                    <div class="btn">可点餐</div>
+                    <div @click="goTo('book')">
+                        <img class="imgPeriod" :src="img_period[1]" />
+                        <div class="time">11：00 午餐</div>
+                        <div class="btn">可点餐</div>
+                    </div>
                 </el-tag>
                 <el-tag type="info">
-                    <img class="imgPeriod" :src="img_period[2]" />
-                    <div class="time">18：00 晚餐</div>
-                    <div class="btn">可点餐</div>
+                    <div @click="goTo('book')">
+                        <img class="imgPeriod" :src="img_period[2]" />
+                        <div class="time">18：00 晚餐</div>
+                        <div class="btn">可点餐</div>
+                    </div>
                 </el-tag>
             </div>
         </div>
@@ -53,6 +59,9 @@ export default {
     },
 
     methods: {
+        goTo (destination) {
+            this.$router.push(`/${destination}`)
+        },
     },
 
     mounted () {

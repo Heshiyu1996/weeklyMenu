@@ -3,6 +3,7 @@ import Router from 'vue-router'
 
 import Index from '@/pages/index'
 import NewIndex from '@/pages/newIndex'
+import Book from '@/pages/book'
 import Login from '@/pages/login'
 import Regist from '@/pages/regist'
 import User from '@/pages/user'
@@ -97,6 +98,11 @@ export default new Router({
             path: '/test',
             name: 'test',
             component: test
+        },
+        {
+            path: '/book',
+            name: 'book',
+            component: Book
         },
         {
             path: '/super',

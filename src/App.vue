@@ -1,9 +1,11 @@
 <template>
   <div id="app">
-    <keep-alive>
+    <transition name="el-fade-in-linear">
         <router-view v-if="$route.meta.keepAlive"></router-view>
-    </keep-alive>
-    <router-view v-if="!$route.meta.keepAlive"></router-view>
+    </transition>
+    <transition name="el-fade-in-linear">
+        <router-view v-if="!$route.meta.keepAlive"></router-view>
+    </transition>
   </div>
 </template>
 
