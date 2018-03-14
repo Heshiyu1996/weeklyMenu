@@ -132,7 +132,6 @@ export default {
             height: px2rem(45px);
             line-height: px2rem(45px);
             letter-spacing: px2rem(4px);
-            background: $green;
             border-radius: 25px;
             color: $white;
             text-align: center;

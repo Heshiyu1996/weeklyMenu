@@ -111,7 +111,6 @@ export default {
     .img {
         width: px2rem(100px);
         height: 100%;
-        background: green;
     }
 
     .desc {

@@ -134,25 +134,25 @@ export default {
                 border: 0 solid $white;
             }
 
-            ::-webkit-input-placeholder { /* WebKit browsers */
+            ::-webkit-input-placeholder {
                 color: $gray2;
                 font-size: 12px;
                 padding-top: px2rem(1px);
             }
 
-            :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+            :-moz-placeholder {
                 color: $gray2;
                 font-size: 12px;
                 padding-top: px2rem(1px);
             }
 
-            ::-moz-placeholder { /* Mozilla Firefox 19+ */
+            ::-moz-placeholder {
                 color: $gray2;
                 font-size: 12px;
                 padding-top: px2rem(1px);
             }
 
-            :-ms-input-placeholder { /* Internet Explorer 10+ */
+            :-ms-input-placeholder { 
                 color: $gray2;
                 font-size: 12px;
                 padding-top: px2rem(1px);
@@ -169,7 +169,6 @@ export default {
             height: px2rem(45px);
             line-height: px2rem(45px);
             letter-spacing: px2rem(4px);
-            background: $green;
             border-radius: 25px;
             color: $white;
             text-align: center;
@@ -207,6 +206,7 @@ export default {
         height: px2rem(40px);
 
         .tip {
+            background: $white1 !important;
             margin-top: px2rem(10px);
             color: $white;
             font-size: px2rem(12px);

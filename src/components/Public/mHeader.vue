@@ -10,7 +10,7 @@
                 <span @click="goTo('user')">{{ userInfo.uname }}</span>
                 <span class="logout" @click="logout()">退出</span> 
             </span>
-            <span v-if="Object.keys(userInfo).length === 0" @click="goTo('login')">登录</span>
+            <span v-if="Object.keys(userInfo).length === 0" @click="goTo('login')">登录 | </span>
             <span v-if="Object.keys(userInfo).length === 0" @click="goTo('regist')">注册</span>
         </div>
     </nav>

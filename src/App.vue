@@ -1,27 +1,20 @@
 <template>
   <div id="app">
-    <!-- <mHeader></mHeader> -->
-    <router-view/>
+    <keep-alive>
+        <router-view v-if="$route.meta.keepAlive"></router-view>
+    </keep-alive>
+    <router-view v-if="!$route.meta.keepAlive"></router-view>
   </div>
 </template>
 
 <script>
-// import mHeader from './components/Public/mHeader'
-// import mFooter from './components/Public/mFooter'
 
 export default {
     name: 'app',
-    // components: {
-    //     mHeader
-    //     // mFooter
-    // },
+
     mounted () {
-        // var el = document.createElement('div')
-        // document.body.appendChild(el)
-        // this.$eruda.init({
-        //     container: el
-        // })
     },
+
     methods: {
     }
 }
