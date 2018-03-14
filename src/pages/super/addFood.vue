@@ -30,9 +30,6 @@
                     <el-option v-for="(day, idx) in days" :key="idx" :label="day.txt" :value="day.dayId"></el-option>
                 </el-select>
                 <el-checkbox-group v-model="period.pids" size="mini">
-                    <!-- <el-checkbox-button label="早餐" name="type"></el-checkbox-button>
-                    <el-checkbox-button label="午餐" name="type"></el-checkbox-button>
-                    <el-checkbox-button label="晚餐" name="type"></el-checkbox-button> -->
                     <el-checkbox-button v-for="period in periods" :label="period.pid" :key="period.txt">{{period.txt}}</el-checkbox-button>
                 </el-checkbox-group>
                 <i v-if="index === 0" class="add-btn el-icon-circle-plus-outline" @click.prevent="addDomain"></i>

@@ -11,9 +11,13 @@ import './style/reset.css'
 import './style/eleUI.css'
 import { getUserInfo, getRecentWeek } from '@/publicAPI/util'
 
+var gb2260 = require('gb2260')
+gb2260.register('201410', require('gb2260/lib/201410'))
+
 Vue.config.productionTip = false
 axios.defaults.withCredentials = true
 Vue.prototype.$axios = axios
+Vue.prototype.$gb2260 = gb2260
 // Vue.prototype.$eruda = eruda
 Vue.use(ElementUI)
 let vm = new Vue({
