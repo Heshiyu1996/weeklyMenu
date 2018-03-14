@@ -26,7 +26,7 @@
                     <div class="question">你平时喜欢吃辣吗？</div>
                     <div class="answer">
                         <el-radio-group v-model="characterInfo.taste" size="mini">
-                            <el-radio-button v-for="(item, idx) in taste" :label="item" :key="idx">{{item}}</el-radio-button>
+                            <el-radio-button v-for="(item, idx) in tastes" :label="item" :key="idx">{{item}}</el-radio-button>
                         </el-radio-group>
                     </div>
                 </div>
@@ -57,7 +57,7 @@
                     <div class="question">你对酒精过敏吗？</div>
                     <div class="answer">
                         <el-radio-group v-model="characterInfo.alcohol" size="mini">
-                            <el-radio-button v-for="(item, idx) in alcohols" :label="item" :key="idx">{{item}}</el-radio-button>
+                            <el-radio-button v-for="(item, idx) in alcohols" :label="idx" :key="idx">{{item}}</el-radio-button>
                         </el-radio-group>
                     </div>
                 </div>
@@ -70,7 +70,7 @@
             </div>
             <div class="btn-wrapper">
                 <div ref="btn" class="btn" 
-                :class="{ noInput: !isFinished }" @click="toRegist($event)">
+                :class="{ noInput: !isFinished }" @click="updateCharacter()">
                     保存
                 </div>
             </div>
@@ -98,7 +98,7 @@ export default {
                "土族","达斡尔族","仫佬族","羌族","布朗族","撒拉族","毛南族","仡佬族","锡伯族","阿昌族","普米族","塔吉克族","怒族", "乌孜别克族",  
               "俄罗斯族","鄂温克族","德昂族","保安族","裕固族","京族","塔塔尔族","独龙族","鄂伦春族","赫哲族","门巴族","珞巴族","基诺族"
             ],
-            taste: ['清淡', '麻辣', '油炸', '都可以'],
+            tastes: ['清淡', '麻辣', '油炸', '都可以'],
             habits: ['多肉少菜', '荤素均衡', '素食为主', '都可以'],
             prepares: ['口味', '价格', '营养价值', '都可以'],
             alcohols: ['是', '不是'],
@@ -116,16 +116,89 @@ export default {
                 alcohol: '',
                 attention: ''
             },
-            isFinished: false
+            isFinished: false,
+            isExistOldData: false
         }
     },
+
+    methods: {
+        ifExistCharacter () {
+            this.$axios.get(`${prefix}/staff/ifExistCharacter`)
+            .then((res) => {
+                if (res.data.success) {
+                    if (res.data.relatedObject.ifExist) {
+                        this.isExistOldData = true
+                    }
+                    this.getCharacter()
+                }
+            })
+            .catch((err) => {
+                alert(err)
+            })
+        },
+        
+
+        getCharacter () {
+            this.$axios.get(`${prefix}/staff/getCharacter`)
+            .then((res) => {
+                if (res.data.success) {
+                    Object.assign(this.characterInfo, res.data.relatedObject)
+                }
+            })
+            .catch((err) => {
+                alert(err)
+            })
+        },
+
+        goTo (destination) {
+            this.$router.push(`/${destination}`)
+        },
+
+        updateCharacter () {
+            var querystring = require('querystring')
+            if (!this.isFinished) return
+            this.$axios.post(`${prefix}/staff/updateCharacter`, 
+                querystring.stringify({
+                    provinceCode: this.characterInfo.provinceCode,
+                    province: this.characterInfo.province,
+                    cityCode: this.characterInfo.cityCode,
+                    city: this.characterInfo.city,
+                    nation: this.characterInfo.nation,
+                    taste: this.characterInfo.taste,
+                    tall: this.characterInfo.tall,
+                    height: this.characterInfo.height,
+                    eatHabit: this.characterInfo.eatHabit,
+                    prepare: this.characterInfo.prepare,
+                    alcohol: this.characterInfo.alcohol,
+                    attention: this.characterInfo.attention
+            }))
+                .then((res) => {
+                    if (res.data.success) {
+                        this.$alert('保存成功!', '温馨提示', {
+                            confirmButtonText: '好的',
+                            callback: () => {
+                                this.$router.push('/user')
+                            }
+                        })
+                    }
+                })
+                .catch((err) => {
+                    alert(err)
+                })
+        }
+    },
+
     watch: {
         'characterInfo.provinceCode': function (newVal) {
             this.characterInfo.province = new this.$gb2260.GB2260('201410').get(newVal).name
             
             this.cities = new this.$gb2260.GB2260('201410').prefectures(newVal)
-            this.characterInfo.cityCode = ''
-            this.characterInfo.city = ''
+            if (!this.isExistOldData) {
+                this.characterInfo.cityCode = ''
+                this.characterInfo.city = ''
+            }
+            this.isExistOldData = false
+
         },
         'characterInfo.cityCode': function (newVal) {
             if (newVal !== '') {
@@ -145,45 +218,8 @@ export default {
         }
     },
 
-
-    methods: {
-        goTo (destination) {
-            this.$router.push(`/${destination}`)
-        },
-
-        toRegist (ev) {
-            if (ev.target.classList.contains('noInput')) return false
-            this.$refs.btn.innerText = '注册中...'
-            this.$refs.btn.style.backgroundColor = '#4FA34B'
-            setTimeout(() => {
-                this.addUser()
-            }, 100)
-        },
-
-        addUser () {
-            var querystring = require('querystring')
-            let that = this
-            this.$axios.post(`${prefix}/staff/regist`,
-                querystring.stringify({
-                    uid: that.uid,
-                    uname: that.uname,
-                    umobile: that.umobile,
-                    upassword: that.upassword
-                }))
-                .then((res) => {
-                    if (res.data.success) {
-                        getUserInfo(that)
-                        this.isSuccess = true
-                    } else {
-                        this.$refs.btn.innerText = '注册'
-                        this.$refs.btn.style.backgroundColor = '#1F9B16'
-                        alert(res.data.msg)
-                    }
-                })
-                .catch((err) => {
-                    alert(err)
-                })
-        }
+    mounted () {
+        this.ifExistCharacter()
     }
 }
 </script>
@@ -215,7 +251,9 @@ export default {
 
                     &.mini {
                         position: relative;
-                        width: px2rem(80px);
+                        width: px2rem(60px);
+                        border-bottom: px2rem(1px) solid $gray5;
+                        text-align: center;
 
                         &.height {
                             margin-left: px2rem(10px);

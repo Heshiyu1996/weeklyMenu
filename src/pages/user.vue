@@ -7,6 +7,11 @@
                 <span class="txt">我的收藏</span>
                 <span class="extend el-icon-arrow-right"></span>
             </div>
+            <div class="item" @click="goTo('myCharacter')">
+                <span class="flag el-icon-location-outline"></span>
+                <span class="txt">我的喜好</span>
+                <span class="extend el-icon-arrow-right"></span>
+            </div>
             <div class="item" @click="goTo('myFeedBack')">
                 <span class="flag el-icon-edit-outline"></span>
                 <div class="txt">我的反馈</div>
