@@ -3,6 +3,7 @@ import Router from 'vue-router'
 
 import Index from '@/pages/index'
 import Login from '@/pages/login'
+import Regist from '@/pages/regist'
 import User from '@/pages/user'
 import FeedBack from '@/pages/feedBack'
 import MyFeedBack from '@/pages/myFeedBack'
@@ -33,6 +34,11 @@ export default new Router({
             path: '/login',
             name: 'login',
             component: Login
+        },
+        {
+            path: '/regist',
+            name: 'regist',
+            component: Regist
         },
         {
             path: '/user',

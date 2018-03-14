@@ -1,19 +1,38 @@
 <template>
     <div>
-        <mHeader2 title="登录"></mHeader2>
-        <div class="login">
+        <mHeader2 title="注册"></mHeader2>
+        <div class="regist">
             <div class="items-wrapper">
                 <div class="item">
                     <span class="label">工号</span>
-                    <input type="text" v-model="account" class="inputBox" placeholder="请输入员工工号"/>
+                    <input type="text" v-model="uid" class="inputBox" placeholder="请输入员工工号"/>
                 </div>
                 <div class="item">
                     <span class="label">密码</span>
-                    <input type="password" v-model="password" class="inputBox" placeholder="请输入密码"/>
+                    <input type="password" v-model="upassword" class="inputBox" placeholder="请输入密码"/>
+                </div>
+                <div class="item">
+                    <span class="label">确认密码</span>
+                    <input type="password" v-model="uConfirmPassword" class="inputBox" placeholder="请再次输入密码"/>
+                </div>
+                <div class="item">
+                    <span class="label">名字</span>
+                    <input type="text" v-model="uname" class="inputBox" placeholder="请输入名字"/>
+                </div>
+                <div class="item">
+                    <span class="label">手机</span>
+                    <input type="text" v-model="umobile" class="inputBox" placeholder="请输入手机号"/>
                 </div>
             </div>
             <div class="btn-wrapper">
-                <div ref="btn" class="btn" :class="{ noInput: ((account.length === 0) || ((password.length === 0))) }" @click="toLogin($event)">登录</div>
+                <div ref="btn" class="btn" 
+                :class="{ noInput: ((uid.length === 0) || 
+                (upassword.length === 0) || 
+                (uConfirmPassword.length === 0) || 
+                (umobile.length === 0) ||
+                (uname.length === 0)) }" @click="toRegist($event)">
+                    注册
+                </div>
             </div>
         </div>
     </div>
@@ -25,33 +44,38 @@ import { prefix } from '@/publicAPI/config'
 import { getUserInfo } from '@/publicAPI/util'
 
 export default {
-    name: 'login',
+    name: 'regist',
     components: {
         mHeader2
     },
     data () {
         return {
-            account: '',
-            password: ''
+            uid: '',
+            uname: '',
+            umobile: '',
+            upassword: '',
+            uConfirmPassword: ''
         }
     },
     methods: {
-        toLogin (ev) {
+        toRegist (ev) {
             if (ev.target.classList.contains('noInput')) return false
-            this.$refs.btn.innerText = '登录中...'
+            this.$refs.btn.innerText = '注册中...'
             this.$refs.btn.style.backgroundColor = '#4FA34B'
             setTimeout(() => {
-                this.login()
+                this.addUser()
             }, 100)
         },
 
-        login () {
+        addUser () {
             var querystring = require('querystring')
             let that = this
-            this.$axios.post(`${prefix}/staff/login`,
+            this.$axios.post(`${prefix}/staff/regist`,
                 querystring.stringify({
-                    uid: that.account,
-                    upassword: that.password
+                    uid: that.uid,
+                    uname: that.uname,
+                    umobile: that.umobile,
+                    upassword: that.upassword
                 }))
                 .then((res) => {
                     if (res.data.success) {
@@ -74,7 +98,7 @@ export default {
 <style lang="postcss" type="text/css" rel="stylesheet/postcss" scoped>
 @import "../common.css";
 
-.login {
+.regist {
     height: px2rem(330px);
 
     .items-wrapper {
@@ -85,7 +109,7 @@ export default {
 
             .label {
                 display: inline-block;
-                width: px2rem(50px);
+                width: px2rem(70px);
                 height: 100%;
                 padding-top: px2rem(14px);
                 color: $gray2;

@@ -38,20 +38,13 @@
                 <i v-if="index === 0" class="add-btn el-icon-circle-plus-outline" @click.prevent="addDomain"></i>
                 <i v-else class="delete-btn el-icon-circle-close-outline" @click.prevent="removeDomain(period)"></i>
             </div>
-            <!-- <div class="item image">
+            <div class="item image">
                 <span class="label">图片</span>
-                <el-upload
-                    class="avatar-uploader"
-                    action="http://up-z2.qiniup.com"
-                    :show-file-list="false"
-                    :on-success="handleAvatarSuccess"
-                    :on-error="handleError"
-                    :before-upload="beforeAvatarUpload"
-                    :data="postData">
-                        <img v-if="foodInfo.imgUrl" :src="foodInfo.imgUrl" class="avatar">
-                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                </el-upload>
-            </div> -->
+                <img :src="imgTemp" class="avatar-uploader" @click="openUploadBox()"/>
+                <input ref="fileInput" @change="changeFileBox()" v-show="false" type="file" name="fileToUpload" id="fileToUpload" />
+                
+                <input ref="uploadBtn" v-show="false" type="button" @click="uploadFile()" value="Upload" />
+            </div>
         </div>
         <div class="btn-wrapper">
             <div ref="btn" class="btn" :class="{ noInput: ((foodInfo.name.length === 0) || (foodInfo.material.length === 0) || (foodInfo.description.length === 0) || (foodInfo.categoryId.length === 0)) }" @click="submit()">添加</div>
@@ -110,12 +103,45 @@ export default {
                 txt: '周日'
             }],
             categories: [],
-            postData: {
-                token: 'ANPdNJ3TJ0L5ZmI1ht91Pr1D1yAhbLM6DdrRs_If:7TnjVhycrXTu0kr7csnDhjKKYSo=:eyJzY29wZSI6IndlZWtseW1lbnUiLCJkZWFkbGluZSI6MTUyMDY5NTM4Mn0='
-            }
+            imgTemp: prefix + '/img/default.png'
         }
     },
     methods: {
+        openUploadBox () {
+            this.$refs.fileInput.click()
+        },
+
+        changeFileBox () {
+            console.log(document.getElementById('fileToUpload').files)
+            if (document.getElementById('fileToUpload').files.length !== 0) {
+                this.$refs.uploadBtn.click()
+            } else {
+                this.imgTemp = ''
+            }
+        },
+
+        uploadFile () {
+            let config = {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            }
+            var fd = new FormData()
+            fd.append('imageFile', document.getElementById('fileToUpload').files[0])
+
+            this.$axios.post(`${prefix}/admin/uploadFile`, fd, config)
+                .then((res) => {
+                    if (res.data.success) {
+                            this.imgTemp = prefix + '/img/image.jpg?radom' + Math.random()
+                    } else {
+                        alert(res.data.msg)
+                    }
+                })
+                .catch((err) => {
+                    alert(err)
+                })
+        },
+
         removeDomain (item) {
             var index = this.foodInfo.plans.indexOf(item)
             if (index !== -1) {
@@ -175,6 +201,11 @@ export default {
         },
 
         submit () {
+            if (!this.imgTemp.includes('default')) {
+                this.foodInfo.imgUrl = this.imgTemp
+            } else {
+                this.foodInfo.imgUrl = ''
+            }
             let plansStrArr = []
             this.foodInfo.plans.forEach((plan) => {
                 let str = plan.dayId
@@ -187,8 +218,7 @@ export default {
             this.$axios.post(`${prefix}/admin/insertFood`,
                 querystring.stringify({
                     name: this.foodInfo.name,
-                    // imgUrl: this.foodInfo.imgUrl,
-                    imgUrl: '',
+                    imgUrl: this.foodInfo.imgUrl,
                     material: this.foodInfo.material,
                     description: this.foodInfo.description,
                     categoryId: this.foodInfo.categoryId,
@@ -269,45 +299,19 @@ export default {
             }
 
             .avatar-uploader {
-                border: 1px dashed #D9D9D9;
+                border: 2px dashed $blue;
+                border-radius: px2rem(3px);
+                padding: px2rem(5px);
                 display: inline-block;
-                width: px2rem(100px);
-                height: px2rem(65px);
-                margin-top: px2rem(2px);
+                width: px2rem(225px);
+                height: px2rem(150px);
+                margin: px2rem(10px) 0 px2rem(10px);
                 vertical-align: middle;
-
-                .el-upload {
-                    width: 100%;
-                    height: 100%;
-                    border: 1px dashed #D9D9D9;
-                    border-radius: 6px;
-                    cursor: pointer;
-                    position: relative;
-                    overflow: hidden;
-                }
-
-                .el-upload:hover {
-                    border-color: #409EFF;
-                }
-
-                .avatar-uploader-icon {
-                    font-size: 28px;
-                    color: #8c939d;
-                    width: 178px;
-                    height: 178px;
-                    line-height: 178px;
-                    text-align: center;
-                }
-
-                .avatar {
-                    width: 178px;
-                    height: 178px;
-                    display: block;
-                }
             }
 
             &.image {
-                height: px2rem(70px);
+                height: px2rem(172px);
+                padding-bottom: 0;
             }
 
             .el-checkbox-group {
