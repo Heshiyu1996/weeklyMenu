@@ -48,7 +48,7 @@
                         </div>
                     </div>
                     <div class="food-wrapper">
-                        <el-tabs v-model="categoryIndex" tab-position="left" style="height: 360px;" @tab-click="selectCategory">
+                        <el-tabs class="food-body" v-model="categoryIndex" tab-position="left" @tab-click="selectCategory">
                             <el-tab-pane :cid="category.cid" :name="category.cid.toString()" v-for="(category, idx) in categories" :key="idx" :label="category.cname">
                                 <FoodCard size="normal" :foodInfo="item" v-for="(item, idx) in foods" :key="idx"></FoodCard>
                             </el-tab-pane>
@@ -244,7 +244,7 @@ export default {
     padding: 0 0;
 
     .main-wrapper {
-        padding: px2rem(10px);
+        padding: px2rem(50px) px2rem(10px) px2rem(10px);
 
         .time-wrapper {
             position: relative;
@@ -306,7 +306,7 @@ export default {
 
         .order-wrapper {
             position: relative;
-            height: px2rem(455px);
+            height: px2rem(478px);
             margin-top: px2rem(5px);
             padding: px2rem(5px) px2rem(10px) px2rem(5px);
             z-index: 5;
@@ -376,6 +376,10 @@ export default {
             
             .food-wrapper {
                 margin-top: px2rem(5px);
+
+                .food-body {
+                    height: px2rem(400px);
+                }
 
                 .el-tabs__content {
                     overflow: scroll !important;

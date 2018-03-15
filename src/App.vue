@@ -7,15 +7,15 @@
         <router-view v-if="!$route.meta.keepAlive"></router-view>
     </transition>
     <div class="switch-bar">
-        <div class="index bar " @click="clickBar($event)">
+        <div ref="index" class="index bar selected" @click="selectIndex()">
             <i class="icon icon-home3"></i>
             <div class="txt">首页</div>
         </div>
-        <div class="book bar" @click="clickBar($event)">
+        <div ref="book" class="book bar" @click="selectBook()">
             <i class="icon icon-tongue2"></i>
             <div class="txt">订餐</div>
         </div>
-        <div class="user bar" @click="clickBar($event)">
+        <div ref="user" class="user bar" @click="selectUser()">
             <i class="icon icon-user"></i>
             <div class="txt">我的</div>
         </div>
@@ -28,19 +28,82 @@
 export default {
     name: 'app',
 
+    computed: {
+        ifLogin () {
+            return this.$store.getters.getIflogin
+        },
+        userInfo () {
+            return this.$store.getters.getUserInfo
+        }
+    },
+
     methods: {
+        goTo (destination) {
+            if ((destination === 'user') && (this.userInfo.utype === 1)) {
+                destination = 'super'
+            }
+            this.$router.push(`/${destination}`)
+        },
+
+        preventGo () {
+            this.$alert('此功能需要登录后才能使用', '请先登录', {
+                confirmButtonText: '好的',
+                callback: () => {
+                    this.$router.push('/login')
+                }
+            })
+        },
+
         clickBar (ev) {
+        },
+
+        selectIndex () {
+            this.cleanFlag()
+            this.$refs.index.classList.add('selected')
+            this.goTo('')
+        },
+
+        selectBook () {
+            this.cleanFlag()
+            if (!this.ifLogin) {
+                this.preventGo()
+                return
+            }
+            this.$refs.book.classList.add('selected')
+            this.goTo('book')
+        },
+
+        selectUser () {
+            this.cleanFlag()
+            if (!this.ifLogin) {
+                this.preventGo()
+                return
+            }
+            this.$refs.user.classList.add('selected')
+            this.goTo('user')
+        },
+
+        cleanFlag () {
             let barList = document.getElementsByClassName('bar')
             let len = barList.length
             for (let i=0; i < len; i++) {
                 barList[i].classList.remove('selected')
             }
-            ev.currentTarget.classList.add('selected')
         }
     },
 
     mounted () {
     },
+
+    watch: {
+        $route: function (newRoute) {
+            console.log(newRoute)
+            // 没登录
+            if (newRoute.name === 'index') {
+                this.selectIndex()
+            }
+        }
+    }
 }
 </script>
 

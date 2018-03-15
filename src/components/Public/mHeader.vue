@@ -44,6 +44,7 @@ export default {
             .then((res) => {
                 if (res.data.success) {
                     that.$store.commit('setUserInfo', {})
+                    that.$store.commit('setIflogin', false)
                 }
             })
             .catch((err) => {

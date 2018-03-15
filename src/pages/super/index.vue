@@ -61,6 +61,7 @@ export default {
             .then((res) => {
                 if (res.data.success) {
                     that.$store.commit('setUserInfo', {})
+                    myVue.$store.commit('setIflogin', false)
                     that.$router.push('/')
                 }
             })

@@ -4,11 +4,15 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
+        ifLogin: false,
         userInfo: {},
         foodInfo: {}
     },
 
     getters: {
+        getIflogin: state => {
+            return state.ifLogin
+        },
         getUserInfo: state => {
             return state.userInfo
         },
@@ -18,6 +22,9 @@ export default new Vuex.Store({
     },
 
     mutations: {
+        setIflogin (state, iflogin) {
+            state.ifLogin = iflogin
+        },
         setUserInfo (state, obj) {
             state.userInfo = obj
         },

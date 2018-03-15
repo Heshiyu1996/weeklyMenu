@@ -43,7 +43,7 @@
 }
 
 .index .main-wrapper .order-wrapper .food-wrapper .el-tabs.el-tabs--left .el-tabs__content {
-    height: 360px;
+    height: 100%;
     overflow: scroll !important;
 }
 

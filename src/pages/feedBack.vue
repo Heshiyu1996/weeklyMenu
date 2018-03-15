@@ -62,19 +62,6 @@ export default {
                 .catch((err) => {
                     alert(err)
                 })
-        },
-
-        logout () {
-            let that = this
-            this.$axios.get(`${prefix}/staff/logout.do`)
-            .then((res) => {
-                if (res.data.success) {
-                    that.$router.push('/')
-                }
-            })
-            .catch((err) => {
-                alert(err)
-            })
         }
     }
 }

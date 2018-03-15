@@ -3,7 +3,7 @@
         <img class="img" :src="prefix + foodInfo.imgUrl" />
         <div class="desc" :class="sizeObj">
             <div class="name f-ellipsis">{{ foodInfo.name }}</div>
-            <div class="material f-ellipsis">{{ foodInfo.material }}</div>
+            <div class="material f-ellipsis2">{{ foodInfo.material }}</div>
             <div class="hot f-ellipsis">{{ foodInfo.visitCount }} 浏览 {{ foodInfo.markCount }} 收藏</div>
         </div>
         <div v-if="showStar" class="star" @click="removeMarks(foodInfo.foodId)" @click.stop>
@@ -98,7 +98,7 @@ export default {
 
 .foodCard {
     width: 100%;
-    height: px2rem(76px);
+    height: px2rem(79px);
     padding: px2rem(5px) 0;
     margin-top: px2rem(5px);
     border-bottom: px2rem(1px) solid $gray2;
@@ -121,13 +121,17 @@ export default {
 
         .name {
             color: $black2;
-            font-size: px2rem(18px);
+            font-size: px2rem(16px);
         }
 
         .material, .hot {
             max-width: px2rem(280px);
             color: $gray2;
-            font-size: px2rem(14px);
+            font-size: px2rem(12px);
+        }
+
+        .material {
+            min-height: px2rem(33px);
         }
 
         &.small {

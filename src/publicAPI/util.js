@@ -6,9 +6,10 @@ function getUserInfo (myVue) {
             .then((res) => {
                 if (res.data.success) {
                     myVue.$store.commit('setUserInfo', res.data.relatedObject)
-                    console.log(myVue.$store.getters.getUserInfo)
+                    myVue.$store.commit('setIflogin', true)
                 } else {
                     console.log('获取用户信息失败，可能session已过期，请重新登录。')
+                    myVue.$store.commit('setIflogin', false)
                 }
             })
             .catch((err) => {
