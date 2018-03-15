@@ -2,8 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 import Index from '@/pages/index'
-import NewIndex from '@/pages/newIndex'
 import Book from '@/pages/book'
+import BookDetail from '@/pages/bookDetail'
 import Login from '@/pages/login'
 import Regist from '@/pages/regist'
 import User from '@/pages/user'
@@ -38,8 +38,8 @@ export default new Router({
         // },        
         {
             path: '/',
-            name: 'newIndex',
-            component: NewIndex,
+            name: 'index',
+            component: Index,
             meta: { 
                 keepAlive: true 
             }
@@ -103,6 +103,11 @@ export default new Router({
             path: '/book',
             name: 'book',
             component: Book
+        },
+        {
+            path: '/bookDetail',
+            name: 'bookDetail',
+            component: BookDetail
         },
         {
             path: '/super',

@@ -1,17 +1,37 @@
 <template>
-    <div>
+    <div class="book">
         <mHeader></mHeader>
-        <div class="book">
-            <div class="main-wrapper">
-                <div class="order-wrapper">
-                    <div class="food-wrapper">
-                        <el-tabs v-model="categoryIndex" tab-position="left" style="height: 360px;" @tab-click="selectCategory">
-                            <el-tab-pane :cid="category.cid" :name="category.cid.toString()" v-for="(category, idx) in categories" :key="idx" :label="category.cname">
-                                <FoodCard size="normal" :foodInfo="item" v-for="(item, idx) in foods" :key="idx"></FoodCard>
-                            </el-tab-pane>
-                        </el-tabs>
-                    </div>
+        <div class="main-wrapper">
+            <div class="datePicker">
+                <div class="whichDay">
+                    <span class="txt" v-for="(item, idx) in whichDay" :key="idx">{{ item }}</span>
                 </div>
+                <div class="day">
+                    <span class="txt selected" v-for="(item, idx) in thisWeek" :key="idx">{{ item }}</span>
+                </div>
+            </div>
+            <div class="bookPicker">
+                <el-tag>
+                    <div @click="goTo('book')">
+                        <img class="imgPeriod" :src="img_period[0]" />
+                        <div class="time">&nbsp;&nbsp;7：00 早餐</div>
+                        <div class="btn">可点餐</div>
+                    </div>
+                </el-tag>
+                <el-tag>
+                    <div @click="goTo('book')">
+                        <img class="imgPeriod" :src="img_period[1]" />
+                        <div class="time">11：00 午餐</div>
+                        <div class="btn">可点餐</div>
+                    </div>
+                </el-tag>
+                <el-tag type="info">
+                    <div @click="goTo('book')">
+                        <img class="imgPeriod" :src="img_period[2]" />
+                        <div class="time">18：00 晚餐</div>
+                        <div class="btn">可点餐</div>
+                    </div>
+                </el-tag>
             </div>
         </div>
     </div>
@@ -20,175 +40,34 @@
 <script>
 import { prefix } from '@/publicAPI/config'
 import mHeader from '@/components/Public/mHeader'
-import FoodCard from '@/components/foodCard'
-import { splitDate } from '@/publicAPI/util'
 
 export default {
     name: 'Book',
     components: {
-        mHeader,
-        FoodCard
+        mHeader
     },
     data () {
         return {
-            img_hot: require('./../../static/hot.png'),
             img_period: [
                 require('./../../static/new_breakfast.png'),
                 require('./../../static/new_lunch.png'),
                 require('./../../static/new_dinner.png')
             ],
-            img_food: require('./../../static/food/ws.jpg'),
-            autoPlay: false,
-            hotFoods: [],
-            hotFoodsPlans: [],
-            foods: [],
-            days: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
-            dayIndex: 1,
-            periods: [{
-                txt: '早餐',
-                shortTxt: '早',
-                time: '7:00-8:00'
-            }, {
-                txt: '午餐',
-                shortTxt: '午',
-                time: '11:00-13:00'
-            }, {
-                txt: '晚餐',
-                shortTxt: '晚',
-                time: '18:00-20:00'
-            }],
-            periodIndex: 1,
-            categories: [],
-            categoryIndex: '',
-            today: {
-                year: '',
-                month: '',
-                day: ''
-            },
-            weekCalendar: []
+            whichDay: ['日', '一', '二', '三', '四', '五', '六'],
+            thisWeek: ['11', '12', '13', '14', '15', '16', '17']
         }
     },
 
     methods: {
-        selectCategory (tab, event) {
-            this.categoryIndex = tab.$attrs.cid.toString()
+        goTo (destination) {
+            this.$router.push(`/${destination}`)
         },
-
-        selectPeriod (periodIdx) {
-            this.periodIndex = periodIdx
-        },
-
-        selectDay (dayIdx) {
-            this.dayIndex = dayIdx
-            this.weekCalendar.forEach((elem, idx) => {
-                if (elem.day === dayIdx) {
-                    splitDate(this.today, elem.date)
-                }
-            })
-        },
-
-        onIndexChange (index) {
-            this.idx = index
-        },
-
-        getWeekCalendar () {
-            this.$axios.get(`${prefix}/plan/getWeekCalendar`)
-            .then((res) => {
-                if (res.data.success) {
-                    // 获取今天星期几
-                    this.dayIndex = res.data.relatedObject.today.day
-                    // 获取目前时段
-                    let hour = res.data.relatedObject.time.split(':')[0]
-                    if (hour <= 8) {
-                        this.periodIndex = 1
-                    } else if (hour > 13) {
-                        this.periodIndex = 3
-                    } else {
-                        this.periodIndex = 2
-                    }
-                    // 获取今天日期
-                    splitDate(this.today, res.data.relatedObject.today.date)
-                    // 获取周日历
-                    this.weekCalendar = [...res.data.relatedObject.weekCalendar]
-                }
-            })
-            .catch((err) => {
-                console.log(err)
-            })
-        },
-
-        getCategoriesList () {
-            this.$axios.get(`${prefix}/plan/getCidsByDayPid?day=${this.dayIndex}&pid=${this.periodIndex}`)
-            .then((res) => {
-                if (res.data.success) {
-                    this.categories = [...res.data.relatedObject.categories]
-                }
-            })
-            .catch((err) => {
-                console.log(err)
-            })
-        },
-
-        getFoodsList (day, pid, cid) {
-            this.$axios.get(`${prefix}/plan/getFoodsByDayPidCid?day=${this.dayIndex}&pid=${this.periodIndex}&cid=${this.categoryIndex}`)
-            .then((res) => {
-                if (res.data.success) {
-                    this.foods = [...res.data.relatedObject.foods]
-                }
-            })
-            .catch((err) => {
-                console.log(err)
-            })
-        },
-
-        getHotFoods (day, pid, cid) {
-            this.$axios.get(`${prefix}/food/getHotFoods`)
-            .then((res) => {
-                if (res.data.success) {
-                    this.hotFoods = [...res.data.relatedObject]
-                    this.hotFoods.forEach((food) => {
-                        this.getPlanByFoodId(food)
-                    })
-                }
-            })
-            .catch((err) => {
-                console.log(err)
-            })
-        },
-
-        getPlanByFoodId (food) {
-            this.$axios.get(`${prefix}/food/getPlanByFoodId?foodId=${food.foodId}`)
-            .then((res) => {
-                if (res.data.success) {
-                    food.plans = [...res.data.relatedObject]
-                }
-            })
-            .catch((err) => {
-                console.log(err)
-            })
-        }
     },
 
     mounted () {
-        this.getWeekCalendar()
-        this.getCategoriesList()
-        this.getFoodsList()
-        this.getHotFoods()
     },
 
     watch: {
-        dayIndex: 'getCategoriesList',
-        periodIndex: 'getCategoriesList',
-        categoryIndex: 'getFoodsList',
-        categories: {
-            handler: function (val, oldVal) {
-                if (val.length > 0) {
-                    this.categoryIndex = val[0].cid.toString()
-                    this.getFoodsList()
-                }
-            },
-            deep: true
-        }
     }
 }
 </script>
@@ -197,72 +76,105 @@ export default {
 @import "../common.css";
 
 .book {
+    display: inline-block;
+    position: relative;
+    width: 100%;
     height: 100%;
     padding: 0 0;
 
     .main-wrapper {
+        display: inline-block;
+        position: relative;
         padding: px2rem(10px);
+        padding-top: px2rem(50px);
+        width: 100%;
+        height: 100%;
 
-        .order-wrapper {
+        .datePicker {
+            display: inline-block;
             position: relative;
-            height: px2rem(455px);
-            margin-top: px2rem(45px);
-            padding: px2rem(5px) px2rem(10px) px2rem(5px);
-            z-index: 5;
-            border: 1px solid $gray;
-            
-            .food-wrapper {
-                margin-top: px2rem(5px);
+            width: 100%;
+            height: px2rem(70px);
+            border-radius: px2rem(4px);
+            background: $gray;
+            color: $white1;
 
-                .el-tabs {
-                    .el-tabs__header {
-                        margin-left: 5px;
+            .whichDay {
+                .txt {
+                    display: inline-block;
+                    width: px2rem(30px);
+                    height: px2rem(30px);
+                    margin: 0 px2rem(10px);
+                    font-size: px2rem(14px);
+                    text-align: center;
+                    line-height: px2rem(30px);
+                }
+            }
+
+            .day {
+                .txt {
+                    display: inline-block;
+                    width: px2rem(30px);
+                    height: px2rem(30px);
+                    margin: 0 px2rem(10px);
+                    font-size: px2rem(14px);
+                    text-align: center;
+                    line-height: px2rem(30px);
+
+                    &.selected {
+                        border-radius: px2rem(30px);
+                        background: $blue;
+                        color: $white;
+                    }
+
+                    &.pass {
+                        color: $gray5;
+                        opacity: .2;
                     }
                 }
+            }
+        }
 
+        .bookPicker {
+            padding-top: px2rem(10px);
 
-                .el-tabs__content {
-                    overflow: scroll !important;
-                }
+            .el-tag {
+                position: relative;
+                width: 100%;
+                height: px2rem(60px);
+                margin-top: px2rem(10px);
+            }
 
-                .food {
-                    height: px2rem(76px);
-                    padding: px2rem(5px) 0;
-                    border-bottom: px2rem(1px) solid $gray2;
+            .imgPeriod {
+                width: px2rem(40px);
+                height: px2rem(40px);
+                vertical-align: text-top;
+            }
 
-                    &:last-child {
-                        border-bottom: 0 solid $gray2;
-                    }
+            .time {
+                display: inline-block;
+                position: absolute;
+                height: px2rem(60px);
+                margin-left: px2rem(8px);
+                line-height: px2rem(60px);
+                color: $gray5;
+                font-size: px2rem(23px);
+                font-weight: bold;
+            }
 
-                    .img, .desc {
-                        display: inline-block;
-                    }
-
-                    .img {
-                        width: px2rem(92px);
-                        height: 100%;
-                    }
-
-                    .desc {
-                        width: px2rem(160px);
-                        height: 100%;
-                        margin-left: px2rem(4px);
-                        vertical-align: top;
-
-                        .name {
-                            max-width: px2rem(140px);
-                            color: $black2;
-                            font-size: px2rem(16px);
-                        }
-
-                        .material, .hot {
-                            max-width: px2rem(140px);
-                            margin-top: px2rem(3px);
-                            color: $gray2;
-                            font-size: px2rem(12px);
-                        }
-                    }
-                }
+            .btn {
+                display: inline-block;
+                position: absolute;
+                top: px2rem(18px);
+                right: px2rem(10px);
+                width: px2rem(50px);
+                height: px2rem(25px);
+                border-radius: px2rem(4px);
+                line-height: px2rem(25px);
+                background: rgba(64, 158, 255, .3);
+                color: $white;
+                font-size: px2rem(14px);
+                text-align: center;
             }
         }
     }
