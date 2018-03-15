@@ -53,9 +53,6 @@ export default {
             })
         },
 
-        clickBar (ev) {
-        },
-
         selectIndex () {
             this.cleanFlag()
             this.$refs.index.classList.add('selected')

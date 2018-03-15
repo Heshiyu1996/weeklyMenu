@@ -7,31 +7,28 @@
                     <span class="txt" v-for="(item, idx) in whichDay" :key="idx">{{ item }}</span>
                 </div>
                 <div class="day">
-                    <span class="txt selected" v-for="(item, idx) in weekCalendar" :key="idx">{{ item }}</span>
+                    <span class="dayTxt"
+                        :class="{ pass: item.pass }"
+                        ref="dayNode"
+                        v-for="(item, idx) in thisWeekDayList" 
+                        :key="idx"
+                        @click="selectDay(idx)"
+                        >
+                        {{ item.day }}
+                    </span>
                 </div>
             </div>
             <div class="bookPicker">
-                <el-tag>
-                    <div @click="goTo('book')">
-                        <img class="imgPeriod" :src="img_period[0]" />
-                        <div class="time">&nbsp;&nbsp;7：00 早餐</div>
-                        <div class="btn">可点餐</div>
-                    </div>
-                </el-tag>
-                <el-tag>
-                    <div @click="goTo('book')">
-                        <img class="imgPeriod" :src="img_period[1]" />
-                        <div class="time">11：00 午餐</div>
-                        <div class="btn">可点餐</div>
-                    </div>
-                </el-tag>
-                <el-tag type="info">
-                    <div @click="goTo('book')">
-                        <img class="imgPeriod" :src="img_period[2]" />
-                        <div class="time">18：00 晚餐</div>
-                        <div class="btn">可点餐</div>
-                    </div>
-                </el-tag>
+                <div v-for="(item, idx) in timeTxt" 
+                    :key="idx" 
+                    class="order-wrapper"
+                    :class="{ already: !canBook[idx]}" 
+                    @click="goTo($event)">
+                    <img class="imgPeriod" :src="img_period[idx]" />
+                    <div class="time">{{ item }}</div>
+                    <div v-if="canBook[idx]" class="btn">可点餐</div>
+                    <div v-else class="btn">已点餐</div>
+                </div>
             </div>
         </div>
     </div>
@@ -54,6 +51,7 @@ export default {
                 require('./../../static/new_lunch.png'),
                 require('./../../static/new_dinner.png')
             ],
+            timeTxt: ['07：00 早餐', '11：00 午餐', '18：00 晚餐'],
             whichDay: ['日', '一', '二', '三', '四', '五', '六'],
             dayIndex: 0,
             periodIndex: 0,
@@ -63,13 +61,28 @@ export default {
                 month: '',
                 day: ''
             },
-            weekCalendar: []
+            weekCalendar: [],
+            thisWeekDayList: [],
+            canBook: []
+        }
+    },
+    computed: {
+        userInfo () {
+            return this.$store.getters.getUserInfo
         }
     },
 
     methods: {
-        goTo (destination) {
-            this.$router.push(`/${destination}`)
+        selectDay (idx) {
+            if(this.$refs.dayNode[idx].className.includes('pass')) return
+            this.cleanFlag()
+            this.$refs.dayNode[idx].classList.add('selected')
+            this.getMyOrderConditionToday(idx)
+        },
+
+        goTo (ev) {
+            if(ev.currentTarget.className.includes('already')) return
+            this.$router.push(`/bookDetail`)
         },
 
         getWeekCalendar () {
@@ -89,12 +102,24 @@ export default {
                     }
                     // 获取今天日期
                     splitDate(this.today, res.data.relatedObject.today.date)
-                    this.getMyOrderConditionToday()
 
                     // 获取周日历
-                    let thisWeek = [...res.data.relatedObject.weekCalendar]
-                    thisWeek.forEach((day) => {
-                        this.weekCalendar.push(day.date.split('-')[2])
+                    this.weekCalendar = [...res.data.relatedObject.weekCalendar]
+                    this.weekCalendar.forEach((day, idx) => {
+                        let obj = {
+                            day: day.date.split('-')[2]
+                        }
+                        if (idx < this.dayIndex) {
+                            obj.pass = true
+                        } else {
+                            obj.pass = false
+                        }
+                        this.thisWeekDayList.push(obj)
+                    })
+                    // this.getMyOrderConditionToday(this.dayIndex)
+                    // 默认进入book页面，点击今日
+                    this.$nextTick(() => {
+                        document.getElementsByClassName('dayTxt')[this.dayIndex].click()
                     })
                 }
             })
@@ -103,23 +128,27 @@ export default {
             })
         },
 
-        getMyOrderConditionToday () {
+        getMyOrderConditionToday (idx) {
             var querystring = require('querystring')
-            let dateCode = '20'
-            for (let i in this.today) {
-                dateCode = dateCode + this.today[i]
-            }
-            console.log(dateCode)
+            let dateCode = this.weekCalendar[idx].date.split('-').join('')
             
             this.$axios.get(`${prefix}/order/getOrdersByDateAndUid?dateCode=${dateCode}`)
             .then((res) => {
                 if (res.data.success) {
-                    console.log(res.data)
+                    this.canBook = [...res.data.relatedObject]
                 }
             })
             .catch((err) => {
                 console.log(err)
             })
+        },
+
+        cleanFlag () {
+            let dayTxtList = document.getElementsByClassName('dayTxt')
+            let len = dayTxtList.length
+            for (let i=0; i < len; i++) {
+                dayTxtList[i].classList.remove('selected')
+            }
         }
     },
 
@@ -172,7 +201,7 @@ export default {
             }
 
             .day {
-                .txt {
+                .dayTxt {
                     display: inline-block;
                     width: px2rem(30px);
                     height: px2rem(30px);
@@ -185,6 +214,7 @@ export default {
                         border-radius: px2rem(30px);
                         background: $blue;
                         color: $white;
+                        transition: color .5s, background .5s, width .5s, border-radius .5s;
                     }
 
                     &.pass {
@@ -198,16 +228,37 @@ export default {
         .bookPicker {
             padding-top: px2rem(10px);
 
-            .el-tag {
+            .order-wrapper {
                 position: relative;
                 width: 100%;
                 height: px2rem(60px);
                 margin-top: px2rem(10px);
+                border: px2rem(2px) solid $blue;
+                border-radius: px2rem(4px);
+                background: rgba(66, 151, 236 , .8);
+                transition: color .5s, background .5s;
+                    
+
+                &.already {
+                    background: $gray6;
+                    border: px2rem(2px) solid $gray6;
+                    transition: background .5s;
+
+                    .btn {
+                        background: gray;
+                        color: blanchedalmond;
+                    }
+                }
+
+                &:first-child {
+                    margin-top: 0;
+                }
             }
 
             .imgPeriod {
                 width: px2rem(40px);
                 height: px2rem(40px);
+                margin: px2rem(6px) 0 0 px2rem(10px);
                 vertical-align: text-top;
             }
 
@@ -217,21 +268,21 @@ export default {
                 height: px2rem(60px);
                 margin-left: px2rem(8px);
                 line-height: px2rem(60px);
-                color: $gray5;
+                color: $white;
                 font-size: px2rem(23px);
-                font-weight: bold;
+                font-family: "黑体";
             }
 
             .btn {
                 display: inline-block;
                 position: absolute;
-                top: px2rem(18px);
+                top: px2rem(16px);
                 right: px2rem(10px);
                 width: px2rem(50px);
                 height: px2rem(25px);
                 border-radius: px2rem(4px);
                 line-height: px2rem(25px);
-                background: rgba(64, 158, 255, .3);
+                background: $green;
                 color: $white;
                 font-size: px2rem(14px);
                 text-align: center;
