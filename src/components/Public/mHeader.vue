@@ -1,7 +1,7 @@
 <template>
     <nav class="header-wrapper">
         <router-link to="/">
-            <img class="logo" src="./../../../static/logo.png">
+            <i class="logo icon icon-hipster2"></i>
             <span class="title">每日菜单</span>
         </router-link>
         <div class="login_area">
@@ -76,7 +76,11 @@ export default {
         bottom: px2rem(10.1px);
         left: px2rem(20px);
         width: px2rem(24px);
-        height: px2rem(21px);
+        height: px2rem(25px);
+        line-height: px2rem(25px);
+        text-align: center;
+        color: $white;
+        font-size: px2rem(20px);
     }
 
     .title {

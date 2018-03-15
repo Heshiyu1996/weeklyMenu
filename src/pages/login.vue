@@ -39,7 +39,7 @@ export default {
         toLogin (ev) {
             if (ev.target.classList.contains('noInput')) return false
             this.$refs.btn.innerText = '登录中...'
-            this.$refs.btn.style.backgroundColor = '#4FA34B'
+            this.$refs.btn.style.backgroundColor = '#336BEF'
             setTimeout(() => {
                 this.login()
             }, 100)

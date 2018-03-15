@@ -7,7 +7,7 @@
                     <span class="txt" v-for="(item, idx) in whichDay" :key="idx">{{ item }}</span>
                 </div>
                 <div class="day">
-                    <span class="txt selected" v-for="(item, idx) in thisWeek" :key="idx">{{ item }}</span>
+                    <span class="txt selected" v-for="(item, idx) in weekCalendar" :key="idx">{{ item }}</span>
                 </div>
             </div>
             <div class="bookPicker">
@@ -39,6 +39,7 @@
 
 <script>
 import { prefix } from '@/publicAPI/config'
+import { splitDate } from '@/publicAPI/util'
 import mHeader from '@/components/Public/mHeader'
 
 export default {
@@ -54,7 +55,15 @@ export default {
                 require('./../../static/new_dinner.png')
             ],
             whichDay: ['日', '一', '二', '三', '四', '五', '六'],
-            thisWeek: ['11', '12', '13', '14', '15', '16', '17']
+            dayIndex: 0,
+            periodIndex: 0,
+            hour: '',
+            today: {
+                year: '',
+                month: '',
+                day: ''
+            },
+            weekCalendar: []
         }
     },
 
@@ -62,9 +71,60 @@ export default {
         goTo (destination) {
             this.$router.push(`/${destination}`)
         },
+
+        getWeekCalendar () {
+            this.$axios.get(`${prefix}/plan/getWeekCalendar`)
+            .then((res) => {
+                if (res.data.success) {
+                    // 获取今天星期几
+                    this.dayIndex = res.data.relatedObject.today.day
+                    // 获取目前时段
+                    let hour = res.data.relatedObject.time.split(':')[0]
+                    if (hour <= 8) {
+                        this.periodIndex = 1
+                    } else if (hour > 13) {
+                        this.periodIndex = 3
+                    } else {
+                        this.periodIndex = 2
+                    }
+                    // 获取今天日期
+                    splitDate(this.today, res.data.relatedObject.today.date)
+                    this.getMyOrderConditionToday()
+
+                    // 获取周日历
+                    let thisWeek = [...res.data.relatedObject.weekCalendar]
+                    thisWeek.forEach((day) => {
+                        this.weekCalendar.push(day.date.split('-')[2])
+                    })
+                }
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+        },
+
+        getMyOrderConditionToday () {
+            var querystring = require('querystring')
+            let dateCode = '20'
+            for (let i in this.today) {
+                dateCode = dateCode + this.today[i]
+            }
+            console.log(dateCode)
+            
+            this.$axios.get(`${prefix}/order/getOrdersByDateAndUid?dateCode=${dateCode}`)
+            .then((res) => {
+                if (res.data.success) {
+                    console.log(res.data)
+                }
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+        }
     },
 
     mounted () {
+        this.getWeekCalendar()
     },
 
     watch: {

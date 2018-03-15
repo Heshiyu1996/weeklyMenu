@@ -9,7 +9,7 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import './style/reset.css'
 import './style/eleUI.css'
-import { getUserInfo, getRecentWeek } from '@/publicAPI/util'
+import { getUserInfo } from '@/publicAPI/util'
 
 var gb2260 = require('gb2260')
 gb2260.register('201410', require('gb2260/lib/201410'))
@@ -27,7 +27,6 @@ let vm = new Vue({
     template: '<App/>',
     mounted () {
         getUserInfo(this)
-        getRecentWeek(this)
     },
     components: { App }
 })

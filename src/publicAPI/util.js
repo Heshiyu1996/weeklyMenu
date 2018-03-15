@@ -17,25 +17,6 @@ function getUserInfo (myVue) {
             })
 }
 
-function getRecentWeek (myVue) {
-    let dateAndDay = []
-    var now = new Date()
-    var nowTime = now.getTime()
-    var day = now.getDay() || 7
-    var oneDayLong = 24 * 60 * 60 * 1000
-
-    for (let i = 1; i < 8; i++) {
-        dateAndDay.push(new Date(nowTime - (day - i) * oneDayLong).toLocaleString())
-    }
-    // var MondayTime = nowTime - (day-1)*oneDayLong
-    // var SundayTime =  nowTime + (7-day)*oneDayLong
-
-    // var monday = new Date(MondayTime).toLocaleString()
-    // var sunday = new Date(SundayTime).toLocaleString()
-    // console.log(monday)
-    // console.log(dateAndDay)
-}
-
 function splitDate (obj, dateStr) {
     obj.year = dateStr.split('-')[0].slice(2, 4)
     obj.month = dateStr.split('-')[1]

@@ -131,7 +131,7 @@ export default {
         }
 
         .material {
-            min-height: px2rem(33px);
+            min-height: px2rem(30px);
         }
 
         &.small {

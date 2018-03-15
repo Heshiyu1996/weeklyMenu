@@ -24,7 +24,6 @@
 </template>
 
 <script>
-
 export default {
     name: 'app',
 
@@ -92,15 +91,14 @@ export default {
         }
     },
 
-    mounted () {
-    },
-
     watch: {
         $route: function (newRoute) {
             console.log(newRoute)
-            // 没登录
             if (newRoute.name === 'index') {
                 this.selectIndex()
+            }
+            if (newRoute.name === 'book') {
+                this.selectBook()
             }
         }
     }
