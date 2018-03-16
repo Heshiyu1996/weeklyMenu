@@ -1,10 +1,5 @@
 <template>
     <nav class="header-wrapper" :class="{isSuper: isSuper}">
-        <router-link to="/">
-            <div class="flag">
-                <i class="back_link el-icon-arrow-left"></i>
-            </div>
-        </router-link>
         <div class="title">
              {{ isSuper ? '超级管理员' : title }}
         </div>

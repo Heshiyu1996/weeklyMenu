@@ -35,14 +35,16 @@
                 </div>
             </div>
         </div>
-        <div v-else class="favorite-guide">
-            <div class="txt">恭喜你，注册成功啦！<br /><br />请给我一个机会，让我更加懂你。</div>
-            <div class="btns">
-                <el-button type="primary" @click="goTo('character')">好的！</el-button>
-                <el-button type="info" @click="goTo('')">不了，谢谢</el-button>
-                <div class="tip">(点击“好的”将前往设置个人性格、喜好，每天优先推送量身定做的菜品)</div>
+        <transition name="bounce">
+            <div v-if="isSuccess" class="favorite-guide">
+                <div class="txt">恭喜你，注册成功啦！<br /><br />请给我一个机会，让我更加懂你。</div>
+                <div class="btns">
+                    <el-button type="primary" @click="goTo('character')">好的！</el-button>
+                    <el-button type="info" @click="goTo('')">不了，谢谢</el-button>
+                    <div class="tip">(点击“好的”将前往设置个人性格、喜好，每天优先推送量身定做的菜品)</div>
+                </div>
             </div>
-        </div>
+        </transition>
     </div>
 </template>
 

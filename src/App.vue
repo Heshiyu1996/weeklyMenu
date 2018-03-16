@@ -1,11 +1,11 @@
 <template>
   <div id="app">
-    <transition name="el-fade-in-linear">
+    <keepAlive>
         <router-view v-if="$route.meta.keepAlive"></router-view>
-    </transition>
-    <transition name="el-fade-in-linear">
-        <router-view v-if="!$route.meta.keepAlive"></router-view>
-    </transition>
+    </keepAlive>
+
+    <router-view v-if="!$route.meta.keepAlive"></router-view>
+    
     <div class="switch-bar">
         <div ref="index" class="index bar selected" @click="selectIndex()">
             <i class="icon icon-home3"></i>

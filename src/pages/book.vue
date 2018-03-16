@@ -23,7 +23,7 @@
                     :key="idx" 
                     class="order-wrapper"
                     :class="{ already: !canBook[idx]}" 
-                    @click="goTo($event)">
+                    @click="goTo($event, idx)">
                     <img class="imgPeriod" :src="img_period[idx]" />
                     <div class="time">{{ item }}</div>
                     <div v-if="canBook[idx]" class="btn">可点餐</div>
@@ -63,7 +63,8 @@ export default {
             },
             weekCalendar: [],
             thisWeekDayList: [],
-            canBook: []
+            canBook: [],
+            dateCode: ''
         }
     },
     computed: {
@@ -77,12 +78,13 @@ export default {
             if(this.$refs.dayNode[idx].className.includes('pass')) return
             this.cleanFlag()
             this.$refs.dayNode[idx].classList.add('selected')
+            this.dayIndex = idx
             this.getMyOrderConditionToday(idx)
         },
 
-        goTo (ev) {
+        goTo (ev, idx) {
             if(ev.currentTarget.className.includes('already')) return
-            this.$router.push(`/bookDetail`)
+            this.$router.push(`/bookDetail/${this.dateCode}/${this.dayIndex}/${idx+1}/${this.userInfo.uid}`)
         },
 
         getWeekCalendar () {
@@ -130,9 +132,9 @@ export default {
 
         getMyOrderConditionToday (idx) {
             var querystring = require('querystring')
-            let dateCode = this.weekCalendar[idx].date.split('-').join('')
+            this.dateCode = this.weekCalendar[idx].date.split('-').join('')
             
-            this.$axios.get(`${prefix}/order/getOrdersByDateAndUid?dateCode=${dateCode}`)
+            this.$axios.get(`${prefix}/order/getOrdersByDateAndUid?dateCode=${this.dateCode}`)
             .then((res) => {
                 if (res.data.success) {
                     this.canBook = [...res.data.relatedObject]
@@ -237,7 +239,11 @@ export default {
                 border-radius: px2rem(4px);
                 background: rgba(66, 151, 236 , .8);
                 transition: color .5s, background .5s;
-                    
+                
+                &:hover, &:focus {
+                    background: $blue2;
+                    transition: color .5s, background .5s;
+                }
 
                 &.already {
                     background: $gray6;

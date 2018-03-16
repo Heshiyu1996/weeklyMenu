@@ -102,10 +102,13 @@ export default new Router({
         {
             path: '/book',
             name: 'book',
-            component: Book
+            component: Book,
+            meta: {
+                keepAlive: true
+            }
         },
         {
-            path: '/bookDetail',
+            path: '/bookDetail/:dateCode/:dayIndex/:pid/:userId',
             name: 'bookDetail',
             component: BookDetail
         },

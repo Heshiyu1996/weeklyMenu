@@ -1,16 +1,18 @@
 <template>
-    <div class="foodCard" @click="gotoDetail($event, foodInfo.foodId)">
-        <img class="img" :src="prefix + foodInfo.imgUrl" />
-        <div class="desc" :class="sizeObj">
-            <div class="name f-ellipsis">{{ foodInfo.name }}</div>
-            <div class="material f-ellipsis2">{{ foodInfo.material }}</div>
-            <div class="hot f-ellipsis">{{ foodInfo.visitCount }} 浏览 {{ foodInfo.markCount }} 收藏</div>
-        </div>
-        <div v-if="showStar" class="star" @click="removeMarks(foodInfo.foodId)" @click.stop>
-            <i class="star_link el-icon-star-on"></i>
-        </div>
-        <div v-if="showSelect" class="select" @click="select(foodInfo.foodId)" @click.stop >
-            <el-checkbox class="star_link" size="medium" v-model="foodInfo.checked"></el-checkbox>
+    <div>
+        <div v-show="show" class="foodCard" @click="gotoDetail($event, foodInfo.foodId)">
+            <img class="img" :src="prefix + foodInfo.imgUrl" />
+            <div class="desc" :class="sizeObj">
+                <div class="name f-ellipsis">{{ foodInfo.name }}</div>
+                <div class="material f-ellipsis2">{{ foodInfo.material }}</div>
+                <div class="hot f-ellipsis">{{ foodInfo.visitCount }} 浏览 {{ foodInfo.markCount }} 收藏</div>
+            </div>
+            <div v-if="showStar" class="star" @click="removeMarks(foodInfo.foodId)" @click.stop>
+                <i class="star_link el-icon-star-on"></i>
+            </div>
+            <div v-if="showSelect" class="select" @click="select(foodInfo.foodId)" @click.stop >
+                <el-checkbox class="star_link" size="medium" v-model="foodInfo.checked"></el-checkbox>
+            </div>
         </div>
     </div>
 </template>
@@ -52,7 +54,8 @@ export default {
                 'normal': this.size === 'normal'    // 58%
             },
             checked: false,
-            prefix: prefix
+            prefix: prefix,
+            show: false
         }
     },
     methods: {
@@ -89,6 +92,10 @@ export default {
                 this.$router.push(`/foodDetail/${id}`)
             }
         }
+    },
+
+    mounted () {
+        this.show = true
     }
 }
 </script>

@@ -134,3 +134,36 @@
     height: 40px;
     text-align: center;
 }
+
+.bookDetail .main-wrapper .order-wrapper .food-wrapper .el-tabs.el-tabs--left .el-tabs__header {
+    width: 62px;
+}
+
+.bookDetail .main-wrapper .order-wrapper .food-wrapper .el-tabs.el-tabs--left .el-tabs__header .el-tabs__nav-wrap .el-tabs__nav-scroll .el-tabs__nav .el-tabs__item {
+    padding: 0;
+    font-size: 16px;
+    height: 50px;
+}
+
+.bookDetail .main-wrapper .order-wrapper .food-wrapper .el-tabs.el-tabs--left {
+    height: 380px;
+}
+
+.bookDetail .main-wrapper .order-wrapper .food-wrapper .el-tabs.el-tabs--left .el-tabs__item.is-left {
+    text-align: center;
+}
+
+.bookDetail .main-wrapper .order-wrapper .food-wrapper .el-tabs.el-tabs--left .el-tabs__header {
+    width: 62px;
+}
+
+.bookDetail .main-wrapper .order-wrapper .food-wrapper .el-tabs.el-tabs--left .el-tabs__header .el-tabs__nav-wrap .el-tabs__nav-scroll .el-tabs__nav .el-tabs__item {
+    padding: 0;
+    font-size: 16px;
+    height: 50px;
+}
+
+.bookDetail .main-wrapper .order-wrapper .food-wrapper .el-tabs.el-tabs--left .el-tabs__content {
+    height: 100%;
+    overflow: scroll !important;
+}
