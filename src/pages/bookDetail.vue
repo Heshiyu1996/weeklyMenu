@@ -10,11 +10,20 @@
                     <div class="food-wrapper">
                         <el-tabs class="food-body" v-model="categoryIndex" tab-position="left" @tab-click="selectCategory">
                             <el-tab-pane :cid="category.cid" :name="category.cid.toString()" v-for="(category, idx) in categories" :key="idx" :label="category.cname">
-                                <FoodCard size="normal" :foodInfo="item" v-for="(item, idx) in foods" :key="idx"></FoodCard>
+                                <FoodCard @emitFromChild="sumTheFoods" type="bookCard" size="normal" :foodInfo="item" v-for="(item, idx) in foods" :key="idx"></FoodCard>
                             </el-tab-pane>
                         </el-tabs>
                     </div>
                 </div>
+            </div>
+        </div>
+        
+        <div class="count-bar">
+            <div ref="total" class="total bar">
+                <div class="totalCount">总计： ￥ {{ sum }}</div>
+            </div>
+            <div ref="submit" class="submit bar" @click="submit()">
+                <div class="btn">提交</div>
             </div>
         </div>
     </div>
@@ -49,11 +58,26 @@ export default {
             allFoodsList: [],
             categories: [],
             categoryIndex: '',
-            foods: []
+            foods: [],
+            sum: 0,
+            bookDetail: {}
         }
     },
 
     methods: {
+        sumTheFoods (id, count, price) {
+            console.log(`儿子响应我${id}，${count}, ${price}` )
+            this.bookDetail[id] = `${price}-${count}`
+            this.sum = 0
+            if (count === 0){
+                delete this.bookDetail[id]
+            }
+            for (let i in this.bookDetail) {
+                let price = parseInt(this.bookDetail[i].split('-')[0])
+                let count = parseInt(this.bookDetail[i].split('-')[1])
+                this.sum += price * count
+            }
+        },
         selectCategory (tab, event) {
             this.categoryIndex = tab.$attrs.cid.toString()
         },
@@ -217,6 +241,50 @@ export default {
                     }
                 }
             }
+        }
+    }
+}
+
+.count-bar {
+    display: flex;
+    position: fixed;
+    background: $blue;
+    bottom: 0;
+    width: 100%;
+    height: px2rem(45px);
+    z-index: 999999;
+    color: $white;
+
+    .total {
+        display: inline-block;
+        flex: 2;
+        height: px2rem(45px);
+        text-align: left;
+        background: $blue2;
+        padding: 0 px2rem(10px);
+        line-height: px2rem(45px);
+        font-size: px2rem(16px);
+        transition: padding .5s, background .5s;
+
+        .totalCount {
+            position: relative;
+            height: 100%;
+            font-size: px2rem(20px);
+        }
+    }
+
+    .submit {
+        display: inline-block;
+        flex: 1;
+        height: px2rem(45px);
+        line-height: px2rem(45px);
+        text-align: center;
+        background: $blue;
+        font-size: px2rem(16px);
+        font-family: "黑体";
+
+        .btn {
+            color: $white;
         }
     }
 }

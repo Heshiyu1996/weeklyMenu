@@ -20,6 +20,10 @@
                     <el-option v-for="(item, idx) in categories" :key="idx" :label="item.cname" :value="item.cid"></el-option>
                 </el-select>
             </div>
+            <div class="item">
+                <span class="label">价格</span>
+                <input type="text" v-model="foodInfo.price" class="inputBox" placeholder="请输入价格"/>
+            </div>
             <div class="item"
                 v-for="(period, index) in foodInfo.plans"
                 :label="'供餐时段' + index"
@@ -60,6 +64,7 @@ export default {
                 name: '',
                 material: '',
                 description: '',
+                price: 0,
                 imgUrl: '',
                 categoryId: '',
                 plans: [{
@@ -219,6 +224,7 @@ export default {
                     material: this.foodInfo.material,
                     description: this.foodInfo.description,
                     categoryId: this.foodInfo.categoryId,
+                    price: this.foodInfo.price,
                     plans: plansStrArr
                 }))
                 .then((res) => {
@@ -338,7 +344,7 @@ export default {
     }
 
     .btn-wrapper {
-        margin-top: px2rem(100px);
+        margin-top: px2rem(20px);
         
         .btn {
             margin: 0 auto;

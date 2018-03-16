@@ -6,7 +6,7 @@
 
     <router-view v-if="!$route.meta.keepAlive"></router-view>
     
-    <div class="switch-bar">
+    <div v-if="!$route.meta.hideSwitchBar" class="switch-bar">
         <div ref="index" class="index bar selected" @click="selectIndex()">
             <i class="icon icon-home3"></i>
             <div class="txt">首页</div>

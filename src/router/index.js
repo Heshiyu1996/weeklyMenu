@@ -110,7 +110,10 @@ export default new Router({
         {
             path: '/bookDetail/:dateCode/:dayIndex/:pid/:userId',
             name: 'bookDetail',
-            component: BookDetail
+            component: BookDetail,
+            meta: {
+                hideSwitchBar: true
+            }
         },
         {
             path: '/super',

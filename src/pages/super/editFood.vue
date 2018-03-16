@@ -19,6 +19,10 @@
                 <input type="text" v-model="foodInfoCopy.description" class="inputBox" placeholder="请输入菜品简介"/>
             </div>
             <div class="item">
+                <span class="label">价格</span>
+                <input type="text" v-model="foodInfoCopy.price" class="inputBox price" placeholder="请输入价格"/> 元
+            </div>
+            <div class="item">
                 <span class="label">菜品分类</span>
                 <!-- <input type="text" v-model="categoryId" class="inputBox" placeholder="请选择菜品分类"/> -->
                 <el-select v-model="foodInfoCopy.categoryId" slot="prepend" placeholder="请选择">
@@ -52,7 +56,8 @@ export default {
                 material: '',
                 description: '',
                 imgUrl: '',
-                categoryId: ''
+                categoryId: '',
+                price: 0
             },
             categories: [],
             default_imageUrl: '/img/default.png'
@@ -137,7 +142,8 @@ export default {
                     imgUrl: this.foodInfoCopy.imgUrl,
                     material: this.foodInfoCopy.material,
                     description: this.foodInfoCopy.description,
-                    categoryId: this.foodInfoCopy.categoryId
+                    categoryId: this.foodInfoCopy.categoryId,
+                    price: this.foodInfoCopy.price
                 }))
                 .then((res) => {
                     if (res.data.success) {
@@ -199,6 +205,10 @@ export default {
                     width: px2rem(100px);
                     background: $white;
                 }
+
+                &.price {
+                    width: px2rem(50px);
+                }
             }
 
             .search-btn {
@@ -248,7 +258,7 @@ export default {
     }
 
     .btn-wrapper {
-        margin-top: px2rem(100px);
+        margin-top: px2rem(20px);
         
         .btn {
             margin: 0 auto;

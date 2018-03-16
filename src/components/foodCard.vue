@@ -1,11 +1,17 @@
 <template>
     <div>
-        <div v-show="show" class="foodCard" @click="gotoDetail($event, foodInfo.foodId)">
-            <img class="img" :src="prefix + foodInfo.imgUrl" />
+        <div v-show="show" class="foodCard" :class="typeObj">
+            <img class="img" :src="prefix + foodInfo.imgUrl" @click="gotoDetail($event, foodInfo.foodId)"/>
             <div class="desc" :class="sizeObj">
                 <div class="name f-ellipsis">{{ foodInfo.name }}</div>
                 <div class="material f-ellipsis2">{{ foodInfo.material }}</div>
                 <div class="hot f-ellipsis">{{ foodInfo.visitCount }} 浏览 {{ foodInfo.markCount }} 收藏</div>
+                <div class="price f-ellipsis"> ￥ {{ foodInfo.price }}</div>
+                <div v-if="type === 'bookCard'" class="count-btn">
+                    <i v-show="count !== 0" class="el-icon-remove-outline" @click="changeCount(0, foodInfo.foodId, count, foodInfo.price)"></i>
+                    <span v-show="count !== 0" class="count">{{ count }}</span>
+                    <i class="el-icon-circle-plus" @click="changeCount(1, foodInfo.foodId, count, foodInfo.price)"></i>
+                </div>
             </div>
             <div v-if="showStar" class="star" @click="removeMarks(foodInfo.foodId)" @click.stop>
                 <i class="star_link el-icon-star-on"></i>
@@ -31,6 +37,10 @@ export default {
             default: '',
             type: String
         },
+        type: {
+            default: '',
+            type: String
+        },
         showStar: {
             default: false,
             type: Boolean
@@ -53,14 +63,19 @@ export default {
                 'small': this.size === 'small',     // 55%
                 'normal': this.size === 'normal'    // 58%
             },
+            typeObj: {
+                'bookCard': this.type === 'bookCard'
+            },
             checked: false,
             prefix: prefix,
-            show: false
+            show: false,
+            count: 0
         }
     },
     methods: {
-        select (id) {
-
+        changeCount (func, id, count, price) {
+            this.count = (func === 0) ? this.count - 1 : this.count + 1
+            this.$emit("emitFromChild", id, this.count, price)
         },
 
         removeMarks (id) {
@@ -141,6 +156,14 @@ export default {
             min-height: px2rem(30px);
         }
 
+        .price {
+            display: inline-block;
+            min-width: px2rem(60px);
+            color: $red;
+            font-size: px2rem(16px);
+            font-weight: bold;
+        }
+
         &.small {
             width: 55%;
         }
@@ -172,6 +195,35 @@ export default {
 
     &:last-child {
         border-bottom: 0 solid $gray2;
+    }
+
+    &.bookCard {
+        height: px2rem(100px);
+
+        .img {
+            width: px2rem(75px);
+            height: px2rem(65px);
+        }
+    }
+
+    .count-btn {
+        display: inline-block;
+        position: absolute;
+        right: 0;
+        width: px2rem(80px);
+
+        .el-icon-circle-plus {
+            position: absolute;
+            top: px2rem(2px);
+            right: px2rem(5px);
+        }
+
+        .count {
+            display: inline-block;
+            width: px2rem(30px);
+            color: $black;
+            text-align: center;
+        }
     }
 }
 </style>
