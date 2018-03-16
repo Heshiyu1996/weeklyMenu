@@ -60,12 +60,14 @@ export default {
         },
 
         selectBook () {
-            this.cleanFlag()
             if (!this.ifLogin) {
                 this.preventGo()
                 return
             }
-            this.$refs.book.classList.add('selected')
+            this.$nextTick(() => {
+                this.cleanFlag()
+                this.$refs.book.classList.add('selected')
+            })
             this.goTo('book')
         },
 

@@ -46,6 +46,7 @@ export default {
     },
     data () {
         return {
+            firstEnter: true,
             img_period: [
                 require('./../../static/new_breakfast.png'),
                 require('./../../static/new_lunch.png'),
@@ -156,6 +157,13 @@ export default {
 
     mounted () {
         this.getWeekCalendar()
+    },
+
+    activated() {
+        if (!this.firstEnter) {
+            this.getMyOrderConditionToday(this.dayIndex)
+        }
+        this.firstEnter = false
     },
 
     watch: {
