@@ -105,18 +105,9 @@ export default {
         getFoodsListByCid (cid) {
         },
 
-        getTest () {
+        submit () {
             var querystring = require('querystring')
-            let config = {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }
-            var jsonStr = {
-                name: 'caozuoxiao',
-                age: 22
-            }
-            this.$axios.post(`${prefix}/admin/getTest`, jsonStr)
+            this.$axios.post(`${prefix}/admin/getTest`, this.bookDetail)
 
             .then((res) => {
                 if (res.data.success) {
@@ -130,7 +121,6 @@ export default {
 
     mounted () {
         this.getAllFoodsList()
-        this.getTest()
     },
 
     watch: {
