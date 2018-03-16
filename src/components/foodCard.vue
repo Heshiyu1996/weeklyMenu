@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div v-show="show" class="foodCard" :class="typeObj">
+        <div v-show="recentCid === foodInfo.categoryId.toString()" class="foodCard" :class="typeObj">
             <img class="img" :src="prefix + foodInfo.imgUrl" @click="gotoDetail($event, foodInfo.foodId)"/>
             <div class="desc" :class="sizeObj">
                 <div class="name f-ellipsis">{{ foodInfo.name }}</div>
@@ -48,6 +48,10 @@ export default {
         showSelect: {
             default: false,
             type: Boolean
+        },
+        recentCid: {
+            default: '',
+            type: String
         }
     },
     computed: {
@@ -68,7 +72,6 @@ export default {
             },
             checked: false,
             prefix: prefix,
-            show: false,
             count: 0
         }
     },
@@ -107,10 +110,6 @@ export default {
                 this.$router.push(`/foodDetail/${id}`)
             }
         }
-    },
-
-    mounted () {
-        this.show = true
     }
 }
 </script>

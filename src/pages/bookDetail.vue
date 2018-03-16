@@ -10,7 +10,7 @@
                     <div class="food-wrapper">
                         <el-tabs class="food-body" v-model="categoryIndex" tab-position="left" @tab-click="selectCategory">
                             <el-tab-pane :cid="category.cid" :name="category.cid.toString()" v-for="(category, idx) in categories" :key="idx" :label="category.cname">
-                                <FoodCard @emitFromChild="sumTheFoods" type="bookCard" size="normal" :foodInfo="item" v-for="(item, idx) in foods" :key="idx"></FoodCard>
+                                <FoodCard :recentCid="categoryIndex" @emitFromChild="sumTheFoods" type="bookCard" size="normal" :foodInfo="item" v-for="(item, idx) in foods" :key="idx"></FoodCard>
                             </el-tab-pane>
                         </el-tabs>
                     </div>
@@ -92,6 +92,7 @@ export default {
                         obj.cid = item.cid
                         obj.cname = item.cname
                         this.categories.push(obj)
+                        this.foods.push(...item.foods)
                     })
                     this.categoryIndex = this.categories[0].cid.toString()
                 }
@@ -102,11 +103,6 @@ export default {
         },
 
         getFoodsListByCid (cid) {
-            this.allFoodsList.forEach((item) => {
-                if (this.categoryIndex === item.cid.toString()) {
-                    this.foods = [...item.foods]
-                }
-            })
         },
 
         getTest () {
