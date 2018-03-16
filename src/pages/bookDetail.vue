@@ -87,14 +87,14 @@ export default {
 
         getTest () {
             var querystring = require('querystring')
-            var jsonStr = {
-                name: 'caozuoxiao',
-                age: 22
-            }
             let config = {
                 headers: {
                     'Content-Type': 'application/json'
                 }
+            }
+            var jsonStr = {
+                name: 'caozuoxiao',
+                age: 22
             }
             this.$axios.post(`${prefix}/admin/getTest`, jsonStr)
 
