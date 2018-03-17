@@ -8,9 +8,9 @@
                 <div class="hot f-ellipsis">{{ foodInfo.visitCount }} 浏览 {{ foodInfo.markCount }} 收藏</div>
                 <div v-show="showPrice" class="price f-ellipsis">
                      ￥ {{ foodInfo.price }}
-                     <span v-show="showCount" class="showCount"> x {{ count }}</span>
+                     <span v-show="showCount" class="showCount"> x {{ foodInfo.count }}</span>
                 </div>
-                <span v-show="showCount" class="showTotal">￥ {{ foodInfo.price * count }}</span>
+                <span v-show="showCount" class="showTotal">￥ {{ foodInfo.price * foodInfo.count }}</span>
                 <div v-if="type === 'bookCard'" class="count-btn">
                     <i v-show="count !== 0" class="el-icon-remove-outline" @click="changeCount(0, foodInfo.foodId, count, foodInfo.price)"></i>
                     <span v-show="count !== 0" class="count">{{ count }}</span>

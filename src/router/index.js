@@ -92,7 +92,7 @@ export default new Router({
                     inChild: true
                 }
             }, {
-                path: 'orderDetail',
+                path: 'orderDetail/:orderId',
                 name: 'orderDetail',
                 component: OrderDetail,
                 meta: {

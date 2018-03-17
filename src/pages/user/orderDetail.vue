@@ -5,10 +5,10 @@
             <div class="detail-wrapper">
                 <div class="record">
                     <div class="info">
-                        <div class="pid">一心食堂（晚餐）</div>
-                        <div class="createTime">2018-03-18 16:35</div>
+                        <div class="pid">一心食堂（{{ periodTxt[orderInfo.pid - 1] }}）</div>
+                        <div class="createTime">{{ orderInfo.createTime }}</div>
                     </div>
-                    <div class="money">15 元</div>
+                    <div class="money">{{ orderInfo.totalMoney }}.0 元</div>
                 </div>
                 <FoodCard :showCount="true" type="orderCard" :commonType="true" @removeMark="updateList" size="big" :foodInfo="item" v-for="(item, idx) in foods" :key="idx"></FoodCard>
             </div>
@@ -30,7 +30,14 @@ export default {
     data () {
         return {
             foods: [],
-            removingId: ''
+            removingId: '',
+            periodTxt: ['早餐', '午餐', '晚餐']
+        }
+    },
+
+    computed: {
+        orderInfo () {
+            return this.$store.getters.getOrderInfo
         }
     },
 
@@ -44,8 +51,8 @@ export default {
             })
         },
 
-        getMyMarksList () {
-            this.$axios.get(`${prefix}/food/getMyMarksList`)
+        getOrderDetail () {
+            this.$axios.get(`${prefix}/order/getOrderDetail?orderId=${this.$route.params.orderId}`)
             .then((res) => {
                 if (res.data.success) {
                     this.foods = [...res.data.relatedObject]
@@ -57,7 +64,7 @@ export default {
         }
     },
     mounted () {
-        this.getMyMarksList()
+        this.getOrderDetail()
     }
 }
 </script>
@@ -92,7 +99,7 @@ export default {
             }
 
             .info {
-                width: 82%;
+                width: 78%;
 
                 .pid {
                     height: 70%;
@@ -104,7 +111,7 @@ export default {
             }
 
             .money {
-                width: 15%;
+                width: 19%;
                 text-align: right;
                 vertical-align: top;
                 line-height: px2rem(39px);

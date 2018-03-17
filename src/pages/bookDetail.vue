@@ -22,7 +22,9 @@
             <div ref="total" class="total bar">
                 <div class="totalCount">总计： ￥ {{ sum }}</div>
             </div>
-            <div ref="submit" class="submit bar" @click="submit()">
+            <div ref="submit" class="submit bar"
+                :class="{notEmpty: Object.keys(bookDetail).length === 0}"
+                @click="submit()">
                 <div class="btn">提交</div>
             </div>
         </div>
@@ -66,7 +68,6 @@ export default {
 
     methods: {
         sumTheFoods (id, count, price) {
-            console.log(`儿子响应我${id}，${count}, ${price}` )
             this.bookDetail[id] = `${price}-${count}`
             this.sum = 0
             if (count === 0){
@@ -104,6 +105,7 @@ export default {
         },
 
         submit () {
+            if (Object.keys(this.bookDetail).length === 0) return
             // 提交前，在bookDetail新增dateCode和pid一起带过去给后台
             this.bookDetail.dateCode = this.$route.params.dateCode
             this.bookDetail.pid = parseInt(this.$route.params.pid)
@@ -276,9 +278,15 @@ export default {
         background: $blue;
         font-size: px2rem(16px);
         font-family: "黑体";
+        transition: background .3s;
 
         .btn {
             color: $white;
+        }
+
+        &.notEmpty {
+            background: gray;
+            transition: background .3s;
         }
     }
 }

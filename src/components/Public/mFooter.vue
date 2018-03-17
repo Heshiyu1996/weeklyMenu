@@ -163,6 +163,7 @@ export default {
         flex: 1;
         height: 100%;
         text-align: center;
+        transition: padding .5s, background .5s;
 
         .txt {
             position: relative;

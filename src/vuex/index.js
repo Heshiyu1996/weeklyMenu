@@ -6,7 +6,8 @@ export default new Vuex.Store({
     state: {
         ifLogin: false,
         userInfo: {},
-        foodInfo: {}
+        foodInfo: {},
+        orderInfo: {}
     },
 
     getters: {
@@ -18,6 +19,9 @@ export default new Vuex.Store({
         },
         getFoodInfo: state => {
             return state.foodInfo
+        },
+        getOrderInfo: state => {
+            return state.orderInfo
         }
     },
 
@@ -30,6 +34,9 @@ export default new Vuex.Store({
         },
         setFoodInfo (state, obj) {
             state.foodInfo = obj
+        },
+        setOrderInfo (state, obj) {
+            state.orderInfo = obj
         }
     }
 })

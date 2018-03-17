@@ -10,7 +10,7 @@
                 </div>
             </div>
             <div class="detail-wrapper">
-                <div class="record" v-for="(item, idx) in orders" :key="idx" @click="goToDetail(item.orderId)">
+                <div class="record" v-for="(item, idx) in orders" :key="idx" @click="goToDetail(item)">
                     <div class="info">
                         <div class="pid">一心食堂（{{ periodTxt[item.pid-1] }}）</div>
                         <div class="createTime">{{ item.createTime }}</div>
@@ -52,8 +52,14 @@ export default {
     },
 
     methods: {
-        goToDetail () {
-            this.$router.push('/user/orderDetail')
+        goToDetail (order) {
+            this.$store.commit('setOrderInfo', {
+                orderId: order.orderId,
+                pid: order.pid,
+                createTime: order.createTime,
+                totalMoney: order.totalMoney
+            })
+            this.$router.push(`/user/orderDetail/${order.orderId}`)
         },
 
         getMyOrders () {
