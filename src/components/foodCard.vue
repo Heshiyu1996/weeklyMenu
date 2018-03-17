@@ -1,12 +1,12 @@
 <template>
     <div>
-        <div v-show="recentCid === foodInfo.categoryId.toString()" class="foodCard" :class="typeObj">
+        <div v-show="commonType || recentCid === foodInfo.categoryId.toString()" class="foodCard" :class="typeObj">
             <img class="img" :src="prefix + foodInfo.imgUrl" @click="gotoDetail($event, foodInfo.foodId)"/>
             <div class="desc" :class="sizeObj">
                 <div class="name f-ellipsis">{{ foodInfo.name }}</div>
                 <div class="material f-ellipsis2">{{ foodInfo.material }}</div>
                 <div class="hot f-ellipsis">{{ foodInfo.visitCount }} 浏览 {{ foodInfo.markCount }} 收藏</div>
-                <div class="price f-ellipsis"> ￥ {{ foodInfo.price }}</div>
+                <div v-show="!commonType" class="price f-ellipsis"> ￥ {{ foodInfo.price }}</div>
                 <div v-if="type === 'bookCard'" class="count-btn">
                     <i v-show="count !== 0" class="el-icon-remove-outline" @click="changeCount(0, foodInfo.foodId, count, foodInfo.price)"></i>
                     <span v-show="count !== 0" class="count">{{ count }}</span>
@@ -46,6 +46,10 @@ export default {
             type: Boolean
         },
         showSelect: {
+            default: false,
+            type: Boolean
+        },
+        commonType: {
             default: false,
             type: Boolean
         },

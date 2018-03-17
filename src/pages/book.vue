@@ -10,7 +10,7 @@
                     <span class="dayTxt"
                         :class="{ pass: item.pass }"
                         ref="dayNode"
-                        v-for="(item, idx) in thisWeekDayList" 
+                        v-for="(item, idx) in thisWeekDayList"
                         :key="idx"
                         @click="selectDay(idx)"
                         >
@@ -19,10 +19,10 @@
                 </div>
             </div>
             <div class="bookPicker">
-                <div v-for="(item, idx) in timeTxt" 
-                    :key="idx" 
+                <div v-for="(item, idx) in timeTxt"
+                    :key="idx"
                     class="order-wrapper"
-                    :class="{ already: !canBook[idx]}" 
+                    :class="{ already: !canBook[idx]}"
                     @click="goTo($event, idx)">
                     <img class="imgPeriod" :src="img_period[idx]" />
                     <div class="time">{{ item }}</div>
@@ -31,6 +31,7 @@
                 </div>
             </div>
         </div>
+        <mFooter></mFooter>
     </div>
 </template>
 
@@ -38,11 +39,13 @@
 import { prefix } from '@/publicAPI/config'
 import { splitDate } from '@/publicAPI/util'
 import mHeader from '@/components/Public/mHeader'
+import mFooter from '@/components/Public/mFooter'
 
 export default {
     name: 'Book',
     components: {
-        mHeader
+        mHeader,
+        mFooter
     },
     data () {
         return {
@@ -134,7 +137,7 @@ export default {
         getMyOrderConditionToday (idx) {
             var querystring = require('querystring')
             this.dateCode = this.weekCalendar[idx].date.split('-').join('')
-            
+
             this.$axios.get(`${prefix}/order/getOrdersByDateAndUid?dateCode=${this.dateCode}`)
             .then((res) => {
                 if (res.data.success) {
@@ -247,7 +250,7 @@ export default {
                 border-radius: px2rem(4px);
                 background: rgba(66, 151, 236 , .8);
                 transition: color .5s, background .5s;
-                
+
                 &:hover, &:focus {
                     background: $blue2;
                     transition: color .5s, background .5s;

@@ -17,7 +17,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="count-bar">
             <div ref="total" class="total bar">
                 <div class="totalCount">总计： ￥ {{ sum }}</div>
@@ -146,7 +146,7 @@ export default {
         font-size: px2rem(18px);
         text-align: center;
     }
-    
+
     .desc {
         display: inline-block;
         width: 100%;
@@ -170,7 +170,7 @@ export default {
             padding: px2rem(5px) px2rem(10px) px2rem(5px);
             z-index: 5;
             border: 1px solid $gray;
-            
+
             .food-wrapper {
                 margin-top: px2rem(5px);
 
@@ -183,7 +183,6 @@ export default {
                         margin-left: 5px;
                     }
                 }
-
 
                 .el-tabs__content {
                     overflow: scroll !important;

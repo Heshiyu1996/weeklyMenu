@@ -57,12 +57,14 @@
                 </div>
             </div>
         </div>
+        <mFooter></mFooter>
     </div>
 </template>
 
 <script>
 import { prefix } from '@/publicAPI/config'
 import mHeader from '@/components/Public/mHeader'
+import mFooter from '@/components/Public/mFooter'
 import FoodCard from '@/components/foodCard'
 import { splitDate } from '@/publicAPI/util'
 
@@ -70,6 +72,7 @@ export default {
     name: 'Index',
     components: {
         mHeader,
+        mFooter,
         FoodCard
     },
     data () {
@@ -252,7 +255,7 @@ export default {
             z-index: 5;
             background: $blue;
             border-radius: 4px;
-            
+
             .img-hot {
                 position: absolute;
                 top: px2rem(-3px);
@@ -281,7 +284,7 @@ export default {
                 font-size: px2rem(16px);
                 text-align: right;
             }
-            
+
             .name {
                 line-height: px2rem(44px);
                 height: px2rem(32px);
@@ -373,7 +376,7 @@ export default {
                     }
                 }
             }
-            
+
             .food-wrapper {
                 margin-top: px2rem(5px);
 

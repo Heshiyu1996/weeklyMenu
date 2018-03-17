@@ -2,7 +2,7 @@
     <div>
         <mHeader2 title="我的收藏"></mHeader2>
         <div class="myMark">
-            <FoodCard @removeMark="updateList" size="normal" :showStar="true" :foodInfo="item" v-for="(item, idx) in foods" :key="idx"></FoodCard>
+            <FoodCard :commonType="true" @removeMark="updateList" size="normal" :showStar="true" :foodInfo="item" v-for="(item, idx) in foods" :key="idx"></FoodCard>
         </div>
     </div>
 </template>
@@ -31,8 +31,6 @@ export default {
             this.foods.forEach((elem, idx) => {
                 if (elem.foodId === id) {
                     this.foods.splice(idx, 1)
-                    console.log('删了一个id为' + id)
-                    console.log(this.foods)
                 }
             })
         },
@@ -62,6 +60,12 @@ export default {
     position: relative;
     width: 100%;
     height: 100%;
-    background: $gray1;
+    padding: 0 px2rem(10px);
+    background: $white;
+    border-bottom: px2rem(1px) solid $gray2;
+
+    &:last-child {
+        border-bottom: 0 solid $gray2;
+    }
 }
 </style>

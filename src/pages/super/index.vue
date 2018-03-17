@@ -75,6 +75,7 @@ export default {
 
 <style lang="postcss" type="text/css" rel="stylesheet/css" scoped>
 @import "../../common.css";
+
 .super {
     position: absolute;
     width: 100%;
@@ -89,7 +90,7 @@ export default {
         color: $black1;
         background: $white;
         border-bottom: 1px $gray3 solid;
-        
+
         &.logout {
             margin-top: px2rem(16px);
             padding-left: px2rem(37px);

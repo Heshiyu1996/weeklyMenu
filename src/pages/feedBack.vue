@@ -2,7 +2,7 @@
     <div>
         <mHeader2 title="提交反馈"></mHeader2>
         <div class="feedBack">
-            <div class="input-wrapper">    
+            <div class="input-wrapper">
                 <el-input
                     class="content"
                     type="textarea"
@@ -69,12 +69,13 @@ export default {
 
 <style lang="postcss" type="text/css" rel="stylesheet/css" scoped>
 @import "../common.css";
+
 .feedBack {
     position: absolute;
     width: 100%;
     height: 100%;
     background: $gray1;
-    
+
     .input-wrapper {
         margin: px2rem(10px);
     }
