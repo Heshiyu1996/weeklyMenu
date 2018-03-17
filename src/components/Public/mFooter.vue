@@ -71,32 +71,32 @@ export default {
         },
 
         selectIndex () {
+            this.cleanFlag()
             this.$nextTick(() => {
-                this.cleanFlag()
                 this.$refs.index.classList.add('selected')
             })
             this.goTo('')
         },
 
         selectBook () {
+            this.cleanFlag()
             if (!this.ifLogin) {
                 this.preventGo()
                 return
             }
             this.$nextTick(() => {
-                this.cleanFlag()
                 this.$refs.book.classList.add('selected')
             })
             this.goTo('book')
         },
 
         selectUser () {
+            this.cleanFlag()
             if (!this.ifLogin) {
                 this.preventGo()
                 return
             }
             this.$nextTick(() => {
-                this.cleanFlag()
                 this.$refs.user.classList.add('selected')
             })
             this.goTo('user')

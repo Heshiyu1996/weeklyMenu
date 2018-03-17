@@ -23,6 +23,7 @@
                         <div class="detail">
                             <div class="type">{{ periods[periodIndex-1].txt }}</div>
                             <div class="date"> {{ today.year }}.{{ today.month }}.{{ today.day }}</div>
+                            <div class="day">（{{ days[dayIndex-1] }}）</div>
                             <div class="time">({{ periods[periodIndex-1].time }})</div>
 
                             <!-- <el-dropdown size="mini" trigger="click" split-button type="primary">
@@ -232,6 +233,7 @@ export default {
 
     .main-wrapper {
         padding: px2rem(50px) px2rem(10px) px2rem(10px);
+        margin-bottom: px2rem(50px);
 
         .time-wrapper {
             position: relative;
@@ -310,6 +312,7 @@ export default {
                     left: px2rem(16px);;
                     width: px2rem(63px);
                     height: px2rem(58px);
+                    animation: myfirst 2s infinite;  
                 }
 
                 .detail {
@@ -318,7 +321,7 @@ export default {
                     text-align: center;
                     line-height: px2rem(34px);
 
-                    .type, .date {
+                    .type, .date, .day {
                         display: inline-block;
                         color: $black2;
                         font-size: px2rem(28px);
@@ -326,6 +329,11 @@ export default {
 
                     .date {
                         margin-left: px2rem(10px);
+                    }
+
+                    .day {
+                        position: absolute;
+                        font-size: px2rem(20px);
                     }
 
                     .time {
@@ -413,6 +421,18 @@ export default {
             }
         }
     }
+}
+
+@keyframes myfirst {
+    0% {  
+        transform: translate(0px, 0px);  
+    }  
+    50% {  
+        transform: translate(0px, -10px);  
+    }  
+    100% {  
+        transform: translate(0px, 0px);  
+    }  
 }
 
 </style>

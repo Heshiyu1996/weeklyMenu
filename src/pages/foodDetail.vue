@@ -1,9 +1,8 @@
 <template>
   <div class="foodDetail">
     <div class="img-wrapper">
-        <img class="img" :src="img_food" />		
+        <img class="img" :src="prefix + foodInfo.imgUrl" />
     </div>
-    <img class="shadeBg"/>
     <div ref="content" class="content" >
         <div class="vidHeader">
             <div class="name f-ellipsis2">{{ foodInfo.name }}</div>
@@ -12,35 +11,20 @@
             <i v-if="isExistMark" class="mark-btn el-icon-star-on" @click="removeMarks()"></i>
             <div class="desc">{{ foodInfo.desc }}</div>
             <div class="hot f-ellipsis">{{ foodInfo.visitCount }} 浏览 {{ foodInfo.markCount }} 收藏</div>
+            <div class="price">￥ {{ foodInfo.price }}.0</div>
         </div>
         <div class="vidLine"></div>
         <div class="vidBody">
-            <div class="material">食材：{{ foodInfo.material }}</div>
-            <div class="plansTable">
-                <el-table
-                    :data="hotfoods"
-                    style="width: 100%;"
-                    size="mini">
-                    <el-table-column
-                    label="星期"
-                    width="100">
-                    <template slot-scope="scope">
-                        <span style="margin-left: 10px;">{{ days[scope.row.day-1] }}</span>
-                    </template>
-                    </el-table-column>
-                    <el-table-column
-                    label="时段"
-                    width="100">
-                    <template slot-scope="scope">
-                        <el-popover trigger="hover" placement="top">
-                        <div slot="reference" class="name-wrapper">
-                            <el-tag size="medium">{{ scope.row.pname }}</el-tag>
-                        </div>
-                        </el-popover>
-                    </template>
-                    </el-table-column>
-                </el-table>
-            </div>
+            <el-collapse v-model="activeInfo">
+                <el-collapse-item title="食材" name="1">
+                    <div>{{ foodInfo.material }}</div>
+                </el-collapse-item>
+                <el-collapse-item title="供应时段" name="2">
+                    <div v-for="(item, idx) in plans" :key="idx">{{ days[parseInt(idx) - 1] }}： {{ item }}</div>
+                </el-collapse-item>
+            </el-collapse>
+
+            <el-tag size="medium">123</el-tag>
         </div>
     </div>
   </div>
@@ -65,9 +49,15 @@ export default {
                 categoryId: 0,
                 category: ''
             },
-            hotfoods: [],
+            plans: {},
             days: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
-            img_food: require('./../../static/food/ws.jpg')
+            img_food: require('./../../static/food/ws.jpg'),
+            prefix: prefix,
+            activeInfo: ['1', '2'],
+            objs: {
+                name: 'heshiyu',
+                age: 21
+            }
         }
     },
     computed: {
@@ -139,7 +129,7 @@ export default {
                 if (res.data.success) {
                     Object.assign(this.foodInfo, res.data.relatedObject)
                     this.getPlanByFoodId(this.foodInfo)
-                    this.addVisitCount()
+                    // this.addVisitCount()
                 }
             })
             .catch((err) => {
@@ -170,8 +160,15 @@ export default {
             this.$axios.get(`${prefix}/food/getPlanByFoodId?foodId=${food.foodId}`)
             .then((res) => {
                 if (res.data.success) {
-                    this.hotfoods = []
-                    this.hotfoods = [...res.data.relatedObject]
+                    let hotFoodsTemp = []
+                    hotFoodsTemp = [...res.data.relatedObject]
+                    hotFoodsTemp.forEach((item, idx) => {
+                        if (item.day in this.plans) {
+                            this.$set(this.plans, item.day, `${this.plans[item.day]}、${item.pname}`)
+                        } else {
+                            this.$set(this.plans, item.day, `${item.pname}`)
+                        }
+                    })
                 }
             })
             .catch((err) => {
@@ -208,24 +205,20 @@ export default {
             height: px2rem(230px);;
             z-index: 1;
             background-repeat: no-repeat;
+            box-shadow: 0 0 px2rem(5px) $black2;
         }
-    }
-
-    .shadeBg {
-        position: absolute;
-        width: 100%;
-        height: 64.8%;
-        background-color: $black;
-        opacity: .4;
     }
 
     .content {
         opacity: .999;
-        padding: px2rem(16px) px2rem(19px) px2rem(16px) px2rem(21px);
+        padding: px2rem(10px);
 
         .vidHeader {
             position: relative;
-            color: $white;
+            color: $black2;
+            background: #D3D3D347;
+            padding: px2rem(5px);
+            border-radius: px2rem(4px);
 
             .name {
                 display: inline-block;
@@ -233,15 +226,29 @@ export default {
                 max-height: px2rem(55px);
                 font-family: PingFang-SC-Medium;
                 font-size: px2rem(18px);
-                color: $white;
+                color: $black2;
             }
 
             .desc, .hot {
                 opacity: .6;
                 font-family: PingFangSC-Regular;
                 font-size: 12px;
-                margin-top: px2rem(10px);
+                margin-top: px2rem(5px);
                 text-align: justify;
+            }
+
+            .hot {
+                display: inline-block;
+                width: 78%;
+            }
+
+            .price {
+                display: inline-block;
+                margin-top: px2rem(5px);
+                width: 20%;
+                color: $red;
+                text-align: right;
+                vertical-align: top;
             }
 
             .tag, .mark-btn {
@@ -270,14 +277,14 @@ export default {
         .vidLine {
             height: px2rem(1px);
             opacity: .2;
-            background: $white;
-            margin: px2rem(15px) 0 px2rem(16px) 0;
+            background: $black2;
+            margin: px2rem(10px) 0;
         }
 
         .vidBody {
             .material {
                 margin-bottom: px2rem(16px);
-                color: $white;
+                color: $black2;
                 font-size: px2rem(12px);
             }
 
@@ -286,7 +293,7 @@ export default {
                 width: px2rem(200px);
                 border: px2rem(4px) solid $blue;
                 border-radius: px2rem(4px);
-                color: $white;
+                color: $black2;
                 font-size: px2rem(12px);
             }
         }

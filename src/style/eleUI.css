@@ -45,6 +45,7 @@
 .index .main-wrapper .order-wrapper .food-wrapper .el-tabs.el-tabs--left .el-tabs__content {
     height: 100%;
     overflow: scroll !important;
+    -webkit-overflow-scrolling: touch;
 }
 
 .index .main-wrapper .date-wrapper .detail .el-dropdown {
@@ -166,4 +167,12 @@
 .bookDetail .main-wrapper .order-wrapper .food-wrapper .el-tabs.el-tabs--left .el-tabs__content {
     height: 100%;
     overflow: scroll !important;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* 菜品详情 */
+.foodDetail .content .vidBody .el-collapse .el-collapse-item .el-collapse-item__header {
+    color: #4297EC;
+    font-weight: bold;
+    font-size: 16px;
 }
