@@ -3,26 +3,19 @@
         <mHeader2 title="我的订单"></mHeader2>
         <div class="myOrder">
             <div class="total-wrapper">
-                <div class="userInfo">heshiyu</div>
+                <div class="userInfo">{{ userInfo.uname }}</div>
                 <div class="consumeTotal">
                     <div class="lf">消费总额（元）：</div>
-                    <div class="rt">9.8</div>
+                    <div class="rt">{{ sum }}.0</div>
                 </div>
             </div>
             <div class="detail-wrapper">
-                <div class="record">
+                <div class="record" v-for="(item, idx) in orders" :key="idx" @click="goToDetail(item.orderId)">
                     <div class="info">
-                        <div class="pid">一心食堂（晚餐）</div>
-                        <div class="createTime">2018-03-18 16:35</div>
+                        <div class="pid">一心食堂（{{ periodTxt[item.pid-1] }}）</div>
+                        <div class="createTime">{{ item.createTime }}</div>
                     </div>
-                    <div class="money">15.0 元</div>
-                </div>
-                <div class="record">
-                    <div class="info">
-                        <div class="pid">晚餐</div>
-                        <div class="createTime">2018-03-18 16:35</div>
-                    </div>
-                    <div class="money">15.0 元</div>
+                    <div class="money">{{ item.totalMoney }}.0 元</div>
                 </div>
             </div>
         </div>
@@ -40,26 +33,34 @@ export default {
     },
     data () {
         return {
-            foods: [],
-            removingId: ''
+            orders: [],
+            periodTxt: ['早餐', '午餐', '晚餐']
+        }
+    },
+
+    computed: {
+        userInfo () {
+            return this.$store.getters.getUserInfo
+        },
+        sum () {
+            let sumTemp = 0
+            this.orders.forEach((item) => {
+                sumTemp += item.totalMoney
+            })
+            return sumTemp
         }
     },
 
     methods: {
-        updateList (id) {
-            this.removingId = id
-            this.foods.forEach((elem, idx) => {
-                if (elem.foodId === id) {
-                    this.foods.splice(idx, 1)
-                }
-            })
+        goToDetail () {
+            this.$router.push('/user/orderDetail')
         },
 
-        getMyMarksList () {
-            this.$axios.get(`${prefix}/food/getMyMarksList`)
+        getMyOrders () {
+            this.$axios.get(`${prefix}/order/getMyOrders`)
             .then((res) => {
                 if (res.data.success) {
-                    this.foods = [...res.data.relatedObject]
+                    this.orders = [...res.data.relatedObject]
                 }
             })
             .catch((err) => {
@@ -68,7 +69,7 @@ export default {
         }
     },
     mounted () {
-        // this.getMyMarksList()
+        this.getMyOrders()
     }
 }
 </script>
@@ -114,6 +115,8 @@ export default {
             }
 
             .rt {
+                position: absolute;
+                right: px2rem(10px);
                 width: px2rem(200px);
                 font-size: px2rem(42px);
                 text-align: right;
