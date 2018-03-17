@@ -78,11 +78,12 @@ export default {
                 this.sum += price * count
             }
         },
+        
         selectCategory (tab, event) {
             this.categoryIndex = tab.$attrs.cid.toString()
         },
 
-        getAllFoodsList (day, pid, cid) {
+        getAllFoodsList () {
             this.$axios.get(`${prefix}/plan/getFoodsByDayPid?day=${this.$route.params.dayIndex}&pid=${this.$route.params.pid}`)
             .then((res) => {
                 if (res.data.success) {
@@ -102,9 +103,6 @@ export default {
             })
         },
 
-        getFoodsListByCid (cid) {
-        },
-
         submit () {
             // 提交前，在bookDetail新增dateCode和pid一起带过去给后台
             this.bookDetail.dateCode = this.$route.params.dateCode
@@ -122,10 +120,6 @@ export default {
 
     mounted () {
         this.getAllFoodsList()
-    },
-
-    watch: {
-        categoryIndex: 'getFoodsListByCid'
     }
 }
 </script>

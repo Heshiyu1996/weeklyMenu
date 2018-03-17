@@ -25,15 +25,15 @@
                             <div class="date"> {{ today.year }}.{{ today.month }}.{{ today.day }}</div>
                             <div class="time">({{ periods[periodIndex-1].time }})</div>
 
-                            <el-dropdown size="mini" trigger="click" split-button type="primary">
+                            <!-- <el-dropdown size="mini" trigger="click" split-button type="primary">
                                 {{ days[dayIndex-1] }}
                                 <el-dropdown-menu slot="dropdown">
                                     <el-dropdown-item v-for="(val, idx) in days" :key="idx">
                                         <span @click="selectDay(idx+1)">{{ val }}</span>
                                     </el-dropdown-item>
                                 </el-dropdown-menu>
-                            </el-dropdown>
-                            <div v-if="periodIndex === 1">
+                            </el-dropdown> -->
+                            <!-- <div v-if="periodIndex === 1">
                                 <div class="period-lf" @click="selectPeriod(2)">午</div>
                                 <div class="period-rt" @click="selectPeriod(3)">晚</div>
                             </div>
@@ -44,13 +44,13 @@
                             <div v-if="periodIndex === 3">
                                 <div class="period-lf" @click="selectPeriod(1)">早</div>
                                 <div class="period-rt" @click="selectPeriod(2)">午</div>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                     <div class="food-wrapper">
                         <el-tabs class="food-body" v-model="categoryIndex" tab-position="left" @tab-click="selectCategory">
                             <el-tab-pane :cid="category.cid" :name="category.cid.toString()" v-for="(category, idx) in categories" :key="idx" :label="category.cname">
-                                <FoodCard size="normal" :foodInfo="item" v-for="(item, idx) in foods" :key="idx"></FoodCard>
+                                <FoodCard :recentCid="categoryIndex" :showPrice="false" size="normal" :foodInfo="item" v-for="(item, idx) in foods" :key="idx"></FoodCard>
                             </el-tab-pane>
                         </el-tabs>
                     </div>
@@ -120,66 +120,66 @@ export default {
             this.categoryIndex = tab.$attrs.cid.toString()
         },
 
-        selectPeriod (periodIdx) {
-            this.periodIndex = periodIdx
-        },
+        // selectPeriod (periodIdx) {
+        //     this.periodIndex = periodIdx
+        // },
 
-        selectDay (dayIdx) {
-            this.dayIndex = dayIdx
-            this.weekCalendar.forEach((elem, idx) => {
-                if (elem.day === dayIdx) {
-                    splitDate(this.today, elem.date)
-                }
-            })
-        },
+        // selectDay (dayIdx) {
+        //     this.dayIndex = dayIdx
+        //     this.weekCalendar.forEach((elem, idx) => {
+        //         if (elem.day === dayIdx) {
+        //             splitDate(this.today, elem.date)
+        //         }
+        //     })
+        // },
 
         onIndexChange (index) {
             this.idx = index
         },
 
         getWeekCalendar () {
-            this.$axios.get(`${prefix}/plan/getWeekCalendar`)
-            .then((res) => {
-                if (res.data.success) {
-                    // 获取今天星期几
-                    this.dayIndex = res.data.relatedObject.today.day
-                    // 获取目前时段
-                    let hour = res.data.relatedObject.time.split(':')[0]
-                    if (hour <= 8) {
-                        this.periodIndex = 1
-                    } else if (hour > 13) {
-                        this.periodIndex = 3
-                    } else {
-                        this.periodIndex = 2
+            return new Promise((resolve, reject) => {
+                this.$axios.get(`${prefix}/plan/getWeekCalendar`)
+                .then((res) => {
+                    if (res.data.success) {
+                        // 获取今天星期几
+                        this.dayIndex = res.data.relatedObject.today.day
+                        // 获取目前时段
+                        let hour = res.data.relatedObject.time.split(':')[0]
+                        if (hour <= 8) {
+                            this.periodIndex = 1
+                        } else if (hour > 13) {
+                            this.periodIndex = 3
+                        } else {
+                            this.periodIndex = 2
+                        }
+                        // 获取今天日期
+                        splitDate(this.today, res.data.relatedObject.today.date)
+                        // 获取周日历
+                        this.weekCalendar = [...res.data.relatedObject.weekCalendar]
+                        // 到这里开始执行resolve()
+                        resolve()
                     }
-                    // 获取今天日期
-                    splitDate(this.today, res.data.relatedObject.today.date)
-                    // 获取周日历
-                    this.weekCalendar = [...res.data.relatedObject.weekCalendar]
-                }
-            })
-            .catch((err) => {
-                console.log(err)
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
             })
         },
 
-        getCategoriesList () {
-            this.$axios.get(`${prefix}/plan/getCidsByDayPid?day=${this.dayIndex}&pid=${this.periodIndex}`)
+        getAllFoodsList () {
+            this.$axios.get(`${prefix}/plan/getFoodsByDayPid?day=${this.dayIndex}&pid=${this.periodIndex}`)
             .then((res) => {
                 if (res.data.success) {
-                    this.categories = [...res.data.relatedObject.categories]
-                }
-            })
-            .catch((err) => {
-                console.log(err)
-            })
-        },
-
-        getFoodsList (day, pid, cid) {
-            this.$axios.get(`${prefix}/plan/getFoodsByDayPidCid?day=${this.dayIndex}&pid=${this.periodIndex}&cid=${this.categoryIndex}`)
-            .then((res) => {
-                if (res.data.success) {
-                    this.foods = [...res.data.relatedObject.foods]
+                    this.allFoodsList = [...res.data.relatedObject]
+                    this.allFoodsList.forEach((item) => {
+                        let obj = {}
+                        obj.cid = item.cid
+                        obj.cname = item.cname
+                        this.categories.push(obj)
+                        this.foods.push(...item.foods)
+                    })
+                    this.categoryIndex = this.categories[0].cid.toString()
                 }
             })
             .catch((err) => {
@@ -217,24 +217,8 @@ export default {
 
     mounted () {
         this.getWeekCalendar()
-        this.getCategoriesList()
-        this.getFoodsList()
+        .then(this.getAllFoodsList)
         this.getHotFoods()
-    },
-
-    watch: {
-        dayIndex: 'getCategoriesList',
-        periodIndex: 'getCategoriesList',
-        categoryIndex: 'getFoodsList',
-        categories: {
-            handler: function (val, oldVal) {
-                if (val.length > 0) {
-                    this.categoryIndex = val[0].cid.toString()
-                    this.getFoodsList()
-                }
-            },
-            deep: true
-        }
     }
 }
 </script>
