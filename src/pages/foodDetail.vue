@@ -23,8 +23,12 @@
                     <div v-for="(item, idx) in plans" :key="idx">{{ days[parseInt(idx) - 1] }}： {{ item }}</div>
                 </el-collapse-item>
             </el-collapse>
-
-            <el-tag size="medium">123</el-tag>
+            <div class="recommends">
+                <div class="title">吃过这道菜的人，还吃过：</div>
+                <div class="body">
+                    <div class="item" v-for="(item, idx) in 4" :key="idx">{{ item }}</div>
+                </div>
+            </div>
         </div>
     </div>
   </div>
@@ -295,6 +299,32 @@ export default {
                 border-radius: px2rem(4px);
                 color: $black2;
                 font-size: px2rem(12px);
+            }
+
+            .recommends {
+                margin-top: px2rem(10px);
+
+                .title {
+                    font-size: px2rem(16px);
+                    font-weight: bold;
+                }
+
+                .body {
+                    height: px2rem(100px);
+                    padding: px2rem(5px) 0;
+                    background: gray;
+                    display: -webkit-box;
+                    overflow-x: scroll;
+                    -webkit-overflow-scrolling: touch;
+
+                    .item {
+                        width: px2rem(150px);
+                        height: 100%;
+                        border: px2rem(1px) solid #CCC;
+                        border-radius: px2rem(4px);
+                        margin-right: px2rem(10px);
+                    }
+                }
             }
         }
     }

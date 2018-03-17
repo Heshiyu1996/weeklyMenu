@@ -312,7 +312,7 @@ export default {
                     left: px2rem(16px);;
                     width: px2rem(63px);
                     height: px2rem(58px);
-                    animation: myfirst 2s infinite;  
+                    animation: myfirst 2s infinite;
                 }
 
                 .detail {
@@ -424,15 +424,17 @@ export default {
 }
 
 @keyframes myfirst {
-    0% {  
-        transform: translate(0px, 0px);  
-    }  
-    50% {  
-        transform: translate(0px, -10px);  
-    }  
-    100% {  
-        transform: translate(0px, 0px);  
-    }  
+    0% {
+        transform: translate(0, 0);
+    }
+
+    50% {
+        transform: translate(0, -10px);
+    }
+
+    100% {
+        transform: translate(0, 0);
+    }
 }
 
 </style>
