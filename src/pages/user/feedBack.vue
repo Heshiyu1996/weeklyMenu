@@ -68,7 +68,7 @@ export default {
 </script>
 
 <style lang="postcss" type="text/css" rel="stylesheet/css" scoped>
-@import "../common.css";
+@import "../../common.css";
 
 .feedBack {
     position: absolute;

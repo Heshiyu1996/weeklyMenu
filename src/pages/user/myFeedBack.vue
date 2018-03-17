@@ -39,7 +39,7 @@
                         <router-link :to="'/myFeedBackDetail/' + item.fid">
                             <div class="enter">
                                 <i class="login_link el-icon-arrow-right"></i>
-                            </div>            
+                            </div>
                             <div class="name">{{ item.user }}
                                 <el-tag v-if="item.isReplied !== 0" size="mini">已回复</el-tag>
                                 <el-tag v-else type="info" size="mini">未回复</el-tag>
@@ -129,11 +129,13 @@ export default {
 </script>
 
 <style lang="postcss" type="text/css" rel="stylesheet/css" scoped>
-@import "../common.css";
+@import "../../common.css";
+
 .myFeedBack {
-    position: absolute;
+    position: relative;
     width: 100%;
     height: 100%;
+    margin-bottom: px2rem(45px);
     background: $gray1;
 
     .filter-wrapper {

@@ -1,39 +1,45 @@
 <template>
     <div>
-        <mHeader2></mHeader2>
-        <div class="user">
-            <div class="item" @click="goTo('myMark')">
+        <mHeader2 v-if="!$route.meta.inChild"></mHeader2>
+        <div v-if="!$route.meta.inChild" class="user">
+            <div class="item" @click="goTo('user/myMark')">
                 <span class="flag el-icon-star-off"></span>
                 <span class="txt">我的收藏</span>
                 <span class="extend el-icon-arrow-right"></span>
             </div>
-            <div class="item" @click="goTo('myCharacter')">
-                <span class="flag el-icon-location-outline"></span>
+            <div class="item" @click="goTo('user/myCharacter')">
+                <span class="flag icon icon-heart"></span>
                 <span class="txt">我的喜好</span>
                 <span class="extend el-icon-arrow-right"></span>
             </div>
-            <div class="item" @click="goTo('myFeedBack')">
+            <div class="item" @click="goTo('user/myFeedBack')">
                 <span class="flag el-icon-edit-outline"></span>
                 <div class="txt">我的反馈</div>
                 <span class="extend el-icon-arrow-right"></span>
             </div>
-            <div class="item" @click="goTo('feedBack')">
+            <div class="item" @click="goTo('user/feedBack')">
                 <span class="flag el-icon-edit"></span>
                 <div class="txt">提交反馈</div>
             </div>
             <div class="item logout" @click="logout()">退出登录</div>
         </div>
+        <div v-else>
+            <router-view></router-view>
+        </div>
+        <mFooter></mFooter>
     </div>
 </template>
 
 <script>
 import mHeader2 from '@/components/Public/mHeader2'
+import mFooter from '@/components/Public/mFooter'
 import { prefix } from '@/publicAPI/config'
 
 export default {
     name: 'user',
     components: {
-        mHeader2
+        mHeader2,
+        mFooter
     },
     data () {
         return {
@@ -69,6 +75,7 @@ export default {
 
 <style lang="postcss" type="text/css" rel="stylesheet/css" scoped>
 @import "../common.css";
+
 .user {
     position: absolute;
     width: 100%;
@@ -83,7 +90,7 @@ export default {
         color: $black1;
         background: $white;
         border-bottom: 1px $gray3 solid;
-        
+
         &.logout {
             margin-top: px2rem(16px);
             padding-left: px2rem(37px);

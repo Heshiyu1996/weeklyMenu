@@ -109,6 +109,9 @@ export default {
         if (this.$route.name === 'book') {
             this.selectBook()
         }
+        if (this.$route.name === 'user') {
+            this.selectUser()
+        }
     }
 }
 </script>

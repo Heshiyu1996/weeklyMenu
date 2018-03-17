@@ -54,18 +54,14 @@ export default {
 </script>
 
 <style lang="postcss" type="text/css" rel="stylesheet/css" scoped>
-@import "../common.css";
+@import "../../common.css";
 
 .myMark {
     position: relative;
     width: 100%;
     height: 100%;
     padding: 0 px2rem(10px);
+    margin-bottom: px2rem(50px);
     background: $white;
-    border-bottom: px2rem(1px) solid $gray2;
-
-    &:last-child {
-        border-bottom: 0 solid $gray2;
-    }
 }
 </style>

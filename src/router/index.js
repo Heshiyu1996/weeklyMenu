@@ -7,14 +7,15 @@ import BookDetail from '@/pages/bookDetail'
 import Login from '@/pages/login'
 import Regist from '@/pages/regist'
 import User from '@/pages/user'
-import FeedBack from '@/pages/feedBack'
-import MyFeedBack from '@/pages/myFeedBack'
-import MyCharacter from '@/pages/myCharacter'
-import MyMark from '@/pages/myMark'
+import FeedBack from '@/pages/user/feedBack'
+import MyFeedBack from '@/pages/user/myFeedBack'
 import MyFeedBackDetail from '@/pages/myFeedBackDetail'
 import Search from '@/pages/search'
 import test from '@/pages/test'
 import foodDetail from '@/pages/foodDetail'
+
+import MyMark from '@/pages/user/myMark'
+import MyCharacter from '@/pages/user/myCharacter'
 
 import superIndex from '@/pages/super/index'
 import Reply from '@/pages/super/reply'
@@ -28,14 +29,6 @@ Vue.use(Router)
 
 export default new Router({
     routes: [
-        // {
-        //     path: '/',
-        //     name: 'Index',
-        //     component: Index,
-        //     meta: { 
-        //         keepAlive: true 
-        //     }
-        // },        
         {
             path: '/',
             name: 'index',
@@ -57,27 +50,44 @@ export default new Router({
         {
             path: '/user',
             name: 'user',
-            component: User
+            component: User,
+            children: [{
+                path: 'myMark',
+                name: 'myMark',
+                component: MyMark,
+                meta: {
+                    inChild: true
+                }
+            },
+            {
+                path: 'myCharacter',
+                name: 'myCharacter',
+                component: MyCharacter,
+                meta: {
+                    inChild: true
+                }
+            },
+            {
+                path: 'myFeedBack',
+                name: 'myFeedBack',
+                component: MyFeedBack,
+                meta: {
+                    inChild: true
+                }
+            },
+            {
+                path: 'feedBack',
+                name: 'feedBack',
+                component: FeedBack,
+                meta: {
+                    inChild: true
+                }
+            }]
         },
         {
             path: '/feedBack',
             name: 'feedBack',
             component: FeedBack
-        },
-        {
-            path: '/myFeedBack',
-            name: 'myFeedBack',
-            component: MyFeedBack
-        },
-        {
-            path: '/myMark',
-            name: 'myMark',
-            component: MyMark
-        },
-        {
-            path: '/myCharacter',
-            name: 'myCharacter',
-            component: MyCharacter
         },
         {
             path: '/myFeedBackDetail/:fid',
