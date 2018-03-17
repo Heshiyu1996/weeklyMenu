@@ -110,6 +110,19 @@ export default {
             this.$axios.post(`${prefix}/order/addOrder`,this.bookDetail)
             .then((res) => {
                 if (res.data.success) {
+                    this.$alert('您可以在“我的” —— “我的订单” 中查看订单详情，提前祝您用餐愉快！', '订餐成功！', {
+                        confirmButtonText: '好的',
+                        callback: () => {
+                            this.$router.push('/book')
+                        }
+                    })
+                } else {
+                    this.$alert('请检查网络配置，或您也可以致电088-68745111 寻找人工服务!', '订餐失败！', {
+                        confirmButtonText: '好的',
+                        callback: () => {
+                            // this.$router.push('/user')
+                        }
+                    })
                 }
             })
             .catch((err) => {

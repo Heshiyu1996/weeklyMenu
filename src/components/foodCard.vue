@@ -91,7 +91,7 @@ export default {
             },
             checked: false,
             prefix: prefix,
-            count: 10
+            count: 0
         }
     },
     methods: {
@@ -176,7 +176,7 @@ export default {
 
         .price {
             display: inline-block;
-            width: 100%;
+            width: 60%;
             color: $red;
             font-size: px2rem(16px);
             font-weight: bold;

@@ -16,18 +16,21 @@
 </template>
 
 <script>
+import { prefix } from '@/publicAPI/config'
+
 export default {
     name: 'mFooter',
 
     data () {
         return {
+            ifLogin: false
         }
     },
 
     computed: {
-        ifLogin () {
-            return this.$store.getters.getIflogin
-        },
+        // ifLogin () {
+        //     return this.$store.getters.getIflogin
+        // },
         userInfo () {
             return this.$store.getters.getUserInfo
         }
@@ -39,6 +42,23 @@ export default {
                 destination = 'super'
             }
             this.$router.push(`/${destination}`)
+        },
+
+        loadIflogin () {
+            return new Promise((resolve, reject) => {
+                this.$axios.get(`${prefix}/staff/getUserInfo`)
+                .then((res) => {
+                    if (res.data.success) {
+                        this.ifLogin = true
+                        resolve()
+                    } else {
+                        this.ifLogin = false
+                    }
+                })
+                .catch((err) => {
+                    alert(err)
+                })
+            })
         },
 
         preventGo () {
@@ -92,26 +112,34 @@ export default {
     },
 
     activated () {
-        this.cleanFlag()
         console.log("activated" + this.$route.name)
         if (this.$route.name === 'index') {
-            this.selectIndex()
+            this.loadIflogin()
+            .then(this.selectIndex)
         }
         if (this.$route.name === 'book') {
-            this.selectBook()
+            this.loadIflogin()
+            .then(this.selectBook)
+        }
+        if (this.$route.path.includes('user')) {
+            this.loadIflogin()
+            .then(this.selectUser)
         }
     },
 
     mounted () {
-        this.cleanFlag()
+        console.log("mounted" + this.$route.name)
         if (this.$route.name === 'index') {
-            this.selectIndex()
+            this.loadIflogin()
+            .then(this.selectIndex)
         }
         if (this.$route.name === 'book') {
-            this.selectBook()
+            this.loadIflogin()
+            .then(this.selectBook)
         }
-        if (this.$route.name === 'user') {
-            this.selectUser()
+        if (this.$route.path.includes('user')) {
+            this.loadIflogin()
+            .then(this.selectUser)
         }
     }
 }

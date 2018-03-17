@@ -115,11 +115,12 @@ export default {
                         let obj = {
                             day: day.date.split('-')[2]
                         }
-                        if (idx < this.dayIndex) {
-                            obj.pass = true
-                        } else {
-                            obj.pass = false
-                        }
+                        // 为了测试，全天都可以选
+                        // if (idx < this.dayIndex) {
+                        //     obj.pass = true
+                        // } else {
+                        //     obj.pass = false
+                        // }
                         this.thisWeekDayList.push(obj)
                     })
                     // this.getMyOrderConditionToday(this.dayIndex)

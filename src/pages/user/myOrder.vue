@@ -144,7 +144,7 @@ export default {
             }
 
             .info {
-                width: 82%;
+                width: 78%;
 
                 .pid {
                     height: 70%;
@@ -156,7 +156,7 @@ export default {
             }
 
             .money {
-                width: 15%;
+                width: 19%;
                 text-align: right;
                 vertical-align: top;
                 line-height: px2rem(39px);
