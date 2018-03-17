@@ -45,6 +45,7 @@ export default {
                 if (res.data.success) {
                     that.$store.commit('setUserInfo', {})
                     that.$store.commit('setIflogin', false)
+                    this.$router.push('')
                 }
             })
             .catch((err) => {

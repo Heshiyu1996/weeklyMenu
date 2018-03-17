@@ -9,7 +9,7 @@
                 </div>
                 <div class="item">
                     <span class="label">密码</span>
-                    <input type="password" v-model="password" class="inputBox" placeholder="请输入密码"/>
+                    <input type="password" @keyup.enter="toLogin($event)" v-model="password" class="inputBox" placeholder="请输入密码"/>
                 </div>
             </div>
             <div class="btn-wrapper">
@@ -62,7 +62,7 @@ export default {
                         that.$router.push('/')
                     } else {
                         this.$refs.btn.innerText = '登录'
-                        this.$refs.btn.style.backgroundColor = '#1F9B16'
+                        this.$refs.btn.style.backgroundColor = '#4297EC'
                         alert(res.data.msg)
                     }
                 })
