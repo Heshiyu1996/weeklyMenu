@@ -17,6 +17,11 @@
                 <div class="txt">我的反馈</div>
                 <span class="extend el-icon-arrow-right"></span>
             </div>
+            <div class="item" @click="goTo('user/myOrder')">
+                <span class="flag el-icon-edit-outline"></span>
+                <div class="txt">我的订单</div>
+                <span class="extend el-icon-arrow-right"></span>
+            </div>
             <div class="item" @click="goTo('user/feedBack')">
                 <span class="flag el-icon-edit"></span>
                 <div class="txt">提交反馈</div>

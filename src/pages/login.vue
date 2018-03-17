@@ -16,10 +16,12 @@
                 <div ref="btn" class="btn" :class="{ noInput: ((account.length === 0) || ((password.length === 0))) }" @click="toLogin($event)">登录</div>
             </div>
         </div>
+        <mFooter></mFooter>
     </div>
 </template>
 
 <script>
+import mFooter from '@/components/Public/mFooter'
 import mHeader2 from '@/components/Public/mHeader2'
 import { prefix } from '@/publicAPI/config'
 import { getUserInfo } from '@/publicAPI/util'
@@ -27,7 +29,8 @@ import { getUserInfo } from '@/publicAPI/util'
 export default {
     name: 'login',
     components: {
-        mHeader2
+        mHeader2,
+        mFooter
     },
     data () {
         return {
@@ -125,7 +128,7 @@ export default {
 
     .btn-wrapper {
         margin-top: px2rem(100px);
-        
+
         .btn {
             margin: 0 auto;
             width: px2rem(300px);

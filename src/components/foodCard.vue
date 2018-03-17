@@ -6,7 +6,11 @@
                 <div class="name f-ellipsis">{{ foodInfo.name }}</div>
                 <div class="material f-ellipsis2">{{ foodInfo.material }}</div>
                 <div class="hot f-ellipsis">{{ foodInfo.visitCount }} 浏览 {{ foodInfo.markCount }} 收藏</div>
-                <div v-show="showPrice" class="price f-ellipsis"> ￥ {{ foodInfo.price }}</div>
+                <div v-show="showPrice" class="price f-ellipsis">
+                     ￥ {{ foodInfo.price }}
+                     <span v-show="showCount" class="showCount"> x {{ count }}</span>
+                </div>
+                <span v-show="showCount" class="showTotal">￥ {{ foodInfo.price * count }}</span>
                 <div v-if="type === 'bookCard'" class="count-btn">
                     <i v-show="count !== 0" class="el-icon-remove-outline" @click="changeCount(0, foodInfo.foodId, count, foodInfo.price)"></i>
                     <span v-show="count !== 0" class="count">{{ count }}</span>
@@ -53,6 +57,10 @@ export default {
             default: true,
             type: Boolean
         },
+        showCount: {
+            default: false,
+            type: Boolean
+        },
         commonType: {
             default: false,
             type: Boolean
@@ -73,14 +81,17 @@ export default {
             img_food: require('./../../static/food/ws.jpg'),
             sizeObj: {
                 'small': this.size === 'small',     // 55%
-                'normal': this.size === 'normal'    // 58%
+                'normal': this.size === 'normal',    // 58%
+                'big': this.size === 'big'    // 76%
             },
             typeObj: {
-                'bookCard': this.type === 'bookCard'
+                'bookCard': this.type === 'bookCard',
+                'markCard': this.type === 'markCard',
+                'orderCard': this.type === 'orderCard'
             },
             checked: false,
             prefix: prefix,
-            count: 0
+            count: 10
         }
     },
     methods: {
@@ -165,7 +176,7 @@ export default {
 
         .price {
             display: inline-block;
-            min-width: px2rem(60px);
+            width: 100%;
             color: $red;
             font-size: px2rem(16px);
             font-weight: bold;
@@ -177,6 +188,10 @@ export default {
 
         &.normal {
             width: 58%;
+        }
+
+        &.big {
+            width: 76%;
         }
     }
 
@@ -204,12 +219,28 @@ export default {
         border-bottom: 0 solid $gray2;
     }
 
-    &.bookCard {
+    &.bookCard, &.markCard, &.orderCard {
         height: px2rem(100px);
+        border-bottom: px2rem(1px) solid $gray2;
 
         .img {
             width: px2rem(75px);
             height: px2rem(65px);
+        }
+    }
+
+    &.orderCard {
+        .price {
+            width: 75%;
+
+            .showCount {
+                color: gray;
+            }
+        }
+
+        .showTotal {
+            display: inline-block;
+            vertical-align: top;
         }
     }
 

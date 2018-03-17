@@ -55,7 +55,7 @@ export default {
             color: $white;
         }
     }
-    
+
     .title {
         display: inline-block;
         position: relative;

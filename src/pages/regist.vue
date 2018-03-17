@@ -25,7 +25,7 @@
                 </div>
             </div>
             <div class="btn-wrapper">
-                <div ref="btn" class="btn" 
+                <div ref="btn" class="btn"
                 :class="{ noInput: ((uid.length === 0) || 
                 (upassword.length === 0) || 
                 (uConfirmPassword.length === 0) || 
@@ -39,24 +39,27 @@
             <div v-if="isSuccess" class="favorite-guide">
                 <div class="txt">恭喜你，注册成功啦！<br /><br />请给我一个机会，让我更加懂你。</div>
                 <div class="btns">
-                    <el-button type="primary" @click="goTo('myCharacter')">好的！</el-button>
+                    <el-button type="primary" @click="goTo('user/myCharacter')">好的！</el-button>
                     <el-button type="info" @click="goTo('')">不了，谢谢</el-button>
                     <div class="tip">(点击“好的”将前往设置个人性格、喜好，每天优先推送量身定做的菜品)</div>
                 </div>
             </div>
         </transition>
+        <mFooter></mFooter>
     </div>
 </template>
 
 <script>
 import mHeader2 from '@/components/Public/mHeader2'
+import mFooter from '@/components/Public/mFooter'
 import { prefix } from '@/publicAPI/config'
 import { getUserInfo } from '@/publicAPI/util'
 
 export default {
     name: 'regist',
     components: {
-        mHeader2
+        mHeader2,
+        mFooter
     },
     data () {
         return {
@@ -154,7 +157,7 @@ export default {
                 padding-top: px2rem(1px);
             }
 
-            :-ms-input-placeholder { 
+            :-ms-input-placeholder {
                 color: $gray2;
                 font-size: 12px;
                 padding-top: px2rem(1px);
@@ -164,7 +167,7 @@ export default {
 
     .btn-wrapper {
         margin-top: px2rem(100px);
-        
+
         .btn {
             margin: 0 auto;
             width: px2rem(300px);
@@ -202,7 +205,7 @@ export default {
         transform: translate(-50%, -50%);
         text-align: center;
     }
-    
+
     .btns {
         top: 75%;
         width: 80%;

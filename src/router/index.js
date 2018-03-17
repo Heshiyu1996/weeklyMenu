@@ -15,6 +15,8 @@ import test from '@/pages/test'
 import foodDetail from '@/pages/foodDetail'
 
 import MyMark from '@/pages/user/myMark'
+import MyOrder from '@/pages/user/myOrder'
+import OrderDetail from '@/pages/user/orderDetail'
 import MyCharacter from '@/pages/user/myCharacter'
 
 import superIndex from '@/pages/super/index'
@@ -79,6 +81,20 @@ export default new Router({
                 path: 'feedBack',
                 name: 'feedBack',
                 component: FeedBack,
+                meta: {
+                    inChild: true
+                }
+            }, {
+                path: 'myOrder',
+                name: 'myOrder',
+                component: MyOrder,
+                meta: {
+                    inChild: true
+                }
+            }, {
+                path: 'orderDetail',
+                name: 'orderDetail',
+                component: OrderDetail,
                 meta: {
                     inChild: true
                 }

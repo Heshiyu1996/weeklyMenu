@@ -2,7 +2,7 @@
     <div>
         <mHeader2 title="我的收藏"></mHeader2>
         <div class="myMark">
-            <FoodCard :commonType="true" @removeMark="updateList" size="normal" :showStar="true" :foodInfo="item" v-for="(item, idx) in foods" :key="idx"></FoodCard>
+            <FoodCard type="markCard" :commonType="true" @removeMark="updateList" size="normal" :showStar="true" :foodInfo="item" v-for="(item, idx) in foods" :key="idx"></FoodCard>
         </div>
     </div>
 </template>

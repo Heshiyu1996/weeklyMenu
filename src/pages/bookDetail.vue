@@ -78,7 +78,7 @@ export default {
                 this.sum += price * count
             }
         },
-        
+
         selectCategory (tab, event) {
             this.categoryIndex = tab.$attrs.cid.toString()
         },

@@ -92,6 +92,7 @@ export default {
     },
 
     activated () {
+        this.cleanFlag()
         console.log("activated" + this.$route.name)
         if (this.$route.name === 'index') {
             this.selectIndex()
@@ -102,6 +103,7 @@ export default {
     },
 
     mounted () {
+        this.cleanFlag()
         if (this.$route.name === 'index') {
             this.selectIndex()
         }
