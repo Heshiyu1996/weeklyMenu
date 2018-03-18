@@ -33,7 +33,13 @@
         <!-- 初次进入 结束 -->
         <div v-else class="result-wrapper">
             <div v-if="lastKeyword.length !== 0" class="tip">以下为 “{{ lastKeyword }}” 的搜索结果，共 {{ foods.length }} 个</div>
-            <FoodCard size="big" :foodInfo="item" v-for="(item, idx) in foods" :key="idx"></FoodCard>
+            <FoodCard
+            :commonType="true"
+            size="normal"
+            type="markCard"
+            :foodInfo="item"
+            v-for="(item, idx) in foods"
+            :key="idx"></FoodCard>
         </div>
     </div>
 </template>

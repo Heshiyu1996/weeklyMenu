@@ -60,7 +60,6 @@ export default {
             .then((res) => {
                 if (res.data.success) {
                     this.provData = [...res.data.relatedObject]
-                    console.log(this.provData.sort(this.mySort('value')))
                     let obj = {
                         name: '其他',
                         value: 0
@@ -70,8 +69,6 @@ export default {
                     }
                     let middle = this.provData.length / 2
                     this.provData = this.provData.slice(0, middle)
-                    // this.provData[middle] = obj
-                    console.log(this.provData)
                 }
             })
             .catch((err) => {

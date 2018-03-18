@@ -91,7 +91,6 @@ export default {
 
     methods: {
         goToDetail (id) {
-            console.log('进来了')
             this.$router.push(`/foodDetail/${id}`)
         },
 
@@ -306,13 +305,16 @@ export default {
             .tag, .mark-btn {
                 display: inline-block;
                 position: absolute;
-                margin-top: px2rem(4px);
+                margin-top: px2rem(2px);
                 vertical-align: super;
                 text-align: center;
                 width: px2rem(36px);
             }
 
             .tag {
+                width: px2rem(45px);
+                height: px2rem(20px);
+                line-height: px2rem(20px);
                 margin-left: px2rem(5px);
                 background: linear-gradient(90deg, rgb(255, 94, 58), rgb(255, 149, 0));
                 border-radius: px2rem(2px);

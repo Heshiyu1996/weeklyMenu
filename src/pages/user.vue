@@ -2,31 +2,43 @@
     <div>
         <mHeader2 v-if="!$route.meta.inChild"></mHeader2>
         <div v-if="!$route.meta.inChild" class="user">
-            <div class="item" @click="goTo('user/myMark')">
-                <span class="flag el-icon-star-off"></span>
-                <span class="txt">我的收藏</span>
-                <span class="extend el-icon-arrow-right"></span>
+            <div class="items">
+                <div class="section">菜品设置</div>
+                <div class="item" @click="goTo('user/myMark')">
+                    <span class="flag el-icon-star-off"></span>
+                    <span class="txt">我的收藏</span>
+                    <span class="extend el-icon-arrow-right"></span>
+                </div>
+                <div class="item" @click="goTo('user/myCharacter')">
+                    <span class="flag icon icon-heart"></span>
+                    <span class="txt">我的喜好</span>
+                    <span class="extend el-icon-arrow-right"></span>
+                </div>
             </div>
-            <div class="item" @click="goTo('user/myCharacter')">
-                <span class="flag icon icon-heart"></span>
-                <span class="txt">我的喜好</span>
-                <span class="extend el-icon-arrow-right"></span>
+            <div class="items">
+                <div class="section">订餐设置</div>
+                <div class="item" @click="goTo('user/feedBack')">
+                    <span class="flag el-icon-edit"></span>
+                    <div class="txt">提交反馈</div>
+                    <span class="extend el-icon-arrow-right"></span>
+                </div>
+                <div class="item" @click="goTo('user/myFeedBack')">
+                    <span class="flag el-icon-document"></span>
+                    <div class="txt">我的反馈</div>
+                    <span class="extend el-icon-arrow-right"></span>
+                </div>
             </div>
-            <div class="item" @click="goTo('user/myFeedBack')">
-                <span class="flag el-icon-edit-outline"></span>
-                <div class="txt">我的反馈</div>
-                <span class="extend el-icon-arrow-right"></span>
+            <div class="items">
+                <div class="section">订餐设置</div>
+                <div class="item" @click="goTo('user/myOrder')">
+                    <span class="flag el-icon-edit-outline"></span>
+                    <div class="txt">我的订单</div>
+                    <span class="extend el-icon-arrow-right"></span>
+                </div>
             </div>
-            <div class="item" @click="goTo('user/myOrder')">
-                <span class="flag el-icon-edit-outline"></span>
-                <div class="txt">我的订单</div>
-                <span class="extend el-icon-arrow-right"></span>
+            <div class="items">
+                <div class="item logout" @click="logout()">退出登录</div>
             </div>
-            <div class="item" @click="goTo('user/feedBack')">
-                <span class="flag el-icon-edit"></span>
-                <div class="txt">提交反馈</div>
-            </div>
-            <div class="item logout" @click="logout()">退出登录</div>
         </div>
         <div v-else>
             <router-view></router-view>
@@ -87,36 +99,48 @@ export default {
     height: 100%;
     background: $gray1;
 
-    .item {
-        position: relative;
-        height: px2rem(49px);
-        padding: px2rem(15px) px2rem(15px) 0;
-        font-size: px2rem(14px);
-        color: $black1;
-        background: $white;
-        border-bottom: 1px $gray3 solid;
+    .items {
+        margin-top: px2rem(10px);
 
-        &.logout {
-            margin-top: px2rem(16px);
-            padding-left: px2rem(37px);
-            color: red;
+        .section {
+            margin-left: px2rem(10px);
+            height: px2rem(30px);
+            line-height: px2rem(30px);
+            color: $gray2;
+            font-size: px2rem(12px);
         }
 
-        .flag {
-            display: inline-block;
-            position: absolute;
-            color: $blue;
-            font-size: px2rem(18px);
-        }
+        .item {
+            position: relative;
+            height: px2rem(49px);
+            padding: px2rem(15px) px2rem(15px) 0;
+            font-size: px2rem(14px);
+            color: $black1;
+            background: $white;
+            border-bottom: 1px $gray3 solid;
 
-        .txt {
-            margin-left: px2rem(22px);
-        }
+            &.logout {
+                margin-top: px2rem(16px);
+                padding-left: px2rem(37px);
+                color: red;
+            }
 
-        .extend {
-            position: absolute;
-            top: px2rem(18.75px);
-            right: px2rem(15px);
+            .flag {
+                display: inline-block;
+                position: absolute;
+                color: $blue;
+                font-size: px2rem(18px);
+            }
+
+            .txt {
+                margin-left: px2rem(22px);
+            }
+
+            .extend {
+                position: absolute;
+                top: px2rem(18.75px);
+                right: px2rem(15px);
+            }
         }
     }
 }

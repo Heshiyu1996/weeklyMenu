@@ -207,7 +207,8 @@ export default {
             this.$axios.get(`${prefix}/food/getPlanByFoodId?foodId=${food.foodId}`)
             .then((res) => {
                 if (res.data.success) {
-                    food.plans = [...res.data.relatedObject]
+                    this.$set(food, 'plans', [...res.data.relatedObject])
+                    // food.plans = [...res.data.relatedObject].
                 }
             })
             .catch((err) => {
