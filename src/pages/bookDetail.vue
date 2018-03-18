@@ -6,6 +6,26 @@
             <div class="back el-icon-arrow-left" @click="goBack()"></div>
         </div>
         <div class="bookDetail">
+            <div class="recommends">
+                <div class="title">猜你喜欢</div>
+                <div class="body">
+                    <div class="item"
+                    v-for="(item, idx) in foodRecommond"
+                    :key="idx"
+                    :style="{ backgroundImage: 'url(' + prefix + item.imgUrl + ')'  }"
+                    @click="selectCategory2(item.categoryId)"
+                    >
+                        <div class="info">
+                            <div class="name">
+                                {{ item.name }}
+                            </div>
+                            <div class="price">
+                               ￥ {{ item.price }}.0
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="main-wrapper">
                 <div class="order-wrapper">
                     <div class="food-wrapper">
@@ -47,6 +67,7 @@ export default {
         return {
             weekAbbr: ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT '],
             days: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+            prefix: prefix,
             periods: [{
                 txt: '早餐',
                 time: '7:00'
@@ -66,11 +87,36 @@ export default {
             bookDetail: {},
             dayIndex: 0,
             dateCode: '',
-            pid: 1
+            pid: 1,
+            foodRecommond: [],
+            firstEnter: true
         }
     },
 
     methods: {
+        mySort (property) {
+            return function(a,b){
+                var value1 = a[property];
+                var value2 = b[property];
+                return value2 - value1;
+            }
+        },
+
+        getFoodRecommondByOrder () {
+            this.$axios.get(`${prefix}/order/loadRecommendFoodsByDayPid?day=${this.dayIndex}&pid=${this.pid}`)
+            .then((res) => {
+                if (res.data.success) {
+                    this.foodRecommond = []
+                    this.foodRecommond = [...res.data.relatedObject]
+                    this.foodRecommond.sort(this.mySort('totalPoint'))
+                    this.foodRecommond = this.foodRecommond.slice(0, 8)
+                }
+            })
+            .catch((err) => {
+                // alert(err)
+            })
+        },
+
         goBack () {
             this.$router.push('/')
         },
@@ -92,10 +138,16 @@ export default {
             this.categoryIndex = tab.$attrs.cid.toString()
         },
 
+        selectCategory2 (cid) {
+            this.categoryIndex = cid.toString()
+        },
+
         getAllFoodsList () {
             this.$axios.get(`${prefix}/plan/getFoodsByDayPid?day=${this.dayIndex}&pid=${this.pid}`)
             .then((res) => {
                 if (res.data.success) {
+                    this.categories = []
+                    this.foods = []
                     this.allFoodsList = [...res.data.relatedObject]
                     this.allFoodsList.forEach((item) => {
                         let obj = {}
@@ -150,12 +202,18 @@ export default {
     },
 
     activated () {
-        this.initData()
+        if (!this.firstEnter) {
+            this.initData()
+            this.getAllFoodsList()
+            this.getFoodRecommondByOrder()
+        }
     },
 
     mounted () {
+        this.firstEnter = false
         this.initData()
         this.getAllFoodsList()
+        this.getFoodRecommondByOrder()
     }
 }
 </script>
@@ -200,13 +258,69 @@ export default {
     height: 100%;
     padding: 0 0;
 
+    .recommends {
+        margin-top: px2rem(5px);
+
+        .title {
+            font-size: px2rem(16px);
+            font-weight: bold;
+            padding-left: px2rem(5px);
+        }
+
+        .body {
+            height: px2rem(100px);
+            padding: px2rem(5px) 0;
+            display: -webkit-box;
+            overflow-x: scroll;
+            -webkit-overflow-scrolling: touch;
+
+            .item {
+                position: relative;
+                width: px2rem(150px);
+                height: 100%;
+                border: px2rem(1px) solid #CCC;
+                border-radius: px2rem(4px);
+                margin-right: px2rem(10px);
+                background-repeat: repeat;
+                background-position: center;
+                background-size: cover;
+
+                .info {
+                    position: absolute;
+                    bottom: 0;
+                    width: 100%;
+                    height: px2rem(25px);
+                    color: $white;
+                    font-size: px2rem(14px);
+                    line-height: px2rem(25px);
+                    background: #414141AD;
+
+                    .name {
+                        display: inline-block;
+                        margin-left: px2rem(5px);
+                        max-width: px2rem(100px);
+                    }
+
+                    .price {
+                        display: inline-block;
+                        position: absolute;
+                        right: px2rem(5px);
+                        color: $red2;
+                        font-weight: bold;
+                    }
+                }
+            }
+        }
+    }
+
     .main-wrapper {
         padding: px2rem(10px);
 
         .order-wrapper {
             position: relative;
-            height: px2rem(542px);
+            height: px2rem(422px);
             padding: px2rem(5px) px2rem(10px) px2rem(5px);
+            margin-bottom: px2rem(50px);
             z-index: 5;
             border: 1px solid $gray;
 
@@ -214,7 +328,7 @@ export default {
                 margin-top: px2rem(5px);
 
                 .food-body {
-                    height: px2rem(528px);
+                    height: px2rem(408px);
                 }
 
                 .el-tabs {
