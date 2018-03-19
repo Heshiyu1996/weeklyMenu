@@ -20,6 +20,7 @@ Vue.prototype.$axios = axios
 Vue.prototype.$gb2260 = gb2260
 // Vue.prototype.$eruda = eruda
 Vue.use(ElementUI)
+
 let vm = new Vue({
     el: '#root',
     router,
@@ -31,3 +32,8 @@ let vm = new Vue({
     components: { App }
 })
 Vue.use(vm)
+
+
+router.beforeEach((to, from, next) => {
+    next()
+})

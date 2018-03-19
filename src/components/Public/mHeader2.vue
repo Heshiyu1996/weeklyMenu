@@ -1,5 +1,6 @@
 <template>
     <nav class="header-wrapper" :class="{isSuper: isSuper}">
+        <div class="back el-icon-arrow-left" @click="goBack()"></div>
         <div class="title">
              {{ isSuper ? '超级管理员' : title }}
         </div>
@@ -23,6 +24,12 @@ export default {
         return {
 
         }
+    },
+
+    methods: {
+        goBack () {
+            this.$router.push('/')
+        }
     }
 }
 </script>
@@ -38,6 +45,13 @@ export default {
     text-align: center;
     color: #FFF;
     background-image: linear-gradient(-1deg, $blue1 10%, $blue 100%);
+
+    .back {
+        position: absolute;
+        top: 50%;
+        left: px2rem(15px);
+        transform: translateY(-50%);
+    }
 
     &.isSuper {
         background: $black;
@@ -60,7 +74,7 @@ export default {
         display: inline-block;
         position: relative;
         top: px2rem(2px);
-        width: px2rem(100px);
+        width: px2rem(250px);
         height: px2rem(24px);
         font-size: px2rem(18px);
     }

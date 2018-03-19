@@ -1,8 +1,9 @@
 <template>
     <div>
         <div class="dateTime-bar">
-            <div class="title">{{ weekAbbr[$route.params.dayIndex] }} / {{ $route.params.dateCode.slice(4, 6) }}-{{ $route.params.dateCode.slice(6, 8) }} {{ periods[$route.params.pid-1].time }}</div>
-            <div class="desc">{{ periods[$route.params.pid-1].txt }}</div>
+            <div class="title">{{ weekAbbr[dayIndex] }} / {{ dateCode.slice(4, 6) }}-{{ dateCode.slice(6, 8) }} {{ periods[pid-1].time }}</div>
+            <div class="desc">{{ periods[pid-1].txt }}</div>
+            <div class="back el-icon-arrow-left" @click="goBack()"></div>
         </div>
         <div class="bookDetail">
             <div class="main-wrapper">
@@ -62,11 +63,18 @@ export default {
             categoryIndex: '',
             foods: [],
             sum: 0,
-            bookDetail: {}
+            bookDetail: {},
+            dayIndex: 0,
+            dateCode: '',
+            pid: 1
         }
     },
 
     methods: {
+        goBack () {
+            this.$router.push('/')
+        },
+
         sumTheFoods (id, count, price) {
             this.bookDetail[id] = `${price}-${count}`
             this.sum = 0
@@ -85,7 +93,7 @@ export default {
         },
 
         getAllFoodsList () {
-            this.$axios.get(`${prefix}/plan/getFoodsByDayPid?day=${this.$route.params.dayIndex}&pid=${this.$route.params.pid}`)
+            this.$axios.get(`${prefix}/plan/getFoodsByDayPid?day=${this.dayIndex}&pid=${this.pid}`)
             .then((res) => {
                 if (res.data.success) {
                     this.allFoodsList = [...res.data.relatedObject]
@@ -107,8 +115,8 @@ export default {
         submit () {
             if (Object.keys(this.bookDetail).length === 0) return
             // 提交前，在bookDetail新增dateCode和pid一起带过去给后台
-            this.bookDetail.dateCode = this.$route.params.dateCode
-            this.bookDetail.pid = parseInt(this.$route.params.pid)
+            this.bookDetail.dateCode = this.dateCode
+            this.bookDetail.pid = parseInt(this.pid)
             this.bookDetail.totalMoney = parseInt(this.sum)
             this.$axios.post(`${prefix}/order/addOrder`,this.bookDetail)
             .then((res) => {
@@ -131,10 +139,22 @@ export default {
             .catch((err) => {
                 console.log(err)
             })
+        },
+
+        initData () {
+            console.log(this.$route)
+            this.dayIndex = this.$route.params.dayIndex
+            this.dateCode = this.$route.params.dateCode
+            this.pid = this.$route.params.pid
         }
     },
 
+    activated () {
+        this.initData()
+    },
+
     mounted () {
+        this.initData()
         this.getAllFoodsList()
     }
 }
@@ -144,9 +164,18 @@ export default {
 @import "../common.css";
 
 .dateTime-bar {
+    position: relative;
     height: px2rem(60px);
     background: $blue;
     padding-top: px2rem(10px);
+
+    .back {
+        position: absolute;
+        top: 50%;
+        left: px2rem(15px);
+        transform: translateY(-50%);
+        color: $white;
+    }
 
     .title {
         display: inline-block;

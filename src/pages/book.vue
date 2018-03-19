@@ -19,15 +19,20 @@
                 </div>
             </div>
             <div class="bookPicker">
-                <div v-for="(item, idx) in timeTxt"
-                    :key="idx"
-                    class="order-wrapper"
-                    :class="{ already: !canBook[idx]}"
-                    @click="goTo($event, idx)">
-                    <img class="imgPeriod" :src="img_period[idx]" />
-                    <div class="time">{{ item }}</div>
-                    <div v-if="canBook[idx]" class="btn">可点餐</div>
-                    <div v-else class="btn">已点餐</div>
+                <div v-if="isSunday" class="none">
+                    今天饭堂师傅休息哦！~
+                </div>
+                <div v-else>
+                    <div v-for="(item, idx) in timeTxt"
+                        :key="idx"
+                        class="order-wrapper"
+                        :class="{ already: !canBook[idx]}"
+                        @click="goTo($event, idx)">
+                        <img class="imgPeriod" :src="img_period[idx]" />
+                        <div class="time">{{ item }}</div>
+                        <div v-if="canBook[idx]" class="btn">可点餐</div>
+                        <div v-else class="btn">已点餐</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -68,7 +73,8 @@ export default {
             weekCalendar: [],
             thisWeekDayList: [],
             canBook: [],
-            dateCode: ''
+            dateCode: '',
+            isSunday: false
         }
     },
     computed: {
@@ -79,6 +85,11 @@ export default {
 
     methods: {
         selectDay (idx) {
+            if (idx === 0) {
+                this.isSunday = true
+            } else {
+                this.isSunday = false
+            }
             if(this.$refs.dayNode[idx].className.includes('pass')) return
             this.cleanFlag()
             this.$refs.dayNode[idx].classList.add('selected')
@@ -241,6 +252,13 @@ export default {
 
         .bookPicker {
             padding-top: px2rem(10px);
+
+            .none {
+                position: fixed;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                left: 50%;
+            }
 
             .order-wrapper {
                 position: relative;

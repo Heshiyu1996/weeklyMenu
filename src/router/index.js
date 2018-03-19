@@ -30,6 +30,7 @@ import FoodSearch from '@/pages/super/foodSearch'
 Vue.use(Router)
 
 export default new Router({
+    
     routes: [
         {
             path: '/',
@@ -138,7 +139,8 @@ export default new Router({
             name: 'bookDetail',
             component: BookDetail,
             meta: {
-                hideSwitchBar: true
+                hideSwitchBar: true,
+                keepAlive: true
             }
         },
         {

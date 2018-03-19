@@ -1,5 +1,6 @@
 <template>
   <div class="foodDetail">
+    <mHeader2 :title="foodInfo.name"></mHeader2>
     <div class="img-wrapper">
         <img class="img" :src="prefix + foodInfo.imgUrl" />
     </div>
@@ -10,7 +11,7 @@
             <i v-if="!isExistMark" class="mark-btn el-icon-star-off" @click="insertMarks()"></i>
             <i v-if="isExistMark" class="mark-btn el-icon-star-on" @click="removeMarks()"></i>
             <div class="desc">{{ foodInfo.desc }}</div>
-            <div class="hot f-ellipsis">{{ foodInfo.visitCount }} 浏览 {{ foodInfo.markCount }} 收藏</div>
+            <div class="hot f-ellipsis">{{ foodInfo.visitCount }} 浏览， {{ foodInfo.markCount }} 收藏</div>
             <div class="price">￥ {{ foodInfo.price }}.0</div>
         </div>
         <div class="vidLine"></div>
@@ -26,7 +27,21 @@
             <div class="recommends">
                 <div class="title">吃过这道菜的人，还吃过：</div>
                 <div class="body">
-                    <div class="item" v-for="(item, idx) in 4" :key="idx">{{ item }}</div>
+                    <div class="item"
+                    v-for="(item, idx) in foodRecommond"
+                    :key="idx"
+                    :style="{ backgroundImage: 'url(' + prefix + item.imgUrl + ')'  }"
+                    @click="goToDetail(item.foodId)"
+                    >
+                        <div class="info">
+                            <div class="name">
+                                {{ item.name }}
+                            </div>
+                            <div class="price">
+                               ￥ {{ item.price }}.0
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -36,9 +51,13 @@
 
 <script>
 import { prefix } from '@/publicAPI/config'
+import mHeader2 from '@/components/Public/mHeader2'
 
 export default {
     name: 'foodDetail',
+    components: {
+        mHeader2
+    },
     data () {
         return {
             isExistMark: false,
@@ -55,23 +74,42 @@ export default {
             },
             plans: {},
             days: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
-            img_food: require('./../../static/food/ws.jpg'),
             prefix: prefix,
             activeInfo: ['1', '2'],
-            objs: {
-                name: 'heshiyu',
-                age: 21
-            }
+            foodRecommond: []
         }
     },
     computed: {
         userInfo () {
             return this.$store.getters.getUserInfo
+        },
+
+        ifLogin () {
+            return this.$store.getters.getIflogin
         }
     },
 
     methods: {
+        goToDetail (id) {
+            console.log('进来了')
+            this.$router.push(`/foodDetail/${id}`)
+        },
+
+        getFoodRecommondByOrder () {
+            this.$axios.get(`${prefix}/food/getFoodRecommondByOrder?foodId=${this.$route.params.foodId}`)
+            .then((res) => {
+                if (res.data.success) {
+                    this.foodRecommond = [...res.data.relatedObject.foodRecommond]
+                }
+            })
+            .catch((err) => {
+                alert(err)
+            })
+        },
+
         checkMarks () {
+            this.isExistMark = false
+            if (!this.ifLogin) return
             this.$axios.get(`${prefix}/food/checkMarks?foodId=${this.$route.params.foodId}`)
             .then((res) => {
                 if (res.data.success) {
@@ -86,13 +124,17 @@ export default {
         },
 
         insertMarks () {
+            if (!this.ifLogin) {
+                this.$alert('请先登录!', '收藏失败！', {
+                    confirmButtonText: '好的',
+                    callback: () => {
+                    }
+                })
+                return
+            }
             var querystring = require('querystring')
             let that = this
-            this.$axios.post(`${prefix}/food/insertMarks`,
-                querystring.stringify({
-                    foodId: that.foodInfo.foodId,
-                    userId: that.userInfo.uid
-                }))
+            this.$axios.get(`${prefix}/food/insertMarks?foodId=${that.foodInfo.foodId}&userId=${that.userInfo.uid}`)
                 .then((res) => {
                     if (res.data.success) {
                         this.isExistMark = true
@@ -133,7 +175,7 @@ export default {
                 if (res.data.success) {
                     Object.assign(this.foodInfo, res.data.relatedObject)
                     this.getPlanByFoodId(this.foodInfo)
-                    // this.addVisitCount()
+                    this.addVisitCount()
                 }
             })
             .catch((err) => {
@@ -164,6 +206,7 @@ export default {
             this.$axios.get(`${prefix}/food/getPlanByFoodId?foodId=${food.foodId}`)
             .then((res) => {
                 if (res.data.success) {
+                    this.plans = {}
                     let hotFoodsTemp = []
                     hotFoodsTemp = [...res.data.relatedObject]
                     hotFoodsTemp.forEach((item, idx) => {
@@ -178,16 +221,21 @@ export default {
             .catch((err) => {
                 console.log(err)
             })
-        }
+        },
     },
 
     mounted () {
         this.checkMarks()
         this.getFoodInfo()
+        this.getFoodRecommondByOrder()
     },
 
     watch: {
-        '$route': 'getArticleDetail'
+        '$route.params.foodId': function (newVal) {
+            this.getFoodInfo()
+            this.getFoodRecommondByOrder()
+            this.checkMarks()
+        }
     }
 }
 </script>
@@ -312,17 +360,45 @@ export default {
                 .body {
                     height: px2rem(100px);
                     padding: px2rem(5px) 0;
-                    background: gray;
                     display: -webkit-box;
                     overflow-x: scroll;
                     -webkit-overflow-scrolling: touch;
 
                     .item {
+                        position: relative;
                         width: px2rem(150px);
                         height: 100%;
                         border: px2rem(1px) solid #CCC;
                         border-radius: px2rem(4px);
                         margin-right: px2rem(10px);
+                        background-repeat: repeat;
+                        background-position: center;
+                        background-size: cover;
+
+                        .info {
+                            position: absolute;
+                            bottom: 0;
+                            width: 100%;
+                            height: px2rem(25px);
+                            color: $white;
+                            font-size: px2rem(14px);
+                            line-height: px2rem(25px);
+                            background: #414141AD;
+
+                            .name {
+                                display: inline-block;
+                                margin-left: px2rem(5px);
+                                max-width: px2rem(100px);
+                            }
+
+                            .price {
+                                display: inline-block;
+                                position: absolute;
+                                right: px2rem(5px);
+                                color: $red2;
+                                font-weight: bold;
+                            }
+                        }
                     }
                 }
             }
