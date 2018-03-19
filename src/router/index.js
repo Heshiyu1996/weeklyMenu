@@ -21,6 +21,7 @@ import MyCharacter from '@/pages/user/myCharacter'
 
 import superIndex from '@/pages/super/index'
 import Reply from '@/pages/super/reply'
+import Analysis from '@/pages/super/analysis'
 import AddFood from '@/pages/super/addFood'
 import EditFood from '@/pages/super/editFood'
 import DeleteFood from '@/pages/super/deleteFood'
@@ -154,6 +155,13 @@ export default new Router({
                 path: 'reply',
                 name: 'reply',
                 component: Reply,
+                meta: {
+                    inChild: true
+                }
+            }, {
+                path: 'analysis',
+                name: 'analysis',
+                component: Analysis,
                 meta: {
                     inChild: true
                 }

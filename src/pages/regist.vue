@@ -109,6 +109,17 @@ export default {
                     alert(err)
                 })
         }
+
+        // addUserTest () {
+        //     var querystring = require('querystring')
+        //     let that = this
+        //     this.$axios.post(`${prefix}/staff/characterTest`)
+        //         .then((res) => {
+        //         })
+        //         .catch((err) => {
+        //             alert(err)
+        //         })
+        // }
     }
 }
 </script>

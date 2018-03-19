@@ -3,6 +3,7 @@
         <mHeader2 :isSuper="true"></mHeader2>
         <div v-if="!this.$route.meta.inChild" class="super">
             <div class="manager">
+                <div class="section">菜品管理</div>
                 <div class="item" @click="goTo('addFood')">
                     <span class="flag el-icon-circle-plus-outline"></span>
                     <div class="txt">添加菜品</div>
@@ -25,13 +26,22 @@
                 </div>
             </div>
             <div class="manager">
+                <div class="section">食堂改善</div>
                 <div class="item" @click="goTo('reply')">
                     <span class="flag el-icon-edit-outline"></span>
                     <div class="txt">查看反馈</div>
                     <span class="extend el-icon-arrow-right"></span>
                 </div>
+                <div class="item" @click="goTo('analysis')">
+                    <span class="flag el-icon-time"></span>
+                    <div class="txt">实时分析</div>
+                    <span class="extend el-icon-arrow-right"></span>
+                </div>
             </div>
-            <div class="item logout" @click="logout()">退出登录</div>
+            <div class="manager">
+                <div class="item logout" @click="logout()">退出登录</div>
+            </div>
+
         </div>
         <router-view v-else></router-view>
     </div>
@@ -61,7 +71,7 @@ export default {
             .then((res) => {
                 if (res.data.success) {
                     that.$store.commit('setUserInfo', {})
-                    myVue.$store.commit('setIflogin', false)
+                    that.$store.commit('setIflogin', false)
                     that.$router.push('/')
                 }
             })
@@ -82,36 +92,52 @@ export default {
     height: 100%;
     background: $gray1;
 
-    .item {
-        position: relative;
-        height: px2rem(49px);
-        padding: px2rem(15px) px2rem(15px) 0;
-        font-size: px2rem(14px);
-        color: $black1;
-        background: $white;
-        border-bottom: 1px $gray3 solid;
+    .manager {
+        margin-top: px2rem(10px);
 
-        &.logout {
-            margin-top: px2rem(16px);
-            padding-left: px2rem(37px);
-            color: red;
+        .section {
+            margin-left: px2rem(10px);
+            height: px2rem(30px);
+            line-height: px2rem(30px);
+            color: $gray2;
+            font-size: px2rem(12px);
         }
 
-        .flag {
-            display: inline-block;
-            position: absolute;
-            font-size: px2rem(18px);
-            color: $blue;
+        .item {
+            position: relative;
+            height: px2rem(49px);
+            padding: px2rem(15px) px2rem(15px) 0;
+            font-size: px2rem(14px);
+            color: $black1;
+            background: $white;
+            border-bottom: 1px $gray3 solid;
+
+            &.logout {
+                margin-top: px2rem(16px);
+                padding-left: px2rem(37px);
+                color: red;
+            }
+
+            .flag {
+                display: inline-block;
+                position: absolute;
+                font-size: px2rem(18px);
+                color: $blue;
+            }
+
+            .txt {
+                margin-left: px2rem(22px);
+            }
+
+            .extend {
+                position: absolute;
+                top: px2rem(18.75px);
+                right: px2rem(15px);
+            }
         }
 
-        .txt {
-            margin-left: px2rem(22px);
-        }
-
-        .extend {
-            position: absolute;
-            top: px2rem(18.75px);
-            right: px2rem(15px);
+        &:first-child {
+            margin-top: 0;
         }
     }
 }
