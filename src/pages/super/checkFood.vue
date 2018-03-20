@@ -9,7 +9,13 @@
             </div>
         </nav>
         <div class="result-wrapper">
-            <FoodCard size="normal" :showSelect="true" :foodInfo="item" v-for="(item, idx) in foods" :key="idx"></FoodCard>
+            <FoodCard
+            :showSelect="false"
+            :commonType="true"
+            size="normal"
+            :foodInfo="item"
+            v-for="(item, idx) in foods"
+            :key="idx"></FoodCard>
         </div>
     </div>
 </template>

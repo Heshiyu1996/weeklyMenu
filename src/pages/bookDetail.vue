@@ -270,6 +270,7 @@ export default {
         .body {
             height: px2rem(100px);
             padding: px2rem(5px) 0;
+            margin: 0 px2rem(10px);
             display: -webkit-box;
             overflow-x: scroll;
             -webkit-overflow-scrolling: touch;

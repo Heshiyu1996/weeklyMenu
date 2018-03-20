@@ -185,3 +185,26 @@
     border-radius: 4px;
 }
 
+.analysis .prov #taste {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    border: 2px solid;
+    border-radius: 4px;
+}
+
+.analysis .prov #prepare {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    border: 2px solid;
+    border-radius: 4px;
+}
+
+.analysis .prov #habit {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    border: 2px solid;
+    border-radius: 4px;
+}

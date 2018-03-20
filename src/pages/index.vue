@@ -7,7 +7,7 @@
                     <img class="img-hot" :src="img_hot" />
                     <el-carousel trigger="click" height="75px" :autoplay="autoPlay" arrow="never">
                         <el-carousel-item v-for="(hotFood, idx) in hotFoods" :key="idx">
-                            <img :src="img_food" class="pic" />
+                            <img :src="prefix + hotFood.imgUrl" class="pic" />
                             <div class="name f-ellipsis"> {{ hotFood.cname }} | {{ hotFood.name }} </div>
                             <div class="plans">
                                 <div class="plan" v-for="(plan, idx) in hotFood.plans" :key="idx">
@@ -78,6 +78,7 @@ export default {
     },
     data () {
         return {
+            prefix: prefix,
             img_hot: require('./../../static/hot.png'),
             img_period: [
                 require('./../../static/new_breakfast.png'),
@@ -254,11 +255,11 @@ export default {
 
             .pic {
                 position: absolute;
-                width: px2rem(110px);
+                width: px2rem(140px);
                 height: px2rem(65px);
                 top: px2rem(2px);
                 left: px2rem(30px);
-                border: px2rem(3px) solid orange;
+                border: px2rem(3px) solid $gray2;
                 border-radius: px2rem(6px);;
                 background-size: contain;
             }

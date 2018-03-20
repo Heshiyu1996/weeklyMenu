@@ -1,28 +1,26 @@
 <template>
-    <div>
-        <div v-show="commonType || recentCid === foodInfo.categoryId.toString()" class="foodCard" :class="typeObj">
-            <img class="img" :src="prefix + foodInfo.imgUrl" @click="gotoDetail($event, foodInfo.foodId)"/>
-            <div class="desc" :class="sizeObj">
-                <div class="name f-ellipsis">{{ foodInfo.name }}</div>
-                <div class="material f-ellipsis2">{{ foodInfo.material }}</div>
-                <div class="hot f-ellipsis">{{ foodInfo.visitCount }} 浏览 {{ foodInfo.markCount }} 收藏</div>
-                <div v-show="showPrice" class="price f-ellipsis">
-                     ￥ {{ foodInfo.price }}
-                     <span v-show="showCount" class="showCount"> x {{ foodInfo.count }}</span>
-                </div>
-                <span v-show="showCount" class="showTotal">￥ {{ foodInfo.price * foodInfo.count }}</span>
-                <div v-if="type === 'bookCard'" class="count-btn">
-                    <i v-show="count !== 0" class="el-icon-remove-outline" @click="changeCount(0, foodInfo.foodId, count, foodInfo.price)"></i>
-                    <span v-show="count !== 0" class="count">{{ count }}</span>
-                    <i class="el-icon-circle-plus" @click="changeCount(1, foodInfo.foodId, count, foodInfo.price)"></i>
-                </div>
+    <div v-show="commonType || recentCid === foodInfo.categoryId.toString()" class="foodCard" :class="typeObj">
+        <img class="img" :src="prefix + foodInfo.imgUrl" @click="gotoDetail($event, foodInfo.foodId)"/>
+        <div class="desc" :class="sizeObj">
+            <div class="name f-ellipsis">{{ foodInfo.name }}</div>
+            <div class="material f-ellipsis2">{{ foodInfo.material }}</div>
+            <div class="hot f-ellipsis">{{ foodInfo.visitCount }} 浏览 {{ foodInfo.markCount }} 收藏</div>
+            <div v-show="showPrice" class="price f-ellipsis">
+                    ￥ {{ foodInfo.price }}
+                    <span v-show="showCount" class="showCount"> x {{ foodInfo.count }}</span>
             </div>
-            <div v-if="showStar" class="star" @click="removeMarks(foodInfo.foodId)" @click.stop>
-                <i class="star_link el-icon-star-on"></i>
+            <span v-show="showCount" class="showTotal">￥ {{ foodInfo.price * foodInfo.count }}</span>
+            <div v-if="type === 'bookCard'" class="count-btn">
+                <i v-show="count !== 0" class="el-icon-remove-outline" @click="changeCount(0, foodInfo.foodId, count, foodInfo.price)"></i>
+                <span v-show="count !== 0" class="count">{{ count }}</span>
+                <i class="el-icon-circle-plus" @click="changeCount(1, foodInfo.foodId, count, foodInfo.price)"></i>
             </div>
-            <div v-if="showSelect" class="select" @click="select(foodInfo.foodId)" @click.stop >
-                <el-checkbox class="star_link" size="medium" v-model="foodInfo.checked"></el-checkbox>
-            </div>
+        </div>
+        <div v-if="showStar" class="star" @click="removeMarks(foodInfo.foodId)" @click.stop>
+            <i class="star_link el-icon-star-on"></i>
+        </div>
+        <div v-if="showSelect" class="select" @click="select(foodInfo.foodId)" @click.stop >
+            <el-checkbox class="star_link" size="medium" v-model="foodInfo.checked"></el-checkbox>
         </div>
     </div>
 </template>
