@@ -49,16 +49,16 @@ export default {
         },
 
         login () {
-            var querystring = require('querystring')
             let that = this
             this.$axios.post(`${prefix}/staff/login`,
-                querystring.stringify({
+                {
                     uid: that.account,
                     upassword: that.password
-                }))
+                })
                 .then((res) => {
                     if (res.data.success) {
-                        getUserInfo(that)
+                        // getUserInfo(that)
+                        console.log(123)
                         that.$router.push('/')
                     } else {
                         this.$refs.btn.innerText = '登录'

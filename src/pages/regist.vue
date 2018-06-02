@@ -86,15 +86,13 @@ export default {
         },
 
         addUser () {
-            var querystring = require('querystring')
             let that = this
-            this.$axios.post(`${prefix}/staff/regist`,
-                querystring.stringify({
+            this.$axios.post(`${prefix}/staff/regist`,{
                     uid: that.uid,
                     uname: that.uname,
                     umobile: that.umobile,
                     upassword: that.upassword
-                }))
+                })
                 .then((res) => {
                     if (res.data.success) {
                         getUserInfo(that)
@@ -109,17 +107,6 @@ export default {
                     alert(err)
                 })
         }
-
-        // addUserTest () {
-        //     var querystring = require('querystring')
-        //     let that = this
-        //     this.$axios.post(`${prefix}/staff/characterTest`)
-        //         .then((res) => {
-        //         })
-        //         .catch((err) => {
-        //             alert(err)
-        //         })
-        // }
     }
 }
 </script>

@@ -122,19 +122,6 @@ export default {
             this.categoryIndex = tab.$attrs.cid.toString()
         },
 
-        // selectPeriod (periodIdx) {
-        //     this.periodIndex = periodIdx
-        // },
-
-        // selectDay (dayIdx) {
-        //     this.dayIndex = dayIdx
-        //     this.weekCalendar.forEach((elem, idx) => {
-        //         if (elem.day === dayIdx) {
-        //             splitDate(this.today, elem.date)
-        //         }
-        //     })
-        // },
-
         onIndexChange (index) {
             this.idx = index
         },

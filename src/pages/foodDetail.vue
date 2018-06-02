@@ -14,7 +14,6 @@
             <div class="hot f-ellipsis">{{ foodInfo.visitCount }} 浏览， {{ foodInfo.markCount }} 收藏</div>
             <div class="price">￥ {{ foodInfo.price }}.0</div>
         </div>
-        <div class="vidLine"></div>
         <div class="vidBody">
             <el-collapse v-model="activeInfo">
                 <el-collapse-item title="食材" name="1">
@@ -131,7 +130,6 @@ export default {
                 })
                 return
             }
-            var querystring = require('querystring')
             let that = this
             this.$axios.get(`${prefix}/food/insertMarks?foodId=${that.foodInfo.foodId}&userId=${that.userInfo.uid}`)
                 .then((res) => {
@@ -148,13 +146,11 @@ export default {
         },
 
         removeMarks () {
-            var querystring = require('querystring')
             let that = this
-            this.$axios.post(`${prefix}/food/removeMarks`,
-                querystring.stringify({
+            this.$axios.post(`${prefix}/food/removeMarks`, {
                     foodId: that.foodInfo.foodId,
                     userId: that.userInfo.uid
-                }))
+                })
                 .then((res) => {
                     if (res.data.success) {
                         this.isExistMark = false
@@ -183,12 +179,10 @@ export default {
         },
 
         addVisitCount () {
-            var querystring = require('querystring')
             let that = this
-            this.$axios.post(`${prefix}/food/addVisitCount`,
-                querystring.stringify({
+            this.$axios.post(`${prefix}/food/addVisitCount`,{
                     foodId: that.foodInfo.foodId
-                }))
+                })
                 .then((res) => {
                     if (res.data.success) {
                         this.foodInfo.visitCount++
@@ -276,8 +270,9 @@ export default {
                 max-width: px2rem(240px);
                 max-height: px2rem(55px);
                 font-family: PingFang-SC-Medium;
-                font-size: px2rem(18px);
+                font-size: px2rem(21px);
                 color: $black2;
+                font-family: "黑体";
             }
 
             .desc, .hot {
@@ -300,6 +295,7 @@ export default {
                 color: $red;
                 text-align: right;
                 vertical-align: top;
+                font-weight: bold;
             }
 
             .tag, .mark-btn {
@@ -318,7 +314,8 @@ export default {
                 margin-left: px2rem(5px);
                 background: linear-gradient(90deg, rgb(255, 94, 58), rgb(255, 149, 0));
                 border-radius: px2rem(2px);
-                font-size: px2rem(12px);
+                font-size: px2rem(14px);
+                font-family: "黑体";
             }
 
             .mark-btn {
@@ -328,14 +325,9 @@ export default {
             }
         }
 
-        .vidLine {
-            height: px2rem(1px);
-            opacity: .2;
-            background: $black2;
-            margin: px2rem(10px) 0;
-        }
-
         .vidBody {
+            margin-top: px2rem(5px);
+
             .material {
                 margin-bottom: px2rem(16px);
                 color: $black2;

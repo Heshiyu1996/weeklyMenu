@@ -127,11 +127,11 @@ export default {
                             day: day.date.split('-')[2]
                         }
                         // 为了测试，全天都可以选
-                        // if (idx < this.dayIndex) {
-                        //     obj.pass = true
-                        // } else {
-                        //     obj.pass = false
-                        // }
+                        if (idx < this.dayIndex) {
+                            obj.pass = true
+                        } else {
+                            obj.pass = false
+                        }
                         this.thisWeekDayList.push(obj)
                     })
                     // this.getMyOrderConditionToday(this.dayIndex)
@@ -147,7 +147,6 @@ export default {
         },
 
         getMyOrderConditionToday (idx) {
-            var querystring = require('querystring')
             this.dateCode = this.weekCalendar[idx].date.split('-').join('')
 
             this.$axios.get(`${prefix}/order/getOrdersByDateAndUid?dateCode=${this.dateCode}`)

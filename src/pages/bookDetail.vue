@@ -165,12 +165,15 @@ export default {
         },
 
         submit () {
+            let config = {
+                withoutQS: true
+            }
             if (Object.keys(this.bookDetail).length === 0) return
             // 提交前，在bookDetail新增dateCode和pid一起带过去给后台
             this.bookDetail.dateCode = this.dateCode
             this.bookDetail.pid = parseInt(this.pid)
             this.bookDetail.totalMoney = parseInt(this.sum)
-            this.$axios.post(`${prefix}/order/addOrder`,this.bookDetail)
+            this.$axios.post(`${prefix}/order/addOrder`,this.bookDetail, config)
             .then((res) => {
                 if (res.data.success) {
                     this.$alert('您可以在“我的” —— “我的订单” 中查看订单详情，提前祝您用餐愉快！', '订餐成功！', {

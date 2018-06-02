@@ -60,12 +60,10 @@ export default {
         },
 
         deleteFoods () {
-            var querystring = require('querystring')
             let that = this
-            this.$axios.post(`${prefix}/admin/deleteFood`,
-                querystring.stringify({
+            this.$axios.post(`${prefix}/admin/deleteFood`, {
                     foodsId: that.idDeleting
-                }))
+                })
                 .then((res) => {
                     if (res.data.success) {
                         this.search()

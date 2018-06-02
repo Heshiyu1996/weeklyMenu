@@ -39,14 +39,12 @@ export default {
     },
     methods: {
         submit () {
-            var querystring = require('querystring')
             let that = this
-            this.$axios.post(`${prefix}/feedBack/insert`,
-                querystring.stringify({
+            this.$axios.post(`${prefix}/feedBack/insert`, {
                     userId: that.userInfo.uid,
                     user: that.userInfo.uname,
                     content: that.cnt
-                }))
+                })
                 .then((res) => {
                     if (res.data.success) {
                         this.$alert('衷心感谢您对本食堂提出的建议，我们会认真对待。同时你也可以留意我们的回复。祝你生活愉快!', '提交成功', {

@@ -8,7 +8,7 @@
             <span class="search-btn el-icon-search" @click="goTo('search')"></span>
             <span v-if="Object.keys(userInfo).length !== 0">
                 <span @click="goTo('user')">{{ userInfo.uname }}</span>
-                <span class="logout" @click="logout()">退出</span> 
+                <span class="logout" @click="logout()">退出</span>
             </span>
             <span v-if="Object.keys(userInfo).length === 0" @click="goTo('login')">登录 | </span>
             <span v-if="Object.keys(userInfo).length === 0" @click="goTo('regist')">注册</span>

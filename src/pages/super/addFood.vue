@@ -126,7 +126,8 @@ export default {
             let config = {
                 headers: {
                     'Content-Type': 'multipart/form-data'
-                }
+                },
+                withoutQS: true
             }
             var fd = new FormData()
             fd.append('imageFile', document.getElementById('fileToUpload').files[0])
@@ -216,9 +217,7 @@ export default {
                 })
                 plansStrArr.push(str)
             })
-            var querystring = require('querystring')
-            this.$axios.post(`${prefix}/admin/insertFood`,
-                querystring.stringify({
+            this.$axios.post(`${prefix}/admin/insertFood`, {
                     name: this.foodInfo.name,
                     imgUrl: this.foodInfo.imgUrl,
                     material: this.foodInfo.material,
@@ -226,7 +225,7 @@ export default {
                     categoryId: this.foodInfo.categoryId,
                     price: this.foodInfo.price,
                     plans: plansStrArr
-                }))
+                })
                 .then((res) => {
                     if (res.data.success) {
                         this.$alert('添加成功!', '温馨提示', {

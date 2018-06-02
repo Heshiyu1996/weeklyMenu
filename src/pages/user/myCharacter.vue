@@ -153,10 +153,8 @@ export default {
         },
 
         updateCharacter () {
-            var querystring = require('querystring')
             if (!this.isFinished) return
-            this.$axios.post(`${prefix}/staff/updateCharacter`,
-                querystring.stringify({
+            this.$axios.post(`${prefix}/staff/updateCharacter`, {
                     provinceCode: this.characterInfo.provinceCode,
                     province: this.characterInfo.province,
                     cityCode: this.characterInfo.cityCode,
@@ -169,7 +167,7 @@ export default {
                     prepare: this.characterInfo.prepare,
                     alcohol: this.characterInfo.alcohol,
                     attention: this.characterInfo.attention
-            }))
+            })
                 .then((res) => {
                     if (res.data.success) {
                         this.$alert('保存成功!', '温馨提示', {

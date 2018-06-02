@@ -85,7 +85,8 @@ export default {
             typeObj: {
                 'bookCard': this.type === 'bookCard',
                 'markCard': this.type === 'markCard',
-                'orderCard': this.type === 'orderCard'
+                'orderCard': this.type === 'orderCard',
+                'searchCard': this.type === 'searchCard'
             },
             checked: false,
             prefix: prefix,
@@ -99,13 +100,11 @@ export default {
         },
 
         removeMarks (id) {
-            var querystring = require('querystring')
             let that = this
-            this.$axios.post(`${prefix}/food/removeMarks`,
-                querystring.stringify({
+            this.$axios.post(`${prefix}/food/removeMarks`,{
                     foodId: id,
                     userId: that.userInfo.uid
-                }))
+                })
                 .then((res) => {
                     if (res.data.success) {
                         this.foodInfo.markCount--
@@ -217,7 +216,7 @@ export default {
         border-bottom: 0 solid $gray2;
     }
 
-    &.bookCard, &.markCard, &.orderCard {
+    &.bookCard, &.markCard, &.orderCard, &.searchCard {
         height: px2rem(100px);
         border-bottom: px2rem(1px) solid $gray2;
 
@@ -239,6 +238,29 @@ export default {
         .showTotal {
             display: inline-block;
             vertical-align: top;
+        }
+    }
+
+    &.searchCard {
+        height: px2rem(85px);
+        padding: px2rem(5px) px2rem(10px);
+        margin-top: px2rem(10px);
+        box-shadow: 0 0 px2rem(5px) $black2;
+
+        .material, .hot {
+            display: inline-block;
+        }
+
+        .price {
+            display: inline-block;
+            position: absolute;
+            right: 0;
+            margin-top: px2rem(-25px);
+            width: 20%;
+        }
+
+        .img {
+            border-radius: px2rem(4px);
         }
     }
 

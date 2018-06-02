@@ -112,13 +112,11 @@ export default {
         },
 
         submit (fid, repliedMsg) {
-            var querystring = require('querystring')
-            this.$axios.post(`${prefix}/admin/update`,
-                querystring.stringify({
+            this.$axios.post(`${prefix}/admin/update`, {
                     fid: fid,
                     isReplied: 1,
                     repliedMsg: repliedMsg
-                }))
+                })
                 .then((res) => {
                     if (res.data.success) {
                         this.loadFeedBackList()

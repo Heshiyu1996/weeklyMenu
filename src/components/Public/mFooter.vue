@@ -46,9 +46,12 @@ export default {
 
         loadIflogin () {
             return new Promise((resolve, reject) => {
+                console.log(this)
                 this.$axios.get(`${prefix}/staff/getUserInfo`)
                 .then((res) => {
                     if (res.data.success) {
+                        this.$store.commit('setUserInfo', res.data.relatedObject)
+                        this.$store.commit('setIflogin', true)
                         this.ifLogin = true
                         resolve()
                     } else {
@@ -112,7 +115,6 @@ export default {
     },
 
     activated () {
-        console.log("activated" + this.$route.name)
         if (this.$route.name === 'index') {
             this.loadIflogin()
             .then(this.selectIndex)
@@ -128,7 +130,6 @@ export default {
     },
 
     mounted () {
-        console.log("mounted" + this.$route.name)
         if (this.$route.name === 'index') {
             this.loadIflogin()
             .then(this.selectIndex)

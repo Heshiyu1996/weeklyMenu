@@ -134,9 +134,7 @@ export default {
         },
 
         editFoodInfo () {
-            var querystring = require('querystring')
-            this.$axios.post(`${prefix}/admin/updateFood`,
-                querystring.stringify({
+            this.$axios.post(`${prefix}/admin/updateFood`,{
                     foodId: this.foodInfoCopy.foodId,
                     name: this.foodInfoCopy.name,
                     imgUrl: this.foodInfoCopy.imgUrl,
@@ -144,7 +142,7 @@ export default {
                     description: this.foodInfoCopy.description,
                     categoryId: this.foodInfoCopy.categoryId,
                     price: this.foodInfoCopy.price
-                }))
+                })
                 .then((res) => {
                     if (res.data.success) {
                         this.$alert('编辑成功!', '温馨提示', {

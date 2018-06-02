@@ -35,8 +35,8 @@
             <div v-if="lastKeyword.length !== 0" class="tip">以下为 “{{ lastKeyword }}” 的搜索结果，共 {{ foods.length }} 个</div>
             <FoodCard
             :commonType="true"
-            size="normal"
-            type="markCard"
+            size="small"
+            type="searchCard"
             :foodInfo="item"
             v-for="(item, idx) in foods"
             :key="idx"></FoodCard>
@@ -101,11 +101,9 @@ export default {
         },
 
         recordKeyword () {
-            var querystring = require('querystring')
-            this.$axios.post(`${prefix}/search/addKeywordCount`,
-                querystring.stringify({
+            this.$axios.post(`${prefix}/search/addKeywordCount`, {
                     keyword: this.keyword
-                }))
+                })
                 .then((res) => {
                     if (res.data.success) {
                         console.log(res.data.success)
